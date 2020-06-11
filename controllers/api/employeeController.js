@@ -51,7 +51,7 @@ exports.employee_create_post = [
         lastname: req.body.lastname,
         username: req.body.username,
         email: req.body.email,
-        passsword: req.body.password,
+        password: req.body.password,
         DepartmentId: req.body.department,
         RoleId: req.body.role
      }
@@ -124,7 +124,7 @@ exports.employee_update_post = function(req, res, next) {
             lastname: req.body.lastname,
             username: req.body.username,
             email: req.body.email,
-            passsword: req.body.password
+            password: req.body.password
           }
           models.Employee.update(
             // Values to update
