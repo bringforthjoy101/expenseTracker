@@ -8,11 +8,11 @@ const { check, validationResult } = require('express-validator');
 exports.employee_create_post = [
   [
       // Validation for inputs
-      check('first_name')
+      check('firstname')
       .isLength({ min: 3, max: 50 }).withMessage('Firstname must be between 3 and 50 characters long')
       .isEmpty().withMessage('Firstname cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Firstname must contain only Letters.'),
-      check('last_name')
+      check('lastname')
       .isLength({ min: 3, max: 50 }).withMessage('Lastname must be between 3 and 50 characters long')
       .isEmpty().withMessage('Lastname cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Lastname must contain only Letters.'),
@@ -44,8 +44,8 @@ exports.employee_create_post = [
      
      
      var employee = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
+        first_name: req.body.firstname,
+        last_name: req.body.lastname,
         username: req.body.username,
         email: req.body.email,
         passsword: req.body.password,
