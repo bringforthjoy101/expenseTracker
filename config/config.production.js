@@ -3,9 +3,9 @@ var config = require('./config.global');
 config.env = 'production';
 config.hostname = 'manifestdbinstance.cgq0reqixqsd.us-east-1.rds.amazonaws.com';
 config.db = {
-    database: 'tracker',
-    username: 'trackerUser',
-    password: 'PassWordChanged2020',
+    database: 'tracker0',
+    username: 'emmanueluser',
+    password: '000000',
     host: "manifestdbinstance.cgq0reqixqsd.us-east-1.rds.amazonaws.com",
     sequelizeParams: {
         dialect: 'postgres',
@@ -14,9 +14,9 @@ config.db = {
     }
 }
 config.sessionDb = {
-    database: 'tracker',
-    username: 'trackerUser',
-    password: 'PassWordChanged2020',
+    database: 'tracker0',
+    username: 'emmanueluser',
+    password: '000000',
     host: "manifestdbinstance.cgq0reqixqsd.us-east-1.rds.amazonaws.com",
     sequelizeParams: {
         dialect: 'postgres',
