@@ -1,0 +1,202 @@
+<!--DEPARTMENT VIEW STARTS HERE-->
+<% if (title == 'Create Department') { %>
+    <div class="main-content">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Departments</h4>
+                            </div>
+                            <div class="card-body"> 
+                            <div class="form-group">
+                                <form action="" method="post">
+                                  Department:<br>
+                                  <input class="form-control" type="text" name="department" value="department_name">
+                                  <br><br>
+                                  <input class="form-control" type="submit" value="Submit">
+                                </form>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } else if (title == 'Delete Department') { %>
+         
+    <% } else if (title == 'Update Department') { %>
+         <div class="main-content">
+        <div class="section__content section__content--p30">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Update Departments</h4>
+                            </div>
+                                <div class="card-body">  
+                                <div class="form-group">
+                                    <form action="/expense/department/<%= department.id %>/update" method="post">
+                                      Department:<br>
+                                      <input class="form-control" type="text" name="department" value="<%= department_name%>">
+                                      <br><br>
+                                      <input class="form-control" type="submit" value="Update">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } else if (title == 'Department Details') { %>
+        <div class="main-content">
+            <div class="section__content section__content--p30">
+                <div class="container-fluid"><br>
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Department Details</h4>
+                                </div>
+                                    <div class="card-body"> 
+                                         <h3>Department Details of <%= department.dept_name %></h3>
+                                         <p>I am a type for this ID = <%= department.id %></p>
+                                         <p>Department Name: <%= department.dept_name %></p>
+                                         <div class='row'>
+                                            <div class="col-2">
+                                                <div class="form-group">
+                                                    <a href="/expense/department/<%= department.id %>/update">
+                                               <button type="submit" class="btn btn-block btn-info btn-xs">Edit</button>
+                                                    </a>
+                                            </div> 
+                                        </div>
+                                            <div class="col-2">
+                                                <div class="form-group">
+                                                    <a href="/expense/department/<%= department.id %>/delete">
+                                                <button type="submit" class="btn btn-block btn-danger btn-xs">Delete </button>
+                                                    </a>
+                                            </div>
+                                         </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } else if (title == 'Department List') { %>
+        <!--department VIEW END HERE-->
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                  <h1 class="m-0 text-dark"><%= title %></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6 ">
+                  <ol class="breadcrumb float-sm-right">
+      
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg">
+                      Create Department
+                    </button>
+                    
+                  </ol>
+                </div><!-- /.col -->
+              </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+            <!-- /.content-header -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-10">
+                <!-- Default box -->
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">All Departments</h3>
+          
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                        <i class="fas fa-minus"></i></button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                        <i class="fas fa-times"></i></button>
+                    </div>
+                  </div>
+                  <div class="card-body p-0">
+                    <table class="table table-striped projects">
+                        <thead>
+                            
+                            <tr>
+                                <th style="width: 10%">
+                                    Department
+                                </th>
+                                <th style="width: 10%" class="text-center">
+                                    Action
+                                </th>
+                            </tr>
+                            
+                        </thead>
+                        <tbody>
+                            <% departments.forEach(function(department) { %>
+                            <tr>
+                                <td><a href="/expense/department/<%= department.id %>"><%= department.name%> <%= department.dept_name%></a></td>
+                                <td class="project-actions text-center">
+                                    <a class="btn btn-danger btn-sm" href="/expense/department/<%= department.id %>/delete">
+                                        <i class="fas fa-trash">
+                                        </i>
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- modal -->
+                <div class="modal fade" id="modal-lg">
+                    <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h4 class="modal-title">Create Department</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/expense/department/create" method="post">
+                                <div class="form-group">
+                                  <label for="inputdepartment">Department</label>
+                                  <input type="text" name="dept_name" id="inputdepartment" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                  <input class="btn btn-primary" type="submit" value="Create Department">
+                                </div>
+                                
+                            </form>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+                <!-- /.modal -->
+          </div>
+          </div>
+            </section>
+        <!-- /.content -->
+        <% } else { %>
+        
+        <% } %>
+    <!--departmentVIEW END HERE-->

@@ -1,0 +1,527 @@
+<!--Employee VIEW STARTS HERE -->
+<% if (title == 'Create Employee') { %>
+
+<% } else if (title == 'Delete Employee') { %>
+        
+<% } else if (title == 'Update Employee') { %>
+
+<% } else if (title == 'Employee Profile') { %>
+
+<section class="content-header">
+    <div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+        <h1><%= title %></h1>
+        </div>
+        <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active"><%= title %></li>
+        </ol>
+        </div>
+    </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+        <div class="col-md-3">
+
+            <!-- Profile Image -->
+            <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                <img class="profile-user-img img-fluid img-circle"
+                    src="../../dist/img/avatar.png"
+                    alt="User profile picture">
+                </div>
+
+                <h3 class="profile-username text-center"><%= employee.first_name %> <%= employee.last_name %></h3>
+
+                <p class="text-muted text-center"><%= employee.Department.dept_name %> (<%= employee.Role.role_name %>)</p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                <li class="list-group-item">
+                    <b>Number of Expenses</b> <a class="float-right"><%= employeeExpenses.count %></a>
+                </li>
+                <li class="list-group-item">
+                    <b>My Total Expenses</b> <a class="float-right">‎₦ <%= Number (employeeTotalExpenses).toLocaleString(); %></a>
+                </li>
+                </ul>
+            </div>
+            <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+            <div class="card">
+            <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                <li class="nav-item"><a class="nav-link active" href="#myExpenses" data-toggle="tab">My Expenses</a></li>
+                <li class="nav-item"><a class="nav-link" href="#createExpense" data-toggle="tab">Create Expense</a></li>
+                <li class="nav-item"><a class="nav-link" href="#editProfile" data-toggle="tab">Edit Profile</a></li>
+                </ul>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="active tab-pane" id="myExpenses">
+                        <!-- My Expense Table -->
+                        <% if (employee.Role.role_name == 'Staff') { %>
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Employee</th>
+                                <th>Time</th>
+                                <th style="width: 20%" class="text-center">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <% expenses.forEach(function(expense) { %>
+                            <tr>
+                            <td><%= expense.title %></td>
+                            <td>₦<%=Number(expense.amount).toLocaleString(); %></td>
+                            <td>
+                                <% if (expense.status == 'Approved' ) { %>
+                                <p class="badge badge-success"><%= expense.status %></p>
+                                <% } else if (expense.status == 'Disapproved') { %>
+                                <p class="badge badge-danger"><%= expense.status %></p>
+                                <% } else { %>
+                                <p class="badge badge-warning"><%= expense.status %></p>
+                                <% } %>
+                            </td>
+                            <td><%= expense.Employee.first_name %> <%= expense.Employee.last_name %></td>
+                            <td><%= moment(expense.createdAt).fromNow() %></td>
+                            <td class="">
+                                <a class="btn btn-primary btn-xs" href="/expense/expense/<%= expense.id %>">
+                                    <i class="fas fa-folder">
+                                    </i>
+                                    View
+                                </a>
+                                <% if (expense.status == 'Pending' ) { %>
+                                <a class="btn btn-danger btn-xs" href="/expense/expense/<%= expense.id %>/delete">
+                                    <i class="fas fa-trash">
+                                    </i>
+                                    Delete
+                                </a>
+                                <% } else { %>
+
+                                <% } %>
+                            </td>
+                            </tr>
+                                <% }); %>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Title</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Employee</th>
+                                <th>Time</th>
+                                <th>Action</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                        <% } else { %>
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Employee</th>
+                                    <th>Time</th>
+                                    <th style="width: 20%" class="text-center">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <% allExpenses.forEach(function(expense) { %>
+                                <tr>
+                                <td><%= expense.title %></td>
+                                <td>₦<%=Number(expense.amount).toLocaleString(); %></td>
+                                <td>
+                                    <% if (expense.status == 'Approved' ) { %>
+                                    <p class="badge badge-success"><%= expense.status %></p>
+                                    <% } else if (expense.status == 'Disapproved') { %>
+                                    <p class="badge badge-danger"><%= expense.status %></p>
+                                    <% } else { %>
+                                    <p class="badge badge-warning"><%= expense.status %></p>
+                                    <% } %>
+                                </td>
+                                <td><%= expense.Employee.first_name %> <%= expense.Employee.last_name %></td>
+                                <td><%= moment(expense.createdAt).fromNow() %></td>
+                                <td class="">
+                                    <a class="btn btn-primary btn-xs" href="/expense/expense/<%= expense.id %>">
+                                        <i class="fas fa-folder">
+                                        </i>
+                                        View
+                                    </a>
+                                    <% if (expense.status == 'Pending') { %>
+                                        <a class="btn btn-success btn-xs" href="/expense/employee/<%= employee.id %>/expense/<%= expense.id %>/approve">
+                                            <i class="fas fa-check">
+                                            </i>
+                                            Approve
+                                        </a>
+                                        <a class="btn btn-danger btn-xs" href="/expense/employee/<%= employee.id %>/expense/<%= expense.id %>/approval/1">
+                                            <i class="fas fa-times-circle">
+                                            </i>
+                                            Disapprove
+                                        </a>
+                                    <% } else if (expense.status == 'Approved') { %>
+                                        <a class="btn btn-danger btn-xs" href="/expense/employee/<%= employee.id %>/expense/<%= expense.id %>/disapprove">
+                                            <i class="fas fa-times-circle">
+                                            </i>
+                                            Disapprove
+                                        </a>
+                                    <% } else { %>
+                                        <a class="btn btn-success btn-xs" href="/expense/employee/<%= employee.id %>/expense/<%= expense.id %>/approve">
+                                            <i class="fas fa-check">
+                                            </i>
+                                            Approve
+                                        </a>
+                                    <% } %>
+                                </td>
+                                </tr>
+                                    <% }); %>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Employee</th>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        <% } %>
+                    </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="createExpense">
+                        <!-- Create Expense -->
+                        <div>
+                            <form action="/expense/employee/expense/create" method="post">
+                            <div class="form-group">
+                            <label for="inputName">Expense Title</label>
+                            <input type="text" name="title" id="inputName" class="form-control">
+                            </div>
+                            <div class="form-group">
+                            <label for="inputDescription">Expense Description</label>
+                            <textarea name="desc" id="inputDescription" class="form-control" rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                            <label for="inputAmount">Amount</label>
+                            <input type="number" name="amount" id="inputAmount" class="form-control">
+                            </div>
+                            <div class="form-group">
+                            <label for="inputCategory">Category</label>
+                            <select class="form-control custom-select" name="category">
+                                <option selected disabled>Select a Category</option>
+                                    <% categories.forEach(function(category) { %>
+                                        <option value="<%= category.id %>"><%= category.name%></option>
+                                    <% }); %>
+                            </select>
+                            </div>
+                            <div class="form-group">
+                            <label for="inputType">Type</label>
+                            <select class="form-control custom-select" name="type">
+                                <option selected disabled>Select a Type</option>
+                                <% types.forEach(function(type) { %>
+                                    <option value="<%= type.id %>"><%= type.type_name %></option>
+                                <% }); %>
+                            </select>
+                            </div>
+                            <div class="form-group">
+                            <input type="hidden" name="department" value="<%= employee.DepartmentId %>">
+                            <input type="hidden" name="employee_id" value="<%= employee.id %>">
+                            <input class="btn btn-primary" type="submit" value="Create Expense">
+                            </div>
+                            
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.tab-pane -->
+
+                    <div class="tab-pane" id="editProfile">
+                            <form action="/expense/employee/<%= employee.id %>/update" method="post" class="form-horizontal">
+                                <div class="form-group">
+                                <label for="inputFirstName">First Name</label>
+                                <input type="text" name="first_name" id="inputFirstName" class="form-control" value="<%= employee.first_name %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputLastName">Last Name</label>
+                                    <input type="text" name="last_name" id="inputLastName" class="form-control" value="<%= employee.last_name %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail">Email</label>
+                                    <input type="email" name="email" id="inputEmail" class="form-control" value="<%= employee.email %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputDepartment">Department</label>
+                                    <select class="form-control custom-select" name="department">
+                                        <option selected><%= employee.Department.dept_name %></option>
+                                            <% departments.forEach(function(department) { %>
+                                                <option value="<%= department.id %>"><%= department.dept_name%></option>
+                                            <% }); %>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputRole">Role</label>
+                                    <select class="form-control custom-select" name="role">
+                                        <option selected><%= employee.Role.role_name %></option>
+                                            <% roles.forEach(function(role) { %>
+                                                <option value="<%= role.id %>"><%= role.role_name%></option>
+                                            <% }); %>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                <input class="btn btn-primary" type="submit" value="Update Profile">
+                                </div>
+                                
+                            </form>
+                    </div>
+                    <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+            </div><!-- /.card-body -->
+            </div>
+            <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+<section>
+    <br>
+
+    <!-- Default box -->
+    <div class="content">
+        <div class="container-fluid">
+        
+          <div class="row">
+              <div class="col-12">
+    <div class="card">
+        <div class="card-header">
+        <h3 class="card-title">All Employees</h3>
+    
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+            <i class="fas fa-minus"></i></button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+            <i class="fas fa-times"></i></button>
+        </div>
+        </div>
+        <div class="card-body p-0">
+            <% if (employee.Role.role_name == 'Manager') { %>
+        <table class="table table-striped projects">
+            <thead>
+                
+                <tr>
+                    <th style="width: 30%">
+                        Full Name
+                    </th>
+                    <th style="width: 20%">
+                        Department
+                    </th>
+                    <th style="width: 20%">
+                        Role
+                    </th>
+                    <th style="width: 30%" class="text-center">
+                        Action
+                    </th>
+                </tr>
+                
+            </thead>
+            <tbody>
+                <% employees.forEach(function(employee) { %>
+                <tr>
+                    <td> <img alt="Avatar" class="table-avatar" src="../../public/dist/img/avatar.png"> <%= employee.first_name %> <%= employee.last_name %></td>
+                    <td><%= employee.Department.dept_name %></td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-info"><%= employee.Role.role_name %></button>
+                            <button type="select" class="btn btn-info dropdown-toggle dropdown-hover dropdown-icon" data-toggle="dropdown">
+                              <span class="sr-only">Toggle Dropdown</span>
+                              <div class="dropdown-menu" role="menu">
+                                  <option selected disabled>Switch Role</option>
+                                  <% roles.forEach(function(role) { %>
+                                    <a href="/expense/employee/<%= employee.id %>/update"><option name="role_name" value="<%= role.id %>" ><%= role.role_name%></option></a>
+                                <% }); %>
+                              </div>
+                            </button>
+                          </div>
+                    </td>
+                    <td class="project-actions text-right">
+                        <a class="btn btn-primary btn-sm" href="/expense/employee/<%= employee.id %>">
+                            <i class="fas fa-folder">
+                            </i>
+                            View
+                        </a>
+                        <a class="btn btn-danger btn-sm" href="/expense/employee/<%= employee.id %>/delete">
+                            <i class="fas fa-trash">
+                            </i>
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        </div>
+        <% } %>
+        <!-- /.card-body -->
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</section>
+
+
+<% } else if (title == 'All Employees') { %>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0 text-dark"><%= title %></h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6 ">
+            <ol class="breadcrumb float-sm-right">
+
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg">
+                Create New Employee
+            </button>
+            
+            </ol>
+        </div>
+        <!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+    <!-- /.content-header -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+            <h3 class="card-title">All Employees</h3>
+    
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fas fa-minus"></i></button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                <i class="fas fa-times"></i></button>
+            </div>
+            </div>
+            <div class="card-body p-0">
+            <table class="table table-striped projects">
+                <thead>
+                    
+                    <tr>
+                        <th style="width: 30%">
+                            Full Name
+                        </th>
+                        <th style="width: 20%">
+                            Department
+                        </th>
+                        <th style="width: 20%">
+                            Role
+                        </th>
+                        <th style="width: 30%" class="text-center">
+                            Action
+                        </th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    <% employees.forEach(function(employee) { %>
+                    <tr>
+                        <td> <img alt="Avatar" class="table-avatar" src="../../public/dist/img/avatar.png"> <%= employee.first_name %> <%= employee.last_name %></td>
+                        <td><%= employee.Department.dept_name %></td>
+                        <td><%= employee.Role.role_name %></td>
+                        <td class="project-actions text-right">
+                            <a class="btn btn-primary btn-sm" href="/expense/employee/<%= employee.id %>">
+                                <i class="fas fa-folder">
+                                </i>
+                                View
+                            </a>
+                            <a class="btn btn-danger btn-sm" href="/expense/employee/<%= employee.id %>/delete">
+                                <i class="fas fa-trash">
+                                </i>
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <!-- modal -->
+        <div class="modal fade" id="modal-lg">
+            <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h4 class="modal-title">Create New Employee</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/expense/employee/create" method="post">
+                        <div class="form-group">
+                            <label for="inputFirstName">First Name</label>
+                            <input type="text" name="first_name" id="inputFirstName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputLastName">Last Name</label>
+                            <input type="text" name="last_name" id="inputLastName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputEmail">Email</label>
+                            <input type="email" name="email" id="inputEmail" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputDepartment">Department</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputRole">Role</label>
+                            <select class="form-control custom-select" name="role">
+                            <option selected disabled>Select a Role</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input class="btn btn-primary" type="submit" value="Create Employee">
+                        </div>
+                        
+                    </form>
+                </div>
+                <div class="modal-footer w3-bar">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    
+    </section>
+<!-- /.content -->
+<% } else { %>
+
+<% } %>
+<!--EMPLOYEE VIEW END HERE-->
