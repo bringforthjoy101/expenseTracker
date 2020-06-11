@@ -220,11 +220,11 @@ exports.expense_detail = function(req, res, next) {
                 include: [
                     {
                       model: models.Employee,
-                      attributes: ['id', 'first_name', 'last_name']
+                      attributes: ['id', 'firstname', 'lastname']
                     },
                     {
                         model: models.Category,
-                        attributes: ['id', 'name']
+                        attributes: ['id', 'category_name']
                     },
                     {
                         model: models.Type,
@@ -274,11 +274,11 @@ exports.expense_list = function(req, res, next) {
             include: [
                 {
                   model: models.Employee,
-                  attributes: ['id', 'first_name', 'last_name']
+                  attributes: ['id', 'firstname', 'lastname']
                 },
                 {
                     model: models.Category,
-                    attributes: ['id', 'name']
+                    attributes: ['id', 'category_name']
                 },
                 {
                     model: models.Type,
@@ -329,11 +329,11 @@ exports.index = async function(req, res) {
             include: [
                 {
                     model: models.Employee,
-                    attributes: ['id', 'first_name', 'last_name']
+                    attributes: ['id', 'firstname', 'lastname']
                 },
                 {
                     model: models.Category,
-                    attributes: ['id', 'name']
+                    attributes: ['id', 'category_name']
                 },
                 {
                     model: models.Type,
