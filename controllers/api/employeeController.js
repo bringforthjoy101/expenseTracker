@@ -23,6 +23,9 @@ exports.employee_create_post = [
       check('email')
       .isEmpty().withMessage('Email cannot be empty')
       .isEmail().withMessage('Invalid Email'),
+      check('password')
+      .isLength({ min: 6, max: 50 }).withMessage('Password must be between 6 and 50 characters long')
+      .isEmpty().withMessage('Password cannot be empty'),
       check('department')
       .isEmpty().withMessage('Department cannot be empty')
       .isNumeric().withMessage('Department must be numeric'),
@@ -44,8 +47,8 @@ exports.employee_create_post = [
      
      
      var employee = {
-        first_name: req.body.firstname,
-        last_name: req.body.lastname,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
         username: req.body.username,
         email: req.body.email,
         passsword: req.body.password,
@@ -117,8 +120,8 @@ exports.employee_update_post = function(req, res, next) {
 
         try {
           var employee = {
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
             username: req.body.username,
             email: req.body.email,
             passsword: req.body.password
