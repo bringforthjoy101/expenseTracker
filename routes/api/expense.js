@@ -31,7 +31,7 @@ router.get('/expense/:expense_id', expense_controller.expense_detail);
 
 
 // GET request for list of all Expense.
-router.get('/expenses/:user_business_name', expense_controller.expense_list);
+router.get('/expenses', expense_controller.expense_list);
 
 // Approval for Expense
 router.get('/employee/:employee_id/expense/:expense_id/approval/:status_code', expense_controller.expense_approval_get);
