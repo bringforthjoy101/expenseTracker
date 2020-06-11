@@ -58,7 +58,13 @@ exports.employee_create_post = [
        
      
       models.Employee.create({
-        employee
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        DepartmentId: req.body.department,
+        RoleId: req.body.role
         }).then(function(employee){
           res.json({
             status: true,
