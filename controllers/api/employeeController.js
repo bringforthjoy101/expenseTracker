@@ -42,7 +42,7 @@ exports.employee_create_post = [
         }
   // create a new employee based on the fields in our employee model
   // I have create two fields, but it can be more for your model
-   console.log("This is the role " + req.body.role);
+   console.log("This is the role " + req.body.username);
      
      
      
