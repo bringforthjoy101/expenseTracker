@@ -267,10 +267,10 @@ exports.expense_detail = function(req, res, next) {
 
 // Display list of all posts.
 exports.expense_list = function(req, res, next) {
-    var user_business_name = req.params.user_busines_name;
+    // var user_business_name = req.params.user_busines_name;
     try {
         models.Expense.findAll({
-            where: {business_name: user_business_name},
+            // where: {business_name: user_business_name},
             include: [
                 {
                   model: models.Employee,
