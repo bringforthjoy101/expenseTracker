@@ -255,7 +255,7 @@ exports.employee_detail = async function(req, res, next) {
         },
       ],
         where: {
-          EmployeeId: employee_id,
+          userId: employee_id,
         },
     });
 
@@ -278,10 +278,10 @@ exports.employee_detail = async function(req, res, next) {
     });
 
     const employeeExpenses = await  models.Expense.findAndCountAll({
-      where: {EmployeeId: employee_id}
+      where: {userId: employee_id}
     });
 
-    const employeeTotalExpenses = await models.Expense.sum('amount', {where: {EmployeeId: employee_id} });
+    const employeeTotalExpenses = await models.Expense.sum('amount', {where: {userId: employee_id} });
     const categories = await models.Category.findAll();
     const types = await models.Type.findAll();
     const departments = await models.Department.findAll();
@@ -308,7 +308,7 @@ exports.employee_detail = async function(req, res, next) {
           include: [
             {
               model: models.Expense,
-              // attributes: [ 'title', 'desc','amount','category','status','EmployeeId','createdAt','department' ],
+              // attributes: [ 'title', 'desc','amount','category','status','userId','createdAt','department' ],
                   
             },
             {

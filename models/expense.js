@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     DepartmentId: DataTypes.INTEGER,
     TypeId: DataTypes.INTEGER,
     CategoryId: DataTypes.INTEGER,
-    userId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER,
+    EmployeeId: DataTypes.INTEGER
     
   });
   
@@ -23,6 +24,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     }
     });
+
+    models.Expense.belongsTo(models.Employee, {
+      onDelete: "CASCADE",
+      foreignKey: {
+      allowNull: true
+    }
+    });
+
 
     models.Expense.belongsTo(models.Category, {
       onDelete: "CASCADE",

@@ -86,23 +86,23 @@ module.exports = function(sequelize, Sequelize) {
     
    // create association between employee and expense
   // an employee can have many expense
-//   Employee.associate = function(models) {
-//     models.Employee.hasMany(models.Expense);
+  Employee.associate = function(models) {
+    models.Employee.hasMany(models.Expense);
 
-//     models.Employee.belongsTo(models.Department, {
-//       onDelete: "CASCADE",
-//       foreignKey: {
-//       allowNull: true
-//     }
-//     });
+    models.Employee.belongsTo(models.Department, {
+      onDelete: "CASCADE",
+      foreignKey: {
+      allowNull: true
+    }
+    });
 
-//     models.Employee.belongsTo(models.Role, {
-//       onDelete: "CASCADE",
-//       foreignKey: {
-//       allowNull: true
-//     }
-//     });
-//   };
+    models.Employee.belongsTo(models.Role, {
+      onDelete: "CASCADE",
+      foreignKey: {
+      allowNull: true
+    }
+    });
+  };
   
   
 
