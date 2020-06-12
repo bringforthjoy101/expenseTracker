@@ -6,10 +6,10 @@ const { check, validationResult } = require('express-validator');
 exports.category_create_post = [
     [
       // Validation for inputs
-      check('dept_name')
-      .isLength({ min: 3, max: 50 }).withMessage('Department name must be between 3 and 50 characters long')
-      .isEmpty().withMessage('Department name cannot be empty')
-      .matches(/^[A-Za-z\s]+$/).withMessage('Department name must contain only Letters.')
+      check('category_name')
+      .isLength({ min: 3, max: 50 }).withMessage('Category name must be between 3 and 50 characters long')
+      .isEmpty().withMessage('Category name cannot be empty')
+      .matches(/^[A-Za-z\s]+$/).withMessage('Category name must contain only Letters.')
     ],
     function(req, res, next) {
         // checks for validations
@@ -20,7 +20,7 @@ exports.category_create_post = [
         // Performs operation
         try {
             models.Category.create({
-            category_name: req.body.category
+            category_name: req.body.category_name
             }).then(function(category) {
               res.json({
                 status: true,
