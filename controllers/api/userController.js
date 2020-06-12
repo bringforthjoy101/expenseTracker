@@ -132,23 +132,31 @@ exports.employee_update_post = [
       // Validation for inputs
       check('firstname')
       .isLength({ min: 3, max: 50 }).withMessage('Firstname must be between 3 and 50 characters long')
-      .matches(/^[A-Za-z\s]+$/).withMessage('Firstname must contain only Letters.'),
+      .matches(/^[A-Za-z\s]+$/).withMessage('Firstname must contain only Letters.')
+      .exists({checkFalsy:true}),
       check('lastname')
       .isLength({ min: 3, max: 50 }).withMessage('Lastname must be between 3 and 50 characters long')
-      .matches(/^[A-Za-z\s]+$/).withMessage('Lastname must contain only Letters.'),
+      .matches(/^[A-Za-z\s]+$/).withMessage('Lastname must contain only Letters.')
+      .exists({checkFalsy:true}),
       check('username')
       .isLength({ min: 3, max: 50 }).withMessage('Username must be between 3 and 50 characters long')
-      .isAlphanumeric().withMessage('Username can only be alphanumeric.'),
+      .isAlphanumeric().withMessage('Username can only be alphanumeric.')
+      .exists({checkFalsy:true}),
       check('email')
-      .isEmail().withMessage('Invalid Email'),
+      .isEmail().withMessage('Invalid Email')
+      .exists({checkFalsy:true}),
       check('password')
-      .isLength({ min: 6, max: 50 }).withMessage('Password must be between 6 and 50 characters long'),
+      .isLength({ min: 6, max: 50 }).withMessage('Password must be between 6 and 50 characters long')
+      .exists({checkFalsy:true}),
       check('department')
-      .isInt().withMessage('Department must be numeric'),
+      .isInt().withMessage('Department must be numeric')
+      .exists({checkFalsy:true}),
       check('role')
-      .isInt().withMessage('Role must be numeric'),
+      .isInt().withMessage('Role must be numeric')
+      .exists({checkFalsy:true}),
     ],
     
+
     async function(req, res, next) {
     // checks for validations
     const errors = validationResult(req);
