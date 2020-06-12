@@ -17,7 +17,7 @@ exports.expense_create_post = [
         check('amount')
         .isLength({ min: 3, max: 50 }).withMessage('Expense title must be between 3 and 50 characters long')
         .isEmpty().withMessage('Expense title cannot be empty')
-        .isNumeric().withMessage('Express amount must be numeric'),
+        .isNumeric().withMessage('Expense amount must be numeric'),
         check('type')
         .isEmpty().withMessage('Type cannot be empty')
         .isNumeric().withMessage('Type must be numeric'),
@@ -104,7 +104,7 @@ exports.expense_delete_post = function(req, res, next) {
     if (isNaN(Number(req.params.expense_id))) {
         return res.status(400).json({
           status: false,
-          message: 'Invalid Department ID'
+          message: 'Invalid Expense ID'
         });
     }
     // Performs operation
@@ -433,5 +433,10 @@ async function getAprovalStatus(id) {
 
 async function getStatus(amount) {
     var status;
-    return status = (amount <= 1000) ? 'Approved' : 'Pending';
+    if (amount <= 1000) {
+        return status = 'Approved';
+    } else {
+        return status = 'Pending';
+    }
+    // return status = (amount <= 1000) ? 'Approved' : 'Pending';
 }
