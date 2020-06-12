@@ -1,6 +1,6 @@
 var Department = require('../../models/department');
 var models = require('../../models');
-const { check, validationResult } = require('express-validator');
+const { check, params validationResult } = require('express-validator');
 
 
 // Handle department create on POST.
@@ -16,7 +16,7 @@ exports.department_create_post = [
     function(req, res, next) {
         
         // checks for validations
-        const errors = validationResult(req.body);
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ status: false, errors: errors.array() });
         }
@@ -47,14 +47,18 @@ exports.department_create_post = [
 ];
 
 // Handle department delete on POST.
-exports.department_delete_post = function(req, res, next) {
+exports.department_delete_post = [
+    param([department_id, 'invalid dept id'])
+  ],
+  async function(req, res, next) {
     // Validates if the department ID is an integer.
-    if (isNaN(Number(req.params.department_id))) {
-        return res.status(400).json({
-          status: false,
-          message: 'Invalid Department ID'
-        });
-    }
+    
+    // if (isNaN(Number(req.params.department_id))) {
+    //     return res.status(400).json({
+    //       status: false,
+    //       message: 'Invalid Department ID'
+    //     });
+    // }
     // Performs operation.
     try {
         models.Department.destroy({
