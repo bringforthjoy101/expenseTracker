@@ -9,30 +9,30 @@ exports.expense_create_post = [
         // Validation for inputs
         check('title')
         .isLength({ min: 3, max: 50 }).withMessage('Expense title must be between 3 and 50 characters long')
-        .isEmpty().withMessage('Expense title cannot be empty')
+        .not().isEmpty().withMessage('Expense title cannot be empty')
         .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.'),
         check('desc')
         .isLength({ min: 3, max: 50 }).withMessage('Expense description must be between 3 and 50 characters long')
-        .isEmpty().withMessage('Expense description cannot be empty'),
+        .not().isEmpty().withMessage('Expense description cannot be empty'),
         check('amount')
         .isLength({ min: 3, max: 50 }).withMessage('Expense title must be between 3 and 50 characters long')
-        .isEmpty().withMessage('Expense title cannot be empty')
-        .isNumeric().withMessage('Expense amount must be numeric'),
+        .not().isEmpty().withMessage('Expense title cannot be empty')
+        .isInt().withMessage('Expense amount must be numeric'),
         check('type')
-        .isEmpty().withMessage('Type cannot be empty')
-        .isNumeric().withMessage('Type must be numeric'),
+        .not().isEmpty().withMessage('Type cannot be empty')
+        .isInt().withMessage('Type must be numeric'),
         check('category')
-        .isEmpty().withMessage('Category cannot be empty')
-        .isNumeric().withMessage('Category must be numeric'),
+        .not().isEmpty().withMessage('Category cannot be empty')
+        .isInt().withMessage('Category must be numeric'),
         check('employee_id')
-        .isEmpty().withMessage('Employee ID cannot be empty')
-        .isNumeric().withMessage('Employee ID must be numeric'),
+        .not().isEmpty().withMessage('Employee ID cannot be empty')
+        .isInt().withMessage('Employee ID must be numeric'),
         check('department')
-        .isEmpty().withMessage('Department cannot be empty')
-        .isNumeric().withMessage('Department must be numeric'),
+        .not().isEmpty().withMessage('Department cannot be empty')
+        .isInt().withMessage('Department must be numeric'),
         check('current_business')
         .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
-        .isEmpty().withMessage('Current business cannot be empty'),
+        .not().isEmpty().withMessage('Current business cannot be empty'),
         
       
     async function(req, res, next) {
@@ -82,7 +82,7 @@ exports.expense_create_post = [
                 TypeId: req.body.type,
                 CategoryId: req.body.category,
                 status: status,
-                busines_name: req.body.current_business,
+                business_name: req.body.current_business,
                 EmployeeId: employee_id,
                 DepartmentId: req.body.department
             }).then(function(expense) {
