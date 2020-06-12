@@ -193,7 +193,7 @@ exports.employee_update_post = [
   // console.log(test1 ? 'true':'false'); // false
   // console.log(test2 ? 'true':'false'); // true
   
- var thisEmployee2 = {
+ var employee = {
     firstname: req.body.firstname ? req.body.firstname : thisEmployee.firstname,
     lastname: req.body.lastname ? req.body.lastname : thisEmployee.lastname, 
     username: req.body.username ? req.body.username : thisEmployee.username, 
@@ -202,8 +202,10 @@ exports.employee_update_post = [
     DepartmentId: req.body.department ? req.body.department : thisEmployee.department, 
     RoleId: req.body.role ? req.body.role : thisEmployee.role 
  }
+ 
+ console.log('This is the employee ' + employee);
   
- console.log('New Employee firstname ' + thisEmployee.firstname);
+ console.log('New Employee firstname ' + employee.firstname);
   
   //   models.user.update({thisEmployee}).then(function(employee) {
   //       res.status(200).json({
@@ -222,7 +224,7 @@ exports.employee_update_post = [
 // ];
 
     models.user.update(
-           {thisEmployee2},{ where: {id: employee_id} }
+           {employee},{ where: {id: employee_id} }
       ).then(function(employee) {
         res.status(200).json({
           status: true,
