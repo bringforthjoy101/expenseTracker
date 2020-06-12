@@ -225,9 +225,9 @@ exports.employee_update_post = [
     
     console.log('This is employee id ' + employee_id);
     
-    models.user.update(
+    await models.user.update(
            {employee},{ where: {id: employee_id} }
-      ).then(function(employee) {
+      ).then(function() {
         res.status(200).json({
           status: true,
           data: employee,
