@@ -8,8 +8,8 @@ exports.expense_create_post = [
     
         // Validation for inputs
         check('title')
-        .isLength({ min: 3, max: 50 }).withMessage('Expense title must be between 3 and 50 characters long')
         .not().isEmpty().withMessage('Expense title cannot be empty')
+        .isLength({ min: 3, max: 50 }).withMessage('Expense title must be between 3 and 50 characters long')
         .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.'),
         check('desc')
         .isLength({ min: 3, max: 50 }).withMessage('Expense description must be between 3 and 50 characters long')
