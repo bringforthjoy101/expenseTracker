@@ -1,6 +1,6 @@
 var Expense = require('../../models/expense');
 var models = require('../../models');
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator');
 
 
 // Handle expense create on POST.
@@ -31,8 +31,9 @@ exports.expense_create_post = [
         .not().isEmpty().withMessage('Department cannot be empty')
         .isInt().withMessage('Department must be numeric'),
         check('current_business')
-        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
-        .not().isEmpty().withMessage('Current business cannot be empty'),
+        .not().isEmpty().withMessage('Current business cannot be empty')
+        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long'),
+        
         
       
     async function(req, res, next) {
