@@ -1,8 +1,6 @@
 var Employee = require('../../models/employee');
 var models = require('../../models');
 const { check, validationResult } = require('express-validator');
-
-
 var checkParamsId = require('../../helpers/checkParams');
 
 // Handle employee create on POST.
@@ -43,22 +41,11 @@ exports.employee_create_post = [
         }
   // create a new employee based on the fields in our employee model
   // I have create two fields, but it can be more for your model
-   console.log("This is the role " + req.body.username);
+   console.log("This is the user " + req.body.username);
      
      
      
-    //  var employee = {
-    //     firstname: req.body.firstname,
-    //     lastname: req.body.lastname,
-    //     username: req.body.username,
-    //     email: req.body.email,
-    //     password: req.body.password,
-    //     DepartmentId: req.body.department,
-    //     RoleId: req.body.role
-    //  }
-       
-     
-      models.user.create({
+      var employee = {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         username: req.body.username,
@@ -66,7 +53,10 @@ exports.employee_create_post = [
         password: req.body.password,
         DepartmentId: req.body.department,
         RoleId: req.body.role
-        }).then(function(employee){
+      }
+       
+     
+      models.user.create(employee).then(function(employee){
           res.json({
             status: true,
             data: employee,
@@ -227,7 +217,7 @@ exports.employee_list = function(req, res, next) {
 // Display detail page for a specific author.
 exports.employee_detail = async function(req, res, next) {
   
-  var employee_id = await checkParamsId(req, res, req.params.employee_id);
+  var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
   
   var thisEmployee = employee_id ? await models.user.findById(employee_id) : null
     
