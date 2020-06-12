@@ -222,7 +222,9 @@ exports.employee_update_post = [
   //   }
   // }
 // ];
-
+    
+    console.log('This is employee id ' + employee_id);
+    
     models.user.update(
            {employee},{ where: {id: employee_id} }
       ).then(function(employee) {
