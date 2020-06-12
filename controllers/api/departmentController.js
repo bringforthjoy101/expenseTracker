@@ -9,7 +9,7 @@ exports.department_create_post = [
       // Validation for inputs
       check('dept_name')
       .isLength({ min: 3, max: 50 }).withMessage('Department name must be between 3 and 50 characters long')
-      .isEmpty().withMessage('Department name cannot be empty')
+      .not().isEmpty().withMessage('Department name cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Department name must contain only Letters.')
     ],
     

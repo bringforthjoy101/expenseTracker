@@ -11,28 +11,28 @@ exports.employee_create_post = [
       // Validation for inputs
       check('firstname')
       .isLength({ min: 3, max: 50 }).withMessage('Firstname must be between 3 and 50 characters long')
-      .isEmpty().withMessage('Firstname cannot be empty')
+      .not().isEmpty().withMessage('Firstname cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Firstname must contain only Letters.'),
       check('lastname')
       .isLength({ min: 3, max: 50 }).withMessage('Lastname must be between 3 and 50 characters long')
-      .isEmpty().withMessage('Lastname cannot be empty')
+      .not().isEmpty().withMessage('Lastname cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Lastname must contain only Letters.'),
       check('username')
       .isLength({ min: 3, max: 50 }).withMessage('Username must be between 3 and 50 characters long')
-      .isEmpty().withMessage('Username cannot be empty')
+      .not().isEmpty().withMessage('Username cannot be empty')
       .isAlphanumeric().withMessage('Username can only be alphanumeric.'),
       check('email')
-      .isEmpty().withMessage('Email cannot be empty')
+      .not().isEmpty().withMessage('Email cannot be empty')
       .isEmail().withMessage('Invalid Email'),
       check('password')
       .isLength({ min: 6, max: 50 }).withMessage('Password must be between 6 and 50 characters long')
-      .isEmpty().withMessage('Password cannot be empty'),
+      .not().isEmpty().withMessage('Password cannot be empty'),
       check('department')
-      .isEmpty().withMessage('Department cannot be empty')
-      .isNumeric().withMessage('Department must be numeric'),
+      .not().isEmpty().withMessage('Department cannot be empty')
+      .isInt().withMessage('Department must be numeric'),
       check('role')
-        .isEmpty().withMessage('Role cannot be empty')
-        .isNumeric().withMessage('Role must be numeric'),
+      .not().isEmpty().withMessage('Role cannot be empty')
+      .isInt().withMessage('Role must be numeric'),
     ],
     
   async function(req, res, next) {

@@ -8,7 +8,7 @@ exports.category_create_post = [
       // Validation for inputs
       check('category_name')
       .isLength({ min: 3, max: 50 }).withMessage('Category name must be between 3 and 50 characters long')
-      .isEmpty().withMessage('Category name cannot be empty')
+      .not().isEmpty().withMessage('Category name cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Category name must contain only Letters.')
     ],
     function(req, res, next) {
