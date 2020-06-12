@@ -132,27 +132,20 @@ exports.employee_update_post = [
       // Validation for inputs
       check('firstname')
       .isLength({ min: 3, max: 50 }).withMessage('Firstname must be between 3 and 50 characters long')
-      .not().isEmpty().withMessage('Firstname cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Firstname must contain only Letters.'),
       check('lastname')
       .isLength({ min: 3, max: 50 }).withMessage('Lastname must be between 3 and 50 characters long')
-      .not().isEmpty().withMessage('Lastname cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Lastname must contain only Letters.'),
       check('username')
       .isLength({ min: 3, max: 50 }).withMessage('Username must be between 3 and 50 characters long')
-      .not().isEmpty().withMessage('Username cannot be empty')
       .isAlphanumeric().withMessage('Username can only be alphanumeric.'),
       check('email')
-      .not().isEmpty().withMessage('Email cannot be empty')
       .isEmail().withMessage('Invalid Email'),
       check('password')
-      .isLength({ min: 6, max: 50 }).withMessage('Password must be between 6 and 50 characters long')
-      .not().isEmpty().withMessage('Password cannot be empty'),
+      .isLength({ min: 6, max: 50 }).withMessage('Password must be between 6 and 50 characters long'),
       check('department')
-      .not().isEmpty().withMessage('Department cannot be empty')
       .isInt().withMessage('Department must be numeric'),
       check('role')
-      .not().isEmpty().withMessage('Role cannot be empty')
       .isInt().withMessage('Role must be numeric'),
     ],
     
@@ -180,14 +173,24 @@ exports.employee_update_post = [
         });
   }
 
-
-    thisEmployee.firstname = req.body.firstname;
-    thisEmployee.lastname = req.body.lastname;
-    thisEmployee.username = req.body.username;
-    thisEmployee.email = req.body.email;
-    thisEmployee.password= req.body.password;
+  // var test1;
   
-    console.log(thisEmployee.firstname);
+  // var test2 = 'value';
+  
+  // console.log(test1 ? 'true':'false'); // false
+  // console.log(test2 ? 'true':'false'); // true
+  
+ 
+    thisEmployee.firstname = req.body.firstname ? req.body.firstname : thisEmployee.firstname 
+    thisEmployee.lastname = req.body.lastname ? req.body.lastname : thisEmployee.lastname 
+    thisEmployee.username = req.body.username ? req.body.username : thisEmployee.username 
+    thisEmployee.email =  req.body.email ? req.body.email : thisEmployee.email 
+    thisEmployee.password = req.body.password ? req.body.password : thisEmployee.password 
+    thisEmployee.DepartmentId = req.body.department ? req.body.department : thisEmployee.department 
+    thisEmployee.RoleId =  req.body.role ? req.body.role : thisEmployee.role 
+        
+  
+    console.log('New Employee firstname ' + thisEmployee.firstname);
   
     thisEmployee.update;
     
@@ -268,6 +271,7 @@ exports.employee_list = function(req, res, next) {
 // Display detail page for a specific author.
 exports.employee_detail = async function(req, res, next) {
   
+
   var employee = await checkParamsId(req, res, 'Employee', req.params.employee_id, true);
   
   var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
