@@ -4,7 +4,7 @@ const { check, validationResult } = require('express-validator');
 
 
 // Handle expense create on POST.
-exports.expense_create_post = [
+exports.expense_create_post = 
     [
         // Validation for inputs
         check('title')
@@ -100,8 +100,8 @@ exports.expense_create_post = [
             });
         }
         
-    }
-];
+    };
+
 
 // Handle post delete on POST.
 exports.expense_delete_post = function(req, res, next) {
