@@ -86,7 +86,7 @@ exports.expense_create_post = [
                 CategoryId: req.body.category,
                 status: status,
                 business_name: req.body.current_business,
-                userId: employee_id,
+                EmployeeId: employee_id,
                 DepartmentId: req.body.department
             }).then(function(expense) {
                 res.status(200).json({
@@ -184,7 +184,13 @@ exports.expense_update_post = [
         try {
             console.log("ID is " + expense_id);
         
-        var status = getStatus(req.body.amount);
+        // var status = getStatus(req.body.amount);
+        var status;
+            if (req.body.amount <= 1000) {
+                status = 'Approved';
+            } else {
+                status = 'Pending';
+            }
         
         var expense = {
             title: req.body.title,
@@ -409,7 +415,15 @@ exports.expense_approval_get = function(req, res) {
     try {
         let expense_id = req.params.expense_id;
         let employee_id = req.params.employee_id;
-        let status = getAprovalStatus(req.params.status_code)
+        // let status = getAprovalStatus(req.params.status_code)
+        var status;
+            if (req.params.status_code === 1) {
+                status = 'Approved';
+            } else if (req.params.status_code === 2) {
+                status = 'Declined';
+            } else {
+                status = 'Pending';
+            }
 
         console.log("The employee id is not null " + employee_id);
         console.log("The expense id is not null " + expense_id);
