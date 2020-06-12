@@ -91,12 +91,12 @@ exports.employee_delete_post = async function(req, res, next) {
           });
       }
     
-    models.user.destroy(thisEmployee);
-    
-    res.status(200).json({
+    models.user.destroy(thisEmployee).then(function() {
+         res.status(200).json({
             status: true,
             message: 'Employee deleted successfully'
-    })
+      }) 
+    });
    } catch (error) {
       res.status(400).json({
         status: false,
