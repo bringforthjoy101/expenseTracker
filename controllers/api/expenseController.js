@@ -6,6 +6,7 @@ const { check, validationResult } = require('express-validator');
 // Handle expense create on POST.
 exports.expense_create_post = [
     
+        [
         // Validation for inputs
         check('title')
         .not().isEmpty().withMessage('Expense title cannot be empty')
@@ -32,13 +33,13 @@ exports.expense_create_post = [
         .isInt().withMessage('Department must be numeric'),
         check('current_business')
         .not().isEmpty().withMessage('Current business cannot be empty')
-        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long'),
-        
+        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
+        ],
         
       
     async function(req, res, next) {
         // checks for validations
-        const errors = validationResult(req.body);
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ status: false, errors: errors.array() });
         }
