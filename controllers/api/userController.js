@@ -76,92 +76,150 @@ exports.employee_delete_post = async function(req, res, next) {
  
     // validates if the ID is an integer
     
-    var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
+   var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
   
-    var thisEmployee = employee_id ? await models.user.findById(employee_id) : null
-    // checks if the ID exists
-    
-    if (!thisEmployee) {
-      return res.status(400).json({
-          status: false,
-          message: 'Employee ID not found'
-        });
-    }
-    // Performs Operation
-    try {
-      models.user.destroy({
-        // find the author_id to delete from database
-        where: {
-          id: employee_id
-        }
-      }).then(function() {
-        res.status(200).json({
-          status: true,
-          message: 'Employee deleted successfully'
-        })
-         console.log("Employee deleted successfully");
+   
+   try { 
+     
+     var thisEmployee = employee_id ? await models.user.findById(employee_id) : null
+      // checks if the ID exists
       
-      });
-    } catch (error) {
+      if (!thisEmployee) {
+        return res.status(400).json({
+            status: false,
+            message: 'Employee ID not found'
+          });
+      }
+    
+    thisEmployee.destroy;
+    
+    res.status(200).json({
+            status: true,
+            message: 'Employee deleted successfully'
+    })
+   } catch (error) {
       res.status(400).json({
         status: false,
         message: `There was an error - ${error}`
       });
     }
+    
+    // // Performs Operation
+    // try {
+    //   models.user.destroy({
+    //     // find the author_id to delete from database
+    //     where: {
+    //       id: employee_id
+    //     }
+    //   }).then(function() {
+        
+      
+    //   });
+    // } catch (error) {
+    //   res.status(400).json({
+    //     status: false,
+    //     message: `There was an error - ${error}`
+    //   });
+    // }
 };
 
 
 // Handle post update on POST.
-exports.employee_update_post = async function(req, res, next) {
+// exports.employee_update_post = async function(req, res, next) {
+exports.employee_update_post = [
   
-       // validates if the ID is an integer
-       var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
-  
-        var thisEmployee = employee_id ? await models.user.findById(employee_id) : null
-       
-        if (!thisEmployee) {
-          return res.status(400).json({
-              status: false,
-              message: 'Employee ID not found'
-            });
-        }
+    [
+      // Validation for inputs
+      check('firstname')
+      .isLength({ min: 3, max: 50 }).withMessage('Firstname must be between 3 and 50 characters long')
+      .not().isEmpty().withMessage('Firstname cannot be empty')
+      .matches(/^[A-Za-z\s]+$/).withMessage('Firstname must contain only Letters.'),
+      check('lastname')
+      .isLength({ min: 3, max: 50 }).withMessage('Lastname must be between 3 and 50 characters long')
+      .not().isEmpty().withMessage('Lastname cannot be empty')
+      .matches(/^[A-Za-z\s]+$/).withMessage('Lastname must contain only Letters.'),
+      check('username')
+      .isLength({ min: 3, max: 50 }).withMessage('Username must be between 3 and 50 characters long')
+      .not().isEmpty().withMessage('Username cannot be empty')
+      .isAlphanumeric().withMessage('Username can only be alphanumeric.'),
+      check('email')
+      .not().isEmpty().withMessage('Email cannot be empty')
+      .isEmail().withMessage('Invalid Email'),
+      check('password')
+      .isLength({ min: 6, max: 50 }).withMessage('Password must be between 6 and 50 characters long')
+      .not().isEmpty().withMessage('Password cannot be empty'),
+      check('department')
+      .not().isEmpty().withMessage('Department cannot be empty')
+      .isInt().withMessage('Department must be numeric'),
+      check('role')
+      .not().isEmpty().withMessage('Role cannot be empty')
+      .isInt().withMessage('Role must be numeric'),
+    ],
+    
+    async function(req, res, next) {
+    // checks for validations
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ status: false, errors: errors.array() });
+    }
+ 
 
-        try {
-          var employee = {
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            username: req.body.username,
-            email: req.body.email,
-            password: req.body.password
-          }
-          models.user.update(
-            // Values to update
-                {
-                    employee
-                },
-              { // Clause
-                    where: 
-                    {
-                        id: employee_id
-                    }
-                }
-            //   returning: true, where: {id: req.params.post_id} 
-             ).then(function(employee) {
-              res.status(200).json({
-                status: true,
-                data: employee,
-                message: 'Employee updated successfully'
-              })  
-              console.log("Employee updated successfully");
+   // validates if the ID is an integer
+  var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
+
+  try {
+    
+  var thisEmployee = employee_id ? await models.user.findById(employee_id) : null
+  
+  console.log('Old employee firstname ' + thisEmployee.firstname);
+       
+  if (!thisEmployee) {
+      return res.status(400).json({
+          status: false,
+          message: 'Employee ID not found'
         });
-        } catch (error) {
-          res.status(400).json({
-            status: false,
-            message: `There was an error - ${error}`
-          });
-        }
-        
-};
+  }
+
+
+    thisEmployee.firstname = req.body.firstname;
+    thisEmployee.lastname = req.body.lastname;
+    thisEmployee.username = req.body.username;
+    thisEmployee.email = req.body.email;
+    thisEmployee.password= req.body.password;
+  
+    console.log(thisEmployee.firstname);
+  
+    thisEmployee.update;
+    
+    res.status(200).json({
+            status: true,
+            message: 'Employee deleted successfully'
+    })
+   } catch (error) {
+      res.status(400).json({
+        status: false,
+        message: `There was an error - ${error}`
+      });
+    }
+  }
+];
+    
+  //   models.user.update(
+  //         { employee },{ where: {id: employee_id} }
+  //     ).then(function(employee) {
+  //       res.status(200).json({
+  //         status: true,
+  //         data: employee,
+  //         message: 'Employee updated successfully'
+  //       })  
+  //       console.log("Employee updated successfully");
+  //   });
+  // } catch (error) {
+  //   res.status(400).json({
+  //     status: false,
+  //     message: `There was an error - ${error}`
+  //   });
+
 
 // Display list of all employees.
 exports.employee_list = function(req, res, next) {
@@ -209,6 +267,8 @@ exports.employee_list = function(req, res, next) {
 
 // Display detail page for a specific author.
 exports.employee_detail = async function(req, res, next) {
+  
+  var employee = await checkParamsId(req, res, 'Employee', req.params.employee_id, true);
   
   var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
   
