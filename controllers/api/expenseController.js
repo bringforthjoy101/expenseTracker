@@ -4,8 +4,8 @@ const { check, validationResult } = require('express-validator');
 
 
 // Handle expense create on POST.
-exports.expense_create_post = 
-    [
+exports.expense_create_post = [
+    
         // Validation for inputs
         check('title')
         .isLength({ min: 3, max: 50 }).withMessage('Expense title must be between 3 and 50 characters long')
@@ -32,9 +32,9 @@ exports.expense_create_post =
         .isNumeric().withMessage('Department must be numeric'),
         check('current_business')
         .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
-        .isEmpty().withMessage('Current business cannot be empty')
+        .isEmpty().withMessage('Current business cannot be empty'),
         
-      ],
+      
     async function(req, res, next) {
         // checks for validations
         const errors = validationResult(req.body);
@@ -100,8 +100,8 @@ exports.expense_create_post =
             });
         }
         
-    };
-
+    }
+];
 
 // Handle post delete on POST.
 exports.expense_delete_post = function(req, res, next) {
