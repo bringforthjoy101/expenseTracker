@@ -1,6 +1,6 @@
 var Expense = require('../../models/expense');
 var models = require('../../models');
-const { check, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator/check');
 
 
 // Handle expense create on POST.
@@ -41,6 +41,7 @@ exports.expense_create_post = [
         if (!errors.isEmpty()) {
             return res.status(422).json({ status: false, errors: errors.array() });
         }
+        
         try {
 
             // var status = getStatus(req.body.amount);
