@@ -58,7 +58,19 @@ exports.expense_create_post = [
                 });
             }
         
-            var expense = {
+            // var expense = {
+            //     title: req.body.title,
+            //     desc: req.body.desc,
+            //     amount: req.body.amount,
+            //     TypeId: req.body.type,
+            //     CategoryId: req.body.category,
+            //     status: status,
+            //     busines_name: req.body.current_business,
+            //     EmployeeId: employee_id,
+            //     DepartmentId: req.body.department
+            // }
+            
+            models.Expense.create({
                 title: req.body.title,
                 desc: req.body.desc,
                 amount: req.body.amount,
@@ -68,10 +80,6 @@ exports.expense_create_post = [
                 busines_name: req.body.current_business,
                 EmployeeId: employee_id,
                 DepartmentId: req.body.department
-            }
-            
-            models.Expense.create({
-                expense
             }).then(function(expense) {
                 res.status(200).json({
                     status: true,

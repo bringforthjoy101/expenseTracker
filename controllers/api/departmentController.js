@@ -23,11 +23,11 @@ exports.department_create_post = [
         // Performs operation
         try {
           
-            var dept_name = {dept_name: req.body.dept_name}
+            // var dept_name = {dept_name: req.body.dept_name}
         
             //   performs operations
             models.Department.create({
-             dept_name
+             dept_name: req.body.dept_name
             }).then(function(department) {
               res.status(200).json({
                 status: true,
@@ -38,43 +38,13 @@ exports.department_create_post = [
             });
         } catch (error) {
           // check if there was an error during operation
-        res.status(400).json({
-          status: false,
-          message: `There was an error - ${error}`
-        });
+          res.status(400).json({
+            status: false,
+            message: `There was an error - ${error}`
+          });
         }
     } 
-]; 
-
-// Display department delete form on GET.
-exports.department_delete_get = function(req, res, next) {
-    // validates if the department ID is an integer
-    if (isNaN(Number(req.params.department_id))) {
-        return res.status(400).json({
-          status: false,
-          message: 'Invalid Department ID'
-        });
-    }
-    // Performs operation
-    try {
-        models.Department.destroy({
-        where: {
-          id: req.params.department_id
-        }
-        }).then(function() {
-            res.status(200).json({
-                status: true,
-                message: 'Department deleted successfully'
-            })
-            console.log("Department deleted successfully");
-        });
-    } catch (error) {
-        res.status(400).json({
-          status: false,
-          message: `There was an error - ${error}`
-        });
-    }
-};
+];
 
 // Handle department delete on POST.
 exports.department_delete_post = function(req, res, next) {
