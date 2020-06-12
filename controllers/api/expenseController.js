@@ -417,9 +417,9 @@ exports.expense_approval_get = function(req, res) {
         let employee_id = req.params.employee_id;
         // let status = getAprovalStatus(req.params.status_code)
         var status;
-            if (req.params.status_code === 1) {
+            if (req.params.status_code == 1) {
                 status = 'Approved';
-            } else if (req.params.status_code === 2) {
+            } else if (req.params.status_code == 2) {
                 status = 'Declined';
             } else {
                 status = 'Pending';
@@ -434,7 +434,7 @@ exports.expense_approval_get = function(req, res) {
 
             }, { // Clause
                 where: {
-                    id: req.params.expense_id
+                    id: expense_id
                 }
             }
             //   returning: true, where: {id: req.params.scheduleId} 
