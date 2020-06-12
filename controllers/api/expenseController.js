@@ -43,9 +43,14 @@ exports.expense_create_post = [
         }
         try {
 
-            var status = getStatus(req.body.amount);
+            // var status = getStatus(req.body.amount);
             // put default pending in model
-            
+            var status;
+            if (req.body.amount <= 1000) {
+                status = 'Approved';
+            } else {
+                status = 'Pending';
+            }
             
             let employee_id = req.body.employee_id;
         
