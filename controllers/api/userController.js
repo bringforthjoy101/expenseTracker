@@ -235,7 +235,7 @@ exports.employee_detail = async function(req, res, next) {
     });
   }
   // checks if the ID exists
-    const thisEmployee = await models.user.findById(employee_id)
+    const thisEmployee = await models.user.findById(employee_id);
     if (!thisEmployee) {
       return res.status(400).json({
           status: false,
