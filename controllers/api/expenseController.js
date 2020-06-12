@@ -57,7 +57,7 @@ exports.expense_create_post = [
             
             let employee_id = req.body.employee_id;
         
-            const employee = await models.Employee.findById(employee_id);
+            const employee = await models.user.findById(employee_id);
             
             // If the category selected in the front end does not exist in DB return 400 error	
             if (!employee) {
@@ -86,7 +86,7 @@ exports.expense_create_post = [
                 CategoryId: req.body.category,
                 status: status,
                 business_name: req.body.current_business,
-                EmployeeId: employee_id,
+                userId: employee_id,
                 DepartmentId: req.body.department
             }).then(function(expense) {
                 res.status(200).json({
@@ -250,7 +250,7 @@ exports.expense_detail = async function(req, res, next) {
             {
                 include: [
                     {
-                      model: models.Employee,
+                      model: models.user,
                       attributes: ['id', 'firstname', 'lastname']
                     },
                     {
@@ -304,7 +304,7 @@ exports.expense_list = function(req, res, next) {
             // where: {business_name: user_business_name},
             include: [
                 {
-                  model: models.Employee,
+                  model: models.user,
                   attributes: ['id', 'firstname', 'lastname']
                 },
                 {
@@ -353,13 +353,13 @@ exports.expense_list = function(req, res, next) {
 // This is the expense homepage.
 exports.index = async function(req, res) {
     try {
-        const employees = await models.Employee.findAll();
+        const employees = await models.user.findAll();
         const totalSum = await models.Expense.sum('amount', { where: { status: 'Approved' } } );
             
         models.Expense.findAll({
             include: [
                 {
-                    model: models.Employee,
+                    model: models.user,
                     attributes: ['id', 'firstname', 'lastname']
                 },
                 {
