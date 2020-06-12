@@ -47,13 +47,21 @@ exports.department_create_post = [
 ];
 
 // Handle department delete on POST.
-exports.department_delete_post = function(req, res, next) {
+exports.department_delete_post = async function(req, res, next) {
     // Validates if the department ID is an integer.
     
     if (isNaN(Number(req.params.department_id))) {
         return res.status(400).json({
           status: false,
           message: 'Invalid Department ID'
+        });
+    }
+    
+    const thisDepartment = await models.Department.findById(req.params.department_id);
+    if (!thisDepartment) {
+      return res.status(400).json({
+          status: false,
+          message: 'Department ID not found'
         });
     }
     // Performs operation.
