@@ -193,15 +193,15 @@ exports.employee_update_post = [
   // console.log(test1 ? 'true':'false'); // false
   // console.log(test2 ? 'true':'false'); // true
   
- 
-    thisEmployee.firstname = req.body.firstname ? req.body.firstname : thisEmployee.firstname 
-    thisEmployee.lastname = req.body.lastname ? req.body.lastname : thisEmployee.lastname 
-    thisEmployee.username = req.body.username ? req.body.username : thisEmployee.username 
-    thisEmployee.email =  req.body.email ? req.body.email : thisEmployee.email 
-    thisEmployee.password = req.body.password ? req.body.password : thisEmployee.password 
-    thisEmployee.DepartmentId = req.body.department ? req.body.department : thisEmployee.department 
-    thisEmployee.RoleId =  req.body.role ? req.body.role : thisEmployee.role 
-        
+ thisEmployee = {
+    firstname: req.body.firstname ? req.body.firstname : thisEmployee.firstname,
+    lastname: req.body.lastname ? req.body.lastname : thisEmployee.lastname, 
+    username: req.body.username ? req.body.username : thisEmployee.username, 
+    email: req.body.email ? req.body.email : thisEmployee.email, 
+    password: req.body.password ? req.body.password : thisEmployee.password, 
+    DepartmentId: req.body.department ? req.body.department : thisEmployee.department, 
+    RoleId: req.body.role ? req.body.role : thisEmployee.role 
+ }
   
     console.log('New Employee firstname ' + thisEmployee.firstname);
   
