@@ -193,16 +193,24 @@ exports.employee_update_post = [
   // console.log(test1 ? 'true':'false'); // false
   // console.log(test2 ? 'true':'false'); // true
   
- var employee = {
-    firstname: req.body.firstname ? req.body.firstname : thisEmployee.firstname,
-    lastname: req.body.lastname ? req.body.lastname : thisEmployee.lastname, 
-    username: req.body.username ? req.body.username : thisEmployee.username, 
-    email: req.body.email ? req.body.email : thisEmployee.email, 
-    password: req.body.password ? req.body.password : thisEmployee.password, 
-    DepartmentId: req.body.department ? req.body.department : thisEmployee.department, 
-    RoleId: req.body.role ? req.body.role : thisEmployee.role 
- }
+// var employee = {
+//     firstname: req.body.firstname ? req.body.firstname : thisEmployee.firstname,
+//     lastname: req.body.lastname ? req.body.lastname : thisEmployee.lastname, 
+//     username: req.body.username ? req.body.username : thisEmployee.username, 
+//     email: req.body.email ? req.body.email : thisEmployee.email, 
+//     password: req.body.password ? req.body.password : thisEmployee.password, 
+//     DepartmentId: req.body.department ? req.body.department : thisEmployee.department, 
+//     RoleId: req.body.role ? req.body.role : thisEmployee.role 
+// }
  
+  var employee = {
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    }
+          
  console.log('This is the employee ' + employee);
   
  console.log('New Employee firstname ' + employee.firstname);
@@ -227,10 +235,10 @@ exports.employee_update_post = [
     
     await models.user.update(
            {employee},{ where: {id: employee_id} }
-      ).then(function() {
+      ).then(function(data) {
         res.status(200).json({
           status: true,
-          data: employee,
+          data: data,
           message: 'Employee updated successfully'
         })  
         console.log("Employee updated successfully");
