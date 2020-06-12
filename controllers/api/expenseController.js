@@ -430,7 +430,7 @@ exports.expense_approval_get = function(req, res) {
         models.Expense.update(
             // Values to update
             {
-                status
+                status: status
 
             }, { // Clause
                 where: {
