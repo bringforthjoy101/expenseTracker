@@ -20,7 +20,7 @@
  
 module.exports = function(sequelize, Sequelize) {
 
-    var User = sequelize.define('User', {
+    var User = sequelize.define('user', {
 
         id: {
             autoIncrement: true,
@@ -76,8 +76,9 @@ module.exports = function(sequelize, Sequelize) {
         account_id : {type: Sequelize.STRING},
         permission : {type: Sequelize.STRING},
         profile : {type: Sequelize.STRING},
-        department_name : {type: Sequelize.STRING},
-        current_business : {type: Sequelize.STRING}
+        current_business : {type: Sequelize.STRING},
+        RoleId : {type: Sequelize.INTEGER, defaultValue: 2, allowNull: false},
+        DepartmentId : {type: Sequelize.INTEGER, allowNull: false}
 
     });
 

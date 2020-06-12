@@ -49,15 +49,15 @@ exports.department_create_post = [
 // Handle department delete on POST.
 exports.department_delete_post = async function(req, res, next) {
     // Validates if the department ID is an integer.
-    
-    if (isNaN(Number(req.params.department_id))) {
+    var department_id = req.params.department_id
+    if (isNaN(Number(department_id))) {
         return res.status(400).json({
           status: false,
           message: 'Invalid Department ID'
         });
     }
-    
-    const thisDepartment = await models.Department.findById(req.params.department_id);
+    // checks if the id exists
+    const thisDepartment = await models.Department.findById(department_id);
     if (!thisDepartment) {
       return res.status(400).json({
           status: false,
@@ -68,7 +68,7 @@ exports.department_delete_post = async function(req, res, next) {
     try {
         models.Department.destroy({
         where: {
-          id: req.params.department_id
+          id: department_id
         }
         }).then(function() {
             res.status(200).json({
@@ -119,18 +119,27 @@ exports.department_list = function(req, res, next) {
 };
 
 // Display detail page for a specific department.
-exports.department_detail = function(req, res, next) {
+exports.department_detail = async function(req, res, next) {
+  var department_id = req.params.department_id
     // validates if the department ID is an integer.
-    if (isNaN(Number(req.params.department_id))) {
+    if (isNaN(Number(department_id))) {
         return res.status(400).json({
           status: false,
           message: 'Invalid Department ID'
         });
     }
+    // checks if the id exists
+    const thisDepartment = await models.Department.findById(department_id)
+    if (!thisDepartment) {
+      return res.status(400).json({
+          status: false,
+          message: 'Department ID not found'
+        });
+    }
     // performs operation
     try {
         models.Department.findById(
-                req.params.department_id
+                department_id
         ).then(function(department) {
         // renders an inividual department details page
         if (!department) {
@@ -140,7 +149,7 @@ exports.department_detail = function(req, res, next) {
               message: 'Department not found'
           });
           } else {
-          res.json({
+          res.status(200).json({
               status: true,
               data: department,
               message: 'Department details rendered successfully'

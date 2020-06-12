@@ -39,12 +39,21 @@ exports.category_create_post = [
 ];
 
 // Handle category delete on POST.
-exports.category_delete_post = function(req, res, next) {
+exports.category_delete_post = async function(req, res, next) {
+    var category_id = req.params.category_id
     // Validates if the department ID is an integer.
-    if (isNaN(Number(req.params.department_id))) {
+    if (isNaN(Number(category_id))) {
         return res.status(400).json({
           status: false,
-          message: 'Invalid Department ID'
+          message: 'Invalid Category ID'
+        });
+    }
+    // checks if the ID exists
+    const thisCategory = await models.Category.findById(category_id)
+    if (!thisCategory) {
+      return res.status(400).json({
+          status: false,
+          message: 'Category ID not found'
         });
     }
     // Performs operation.
@@ -52,7 +61,7 @@ exports.category_delete_post = function(req, res, next) {
         models.Category.destroy({
             // find the category_id to delete from database
             where: {
-              id: req.params.category_id
+              id: category_id
             }
           }).then(function() {
            // If an category gets deleted successfully, we just redirect to posts list
@@ -73,13 +82,7 @@ exports.category_delete_post = function(req, res, next) {
 
 // Display list of all categorys.
 exports.category_list = function(req, res, next) {
-        // Validates if the department ID is an integer.
-        if (isNaN(Number(req.params.department_id))) {
-            return res.status(400).json({
-              status: false,
-              message: 'Invalid Department ID'
-            });
-        }
+        
         // Performs operation
         try {
             models.Category.findAll(
@@ -109,10 +112,26 @@ exports.category_list = function(req, res, next) {
 };
 
 // Display detail page for a specific category.
-exports.category_detail = function(req, res, next) {
+exports.category_detail = async function(req, res, next) {
+    var category_id = req.params.category_id
+        // Validates if the department ID is an integer.
+        if (isNaN(Number(category_id))) {
+            return res.status(400).json({
+              status: false,
+              message: 'Invalid Category ID'
+            });
+        }
+        // checks if the ID exists
+        const thisCategory = await models.Category.findById(category_id)
+        if (!thisCategory) {
+          return res.status(400).json({
+              status: false,
+              message: 'Category ID not found'
+            });
+        }
      try {
          models.Category.findById(
-                req.params.category_id,
+                category_id
                 
         ).then(function(category) {
         // renders an inividual category details page

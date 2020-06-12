@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator');
 
 
 
+
 // Handle employee create on POST.
 exports.employee_create_post = [
   [
@@ -81,12 +82,21 @@ exports.employee_create_post = [
 
 
 // Handle employee delete on POST.
-exports.employee_delete_post = function(req, res, next) {
+exports.employee_delete_post = async function(req, res, next) {
+  var employee_id = req.params.employee_id
           // validates if the ID is an integer
-    if (isNaN(Number(req.params.employee_id))) {
+    if (isNaN(Number(employee_id))) {
         return res.status(400).json({
           status: false,
           message: 'Invalid Employee ID'
+        });
+    }
+    // checks if the ID exists
+    const thisEmployee = await models.Employee.findById(employee_id)
+    if (!thisEmployee) {
+      return res.status(400).json({
+          status: false,
+          message: 'Employee ID not found'
         });
     }
     // Performs Operation
@@ -94,7 +104,7 @@ exports.employee_delete_post = function(req, res, next) {
       models.Employee.destroy({
         // find the author_id to delete from database
         where: {
-          id: req.params.employee_id
+          id: employee_id
         }
       }).then(function() {
         res.status(200).json({
@@ -114,14 +124,23 @@ exports.employee_delete_post = function(req, res, next) {
 
 
 // Handle post update on POST.
-exports.employee_update_post = function(req, res, next) {
-       console.log("ID is " + req.params.employee_id);
+exports.employee_update_post = async function(req, res, next) {
+  var employee_id = req.params.employee_id
+       console.log("ID is " + employee_id);
        // validates if the ID is an integer
-       if (isNaN(Number(req.params.employee_id))) {
+       if (isNaN(Number(employee_id))) {
           return res.status(400).json({
             status: false,
             message: 'Invalid Employee ID'
           });
+        }
+        // checks if the ID exists
+        const thisEmployee = await models.Employee.findById(employee_id)
+        if (!thisEmployee) {
+          return res.status(400).json({
+              status: false,
+              message: 'Employee ID not found'
+            });
         }
 
         try {
@@ -140,7 +159,7 @@ exports.employee_update_post = function(req, res, next) {
               { // Clause
                     where: 
                     {
-                        id: req.params.employee_id
+                        id: employee_id
                     }
                 }
             //   returning: true, where: {id: req.params.post_id} 
@@ -207,17 +226,26 @@ exports.employee_list = function(req, res, next) {
 
 // Display detail page for a specific author.
 exports.employee_detail = async function(req, res, next) {
+  var employee_id = req.params.employee_id
   // validates if the ID is an integer
-  if (isNaN(Number(req.params.employee_id))) {
+  if (isNaN(Number(employee_id))) {
     return res.status(400).json({
       status: false,
       message: 'Invalid Employee ID'
     });
   }
+  // checks if the ID exists
+    const thisEmployee = await models.Employee.findById(employee_id)
+    if (!thisEmployee) {
+      return res.status(400).json({
+          status: false,
+          message: 'Employee ID not found'
+        });
+    }
 
   try {
-    console.log("This is the employee id " + req.params.employee_id);
-    console.log("This is the employee department " + req.params.employee_department);
+    console.log("This is the employee id " + employee_id);
+    // console.log("This is the employee department " + req.params.employee_department);
     // Listing all expenses created by an employee
     const expenses = await models.Expense.findAll({
       include: [
@@ -227,16 +255,16 @@ exports.employee_detail = async function(req, res, next) {
         },
       ],
         where: {
-          EmployeeId: req.params.employee_id,
+          EmployeeId: employee_id,
         },
     });
 
     // Listing all expenses created by all employees
-    const deptExpenses = await models.Expense.findAll({
-      where: {
-        DepartmentId: req.params.employee_department,
-      },
-    });
+    // const deptExpenses = await models.Expense.findAll({
+    //   where: {
+    //     DepartmentId: req.params.employee_department,
+    //   },
+    // });
 
     
 
@@ -250,10 +278,10 @@ exports.employee_detail = async function(req, res, next) {
     });
 
     const employeeExpenses = await  models.Expense.findAndCountAll({
-      where: {EmployeeId: req.params.employee_id}
+      where: {EmployeeId: employee_id}
     });
 
-    const employeeTotalExpenses = await models.Expense.sum('amount', {where: {EmployeeId: req.params.employee_id} });
+    const employeeTotalExpenses = await models.Expense.sum('amount', {where: {EmployeeId: employee_id} });
     const categories = await models.Category.findAll();
     const types = await models.Type.findAll();
     const departments = await models.Department.findAll();
@@ -271,11 +299,11 @@ exports.employee_detail = async function(req, res, next) {
       ]
     });
 
-    console.log("This is the expenses for that employed id " + req.params.employee_id);
-    console.log("This is the expenses for that employee dept " + req.params.employee_department);
+    console.log("This is the expenses for that employed id " + employee_id);
+    // console.log("This is the expenses for that employee dept " + req.params.employee_department);
 
      models.Employee.findById(
-      req.params.employee_id, 
+      employee_id, 
       {
           include: [
             {
@@ -310,7 +338,7 @@ exports.employee_detail = async function(req, res, next) {
             expenses: expenses,
             departments: departments,
             roles: roles, 
-            deptExpenses: deptExpenses,
+            // deptExpenses: deptExpenses,
             allExpenses: allExpenses,
             employeeTotalExpenses: employeeTotalExpenses,
             employeeExpenses: employeeExpenses,

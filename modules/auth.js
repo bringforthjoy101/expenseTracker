@@ -29,20 +29,20 @@ auth.initializeStrategy = function(passport) {
             passReqToCallback: true
         },
         function(req, email, password, cb) {
-            dbLayer.Employee.findOne({
+            dbLayer.user.findOne({
                 where: {
                     email: email
                 }
-            }).then(function(employee) {
-                if (!employee) {
+            }).then(function(user) {
+                if (!user) {
                     return cb(null, false);
                 }
-                if (!isValidPassword(employee.password, password)) {
+                if (!isValidPassword(user.password, password)) {
                     return cb(null, false);
                 }
 
-                var userinfo = employee.get();
-                employee.update({
+                var userinfo = user.get();
+                user.update({
                     last_login: Date.now()
                 })
                 return cb(null, userinfo);
@@ -53,14 +53,14 @@ auth.initializeStrategy = function(passport) {
             });
         }));
 
-    passport.serializeUser(function(employee, cb) {
-        cb(null, employee.id);
+    passport.serializeUser(function(user, cb) {
+        cb(null, user.id);
     });
 
     passport.deserializeUser(function(id, cb) {
-        dbLayer.Employee.findById(id).then(function(employee) {
-            if (employee) {
-                cb(null, employee);
+        dbLayer.user.findById(id).then(function(user) {
+            if (user) {
+                cb(null, user);
             } else {
                 return cb(null);
             }
@@ -70,19 +70,19 @@ auth.initializeStrategy = function(passport) {
 };
 
 auth.createUser = function(req, res, next) {
-    var Employee = dbLayer.Employee;
-    Employee.findOne({
+    var User = dbLayer.user;
+    User.findOne({
         where: {
             email: req.body.email
         }
-    }).then(function(employee) {
-        if (employee) {
+    }).then(function(user) {
+        if (user) {
             next({
                 success: false,
                 message: 'That email is already taken'
             });
         } else {
-            var userPassword = generateHash(req.body.password);
+            var userPassword = generateHash(req.body.passwordReg);
             var data = {
                 email: req.body.email,
                 username: req.body.username,
@@ -94,17 +94,17 @@ auth.createUser = function(req, res, next) {
                 // more info here for user
             };
 
-            Employee.create(data).then(function(newEmployee, created) {
-                if (!newEmployee) {
+            User.create(data).then(function(newUser, created) {
+                if (!newUser) {
                     next({
                         success: false,
-                        message: 'Error when trying to create new Employee'
+                        message: 'Error when trying to create new user'
                     });
                 };
-                if (newEmployee) {
+                if (newUser) {
                     next({
                         success: true,
-                        message: 'Employee created'
+                        message: 'User created'
                     });
                 };
             });

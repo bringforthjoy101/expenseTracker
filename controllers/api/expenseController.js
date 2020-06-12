@@ -159,27 +159,33 @@ exports.expense_update_post = [
         .isNumeric().withMessage('Category must be numeric'),
       ],
     async function(req, res, next) {
+        var expense_id = req.params.expense_id
         // checks for validations
         const errors = validationResult(req.body);
         if (!errors.isEmpty()) {
             return res.status(422).json({ status: false, errors: errors.array() });
         }
+        // validates if the department ID is an integer
+        if (isNaN(Number(expense_id))) {
+            return res.status(400).json({
+              status: false,
+              message: 'Invalid Expense ID'
+            });
+        }
+        // checks if the ID exists
+        const thisExpense = await models.Expense.findById(expense_id)
+        if (!thisExpense) {
+          return res.status(400).json({
+              status: false,
+              message: 'Expense ID not found'
+            });
+        }
         // Performs operation
         try {
-            console.log("ID is " + req.params.expense_id);
+            console.log("ID is " + expense_id);
         
         var status = getStatus(req.body.amount);
-        let employee_id = req.body.employee_id;
-        // create a new post based on the fields in our post model
-        // I have create two fields, but it can be more for your model
-         
-        // I queried the database to make sure the employee selected exist in DB
-        const employee = await models.Employee.findById(employee_id);
         
-        // If the category selected in the front end does not exist in DB return 400 error	
-        if (!employee) {
-            return res.status(400);
-        }
         var expense = {
             title: req.body.title,
             desc: req.body.desc,
@@ -195,10 +201,10 @@ exports.expense_update_post = [
           { // Clause
                 where: 
                 {
-                    id: req.params.expense_id
+                    id: expense_id
                 }
             }
-        //   returning: true, where: {id: req.params.expense_id} 
+        //   returning: true, where: {id: expense_id} 
          ).then(function(expense) { 
                 // If an post gets updated successfully, we just redirect to posts list
                 // no need to render a page
@@ -220,18 +226,27 @@ exports.expense_update_post = [
 ];
 
 // Display detail page for a specific expense.
-exports.expense_detail = function(req, res, next) {
+exports.expense_detail = async function(req, res, next) {
+    var expense_id = req.params.expense_id;
     // validates if the department ID is an integer
-    if (isNaN(Number(req.params.expense_id))) {
+    if (isNaN(Number(expense_id))) {
         return res.status(400).json({
           status: false,
           message: 'Invalid Expense ID'
         });
     }
+    // checks if the ID exists
+        const thisExpense = await models.Expense.findById(expense_id)
+        if (!thisExpense) {
+          return res.status(400).json({
+              status: false,
+              message: 'Expense ID not found'
+            });
+        }
     // Performs operation
     try {
         models.Expense.findById(
-            req.params.expense_id,
+            expense_id,
             {
                 include: [
                     {

@@ -14,7 +14,7 @@ exports.role_create_post = [
     ],
     function(req, res, next) {
       // checks for validations
-        const errors = validationResult(req.body);
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ status: false, errors: errors.array() });
         }
@@ -40,18 +40,28 @@ exports.role_create_post = [
 ];
 
 // Handle role delete on POST.
-exports.role_delete_post = function(req, res, next) {
-    if (isNaN(Number(req.params.role_id))) {
+exports.role_delete_post = async function(req, res, next) {
+  var role_id = req.params.role_id
+    if (isNaN(Number(role_id))) {
         return res.status(400).json({
           status: false,
           message: 'Invalid Role ID'
         });
     }
+    // checks if the ID exists
+        const thisRole = await models.Role.findById(role_id)
+        if (!thisRole) {
+          return res.status(400).json({
+              status: false,
+              message: 'Role ID not found'
+            });
+        }
+    // Performs operation
     try {
         models.Role.destroy({
             // find the post_id to delete from database
             where: {
-              id: req.params.role_id
+              id: role_id
             }
             }).then(function() {
             // If an post gets deleted successfully, we just redirect to posts list
@@ -102,16 +112,26 @@ exports.role_list = function(req, res, next) {
 };
 
 // Display detail page for a specific role.
-exports.role_detail = function(req, res, next) {
-    if (isNaN(Number(req.params.role_id))) {
+exports.role_detail = async function(req, res, next) {
+  var role_id = req.params.role_id
+    if (isNaN(Number(role_id))) {
         return res.status(400).json({
           status: false,
           message: 'Invalid Role ID'
         });
     }
+    // checks if the ID exists
+        const thisRole = await models.Role.findById(role_id)
+        if (!thisRole) {
+          return res.status(400).json({
+              status: false,
+              message: 'Role ID not found'
+            });
+        }
+    // Performs operation
     try {
         models.Role.findById(
-                req.params.role_id
+                role_id
         ).then(function(role) {
         // renders an inividual role details page
         if (!role) {

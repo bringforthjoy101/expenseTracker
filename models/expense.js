@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       
   Expense.associate = function (models) { 
     
-    models.Expense.belongsTo(models.Employee, {
+    models.Expense.belongsTo(models.user, {
       onDelete: "CASCADE",
       foreignKey: {
       allowNull: true

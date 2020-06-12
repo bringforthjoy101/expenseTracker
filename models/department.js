@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Department.associate = function(models) {
-    models.Department.hasMany(models.Employee);
+    models.Department.hasMany(models.user);
 
     models.Department.hasMany(models.Expense);
   };

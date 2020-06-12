@@ -13,7 +13,7 @@ exports.type_create_post = [
     ],
     function(req, res, next) {
         // checks for validations
-        const errors = validationResult(req.body);
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({ status: false, errors: errors.array() });
         }
@@ -21,7 +21,7 @@ exports.type_create_post = [
             models.Type.create({
                 type_name: req.body.type_name
             }).then(function(type) {
-                  res.json({
+                  res.status(200).json({
                     status: true,
                     data: type,
                     message: 'Type created successfully'
@@ -39,59 +39,36 @@ exports.type_create_post = [
     }
 ];
 
-// Display type delete form on GET.
-exports.type_delete_get = function(req, res, next) {
-     // validates if the department ID is an integer
-    if (isNaN(Number(req.params.department_id))) {
-        return res.status(400).json({
-          status: false,
-          message: 'Invalid Department ID'
-        });
-    }
-    try {
-        models.Type.destroy({
-            // find the type_id to delete from database
-            where: {
-              id: req.params.type_id
-            }
-          }).then(function(type) {
-           // If an type gets deleted successfully, we just redirect to comments list
-           // no need to render a page
-           res.json({
-            status: true,
-            message: 'Type deleted successfully'
-          })
-            console.log("Type deleted successfully");
-          });
-    } catch (error) {
-        // check if there was an error during operation
-        res.status(400).json({
-          status: false,
-          message: `There was an error - ${error}`
-        });
-    }
-       
-};
 
 // Handle type delete on POST.
-exports.type_delete_post = function(req, res, next) {
+exports.type_delete_post = async function(req, res, next) {
+    var type_id = req.params.type_id
     // validates if the department ID is an integer
-    if (isNaN(Number(req.params.department_id))) {
+    if (isNaN(Number(type_id))) {
         return res.status(400).json({
           status: false,
-          message: 'Invalid Department ID'
+          message: 'Invalid Type ID'
         });
     }
+    // checks if the ID exists
+    const thisType = await models.Type.findById(type_id);
+    if (!thisType) {
+      return res.status(400).json({
+          status: false,
+          message: 'Type ID not found'
+        });
+    }
+    // performs operation
     try {
         models.Type.destroy({
             // find the type_id to delete from database
             where: {
-              id: req.params.type_id
+              id: type_id
             }
           }).then(function(type) {
            // If an type gets deleted successfully, we just redirect to comments list
            // no need to render a page
-           res.json({
+           res.status(200).json({
             status: true,
             message: 'Type deleted successfully'
           })
@@ -138,17 +115,27 @@ exports.type_list = function(req, res, next) {
 };
 
 // Display detail page for a specific type.
-exports.type_detail = function(req, res, next) {
+exports.type_detail = async function(req, res, next) {
+    var type_id = req.params.type_id
     // validates if the type ID is an integer.
-    if (isNaN(Number(req.params.type_id))) {
+    if (isNaN(Number(type_id))) {
         return res.status(400).json({
           status: false,
           message: 'Invalid Type ID'
         });
     }
+    // checks if the ID exists
+    const thisType = await models.Type.findById(type_id);
+    if (!thisType) {
+      return res.status(400).json({
+          status: false,
+          message: 'Type ID not found'
+        });
+    }
+    // Performs operation
     try {
          models.Type.findById(
-                req.params.type_id
+                type_id
         ).then(function(type) {
         // renders an inividual type details page
         if (!type) {

@@ -3,7 +3,7 @@ var router = express.Router();
 
 
 // Require our controllers.
-var employee_controller = require('../../controllers/api/employeeController');
+var employee_controller = require('../../controllers/api/userController');
 var expense_controller = require('../../controllers/api/expenseController'); 
 var category_controller = require('../../controllers/api/categoryController');
 var type_controller = require('../../controllers/api/typeController');
