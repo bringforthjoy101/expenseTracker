@@ -234,7 +234,13 @@ exports.employee_update_post = [
     console.log('This is employee id ' + employee_id);
     
     await models.user.update(
-           {employee},{ where: {id: employee_id} }
+           {
+             firstname: req.body.firstname,
+              lastname: req.body.lastname,
+              username: req.body.username,
+              email: req.body.email,
+              password: req.body.password
+           },{ where: {id: employee_id} }
       ).then(function(data) {
         res.status(200).json({
           status: true,
@@ -303,6 +309,8 @@ exports.employee_detail = async function(req, res, next) {
   
   var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
   
+  try {
+     
   var thisEmployee = employee_id ? await models.user.findById(employee_id) : null
     
   if (!thisEmployee) {
@@ -314,9 +322,7 @@ exports.employee_detail = async function(req, res, next) {
 
   console.log('This is the employee ' + thisEmployee);
 
-  try {
-    
-    console.log("This is the employee id " + employee_id);
+  console.log("This is the employee id " + employee_id);
     // console.log("This is the employee department " + req.params.employee_department);
     // Listing all expenses created by an employee
     const expenses = await models.Expense.findAll({
