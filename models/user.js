@@ -83,16 +83,16 @@ module.exports = function(sequelize, Sequelize) {
     });
 
     User.associate = function(models) {
-        models.User.hasMany(models.Expense);
+        models.user.hasMany(models.Expense);
     
-        models.User.belongsTo(models.Department, {
+        models.user.belongsTo(models.Department, {
           onDelete: "CASCADE",
           foreignKey: {
           allowNull: true
         }
         });
     
-        models.User.belongsTo(models.Role, {
+        models.user.belongsTo(models.Role, {
           onDelete: "CASCADE",
           foreignKey: {
           allowNull: true
