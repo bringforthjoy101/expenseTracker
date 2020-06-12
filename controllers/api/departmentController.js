@@ -1,6 +1,6 @@
 var Department = require('../../models/department');
 var models = require('../../models');
-const { check, params validationResult } = require('express-validator');
+const { check, params, validationResult } = require('express-validator');
 
 
 // Handle department create on POST.
