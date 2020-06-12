@@ -422,7 +422,10 @@ exports.expense_approval_get = function(req, res) {
             } else if (req.params.status_code == 2) {
                 status = 'Declined';
             } else {
-                status = 'Pending';
+                res.status(200).json({
+                    status: true,
+                    message: 'invalid status code'
+                })
             }
 
         console.log("The employee id is not null " + employee_id);
