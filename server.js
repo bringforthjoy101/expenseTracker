@@ -30,7 +30,8 @@ var login = require('./routes/login');
 var user = require('./routes/user');
 var users = require('./routes/users');
 var expense = require('./routes/expense');
-var expenseAPI = require('./routes/api/expense');
+// var expenseAPI = require('./routes/api/expense');
+var expenseAPI = require('./routes/api');
 
 //// ROUTES FOR API END POINT /////
 var userAPI = require('./api/v1/routes/user');

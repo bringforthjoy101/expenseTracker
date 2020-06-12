@@ -3,7 +3,7 @@ var models = require('../../models');
 const { check, validationResult } = require('express-validator');
 
 
-
+var checkParamsId = require('../../helpers/checkParams');
 
 // Handle employee create on POST.
 exports.employee_create_post = [
@@ -84,7 +84,7 @@ exports.employee_create_post = [
 // Handle employee delete on POST.
 exports.employee_delete_post = async function(req, res, next) {
   var employee_id = req.params.employee_id
-          // validates if the ID is an integer
+    // validates if the ID is an integer
     if (isNaN(Number(employee_id))) {
         return res.status(400).json({
           status: false,
@@ -226,24 +226,22 @@ exports.employee_list = function(req, res, next) {
 
 // Display detail page for a specific author.
 exports.employee_detail = async function(req, res, next) {
-  var employee_id = req.params.employee_id
-  // validates if the ID is an integer
-  if (isNaN(Number(employee_id))) {
-    return res.status(400).json({
-      status: false,
-      message: 'Invalid Employee ID'
-    });
-  }
-  // checks if the ID exists
-    const thisEmployee = await models.user.findById(employee_id);
-    if (!thisEmployee) {
+  
+  var employee_id = await checkParamsId(req, res, req.params.employee_id);
+  
+  var thisEmployee = employee_id ? await models.user.findById(employee_id) : null
+    
+  if (!thisEmployee) {
       return res.status(400).json({
           status: false,
-          message: 'Employee ID not found'
+          message: 'Employee ID not found yes'
         });
-    }
+  }
+
+  console.log('This is the employee ' + thisEmployee);
 
   try {
+    
     console.log("This is the employee id " + employee_id);
     // console.log("This is the employee department " + req.params.employee_department);
     // Listing all expenses created by an employee
@@ -272,7 +270,7 @@ exports.employee_detail = async function(req, res, next) {
       include: [
         {
           model: models.user,
-          attributes: ['id', 'first_name', 'last_name']
+          attributes: ['id', 'firstname', 'lastname']
         },
       ]
     });
