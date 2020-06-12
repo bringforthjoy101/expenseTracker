@@ -91,7 +91,7 @@ exports.employee_delete_post = async function(req, res, next) {
           });
       }
     
-    models.user.destroy(thisEmployee).then(function() {
+    models.user.destroy({thisEmployee}).then(function() {
          res.status(200).json({
             status: true,
             message: 'Employee deleted successfully'
@@ -200,7 +200,7 @@ exports.employee_update_post = [
   
     console.log('New Employee firstname ' + thisEmployee.firstname);
   
-    models.user.update(thisEmployee).then(function(employee) {
+    models.user.update({thisEmployee}).then(function(employee) {
         res.status(200).json({
           status: true,
           data: employee,
