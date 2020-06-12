@@ -73,16 +73,14 @@ exports.employee_create_post = [
 
 // Handle employee delete on POST.
 exports.employee_delete_post = async function(req, res, next) {
-  var employee_id = req.params.employee_id
+ 
     // validates if the ID is an integer
-    if (isNaN(Number(employee_id))) {
-        return res.status(400).json({
-          status: false,
-          message: 'Invalid Employee ID'
-        });
-    }
+    
+    var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
+  
+    var thisEmployee = employee_id ? await models.user.findById(employee_id) : null
     // checks if the ID exists
-    const thisEmployee = await models.user.findById(employee_id)
+    
     if (!thisEmployee) {
       return res.status(400).json({
           status: false,
@@ -115,17 +113,12 @@ exports.employee_delete_post = async function(req, res, next) {
 
 // Handle post update on POST.
 exports.employee_update_post = async function(req, res, next) {
-  var employee_id = req.params.employee_id
-       console.log("ID is " + employee_id);
+  
        // validates if the ID is an integer
-       if (isNaN(Number(employee_id))) {
-          return res.status(400).json({
-            status: false,
-            message: 'Invalid Employee ID'
-          });
-        }
-        // checks if the ID exists
-        const thisEmployee = await models.user.findById(employee_id)
+       var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
+  
+        var thisEmployee = employee_id ? await models.user.findById(employee_id) : null
+       
         if (!thisEmployee) {
           return res.status(400).json({
               status: false,
@@ -224,7 +217,7 @@ exports.employee_detail = async function(req, res, next) {
   if (!thisEmployee) {
       return res.status(400).json({
           status: false,
-          message: 'Employee ID not found yes'
+          message: 'Employee ID not found'
         });
   }
 
