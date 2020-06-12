@@ -91,7 +91,12 @@ exports.employee_delete_post = async function(req, res, next) {
           });
       }
     
-    models.user.destroy({thisEmployee}).then(function() {
+    models.user.destroy({
+      thisEmployee,
+      where: {
+          id: employee_id
+      }
+    }).then(function() {
          res.status(200).json({
             status: true,
             message: 'Employee deleted successfully'
@@ -200,39 +205,40 @@ exports.employee_update_post = [
   
     console.log('New Employee firstname ' + thisEmployee.firstname);
   
-    models.user.update({thisEmployee}).then(function(employee) {
-        res.status(200).json({
-          status: true,
-          data: employee,
-          message: 'Employee updated successfully'
-        });
-      });
-   } catch (error) {
-      res.status(400).json({
-        status: false,
-        message: `There was an error - ${error}`
-      });
-    }
-  }
-];
-    
-  //   models.user.update(
-  //         { employee },{ where: {id: employee_id} }
-  //     ).then(function(employee) {
+  //   models.user.update({thisEmployee}).then(function(employee) {
   //       res.status(200).json({
   //         status: true,
   //         data: employee,
   //         message: 'Employee updated successfully'
-  //       })  
-  //       console.log("Employee updated successfully");
-  //   });
+  //       });
+  //     });
   // } catch (error) {
-  //   res.status(400).json({
-  //     status: false,
-  //     message: `There was an error - ${error}`
-  //   });
+  //     res.status(400).json({
+  //       status: false,
+  //       message: `There was an error - ${error}`
+  //     });
+  //   }
+  // }
+// ];
 
-
+    models.user.update(
+          { thisEmployee },{ where: {id: employee_id} }
+      ).then(function(employee) {
+        res.status(200).json({
+          status: true,
+          data: employee,
+          message: 'Employee updated successfully'
+        })  
+        console.log("Employee updated successfully");
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: false,
+      message: `There was an error - ${error}`
+    });
+  }
+  }
+];
 // Display list of all employees.
 exports.employee_list = function(req, res, next) {
 
