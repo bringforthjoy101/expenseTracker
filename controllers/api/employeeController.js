@@ -47,15 +47,15 @@ exports.employee_create_post = [
      
      
      
-     var employee = {
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        DepartmentId: req.body.department,
-        RoleId: req.body.role
-     }
+    // var employee = {
+    //     firstname: req.body.firstname,
+    //     lastname: req.body.lastname,
+    //     username: req.body.username,
+    //     email: req.body.email,
+    //     password: req.body.password,
+    //     DepartmentId: req.body.department,
+    //     RoleId: req.body.role
+    // }
        
      
       models.Employee.create({
