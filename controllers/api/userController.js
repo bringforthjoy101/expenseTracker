@@ -44,8 +44,8 @@ exports.employee_create_post = [
    console.log("This is the user " + req.body.username);
      
      
-     
-      var employee = {
+     try {
+       var employee = {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         username: req.body.username,
@@ -57,16 +57,21 @@ exports.employee_create_post = [
        
      
       models.user.create(employee).then(function(employee){
-          res.json({
+          res.status(200).json({
             status: true,
             data: employee,
             message: 'Employee created successfully'
           })
         console.log("Employee created successfully");
       });
-  
-  
-  }
+    } catch (error) {
+      res.status(400).json({
+        status: false,
+        message: `There was an error - ${error}`
+      });
+    }
+     }
+      
 ];
 
 
@@ -128,9 +133,6 @@ exports.employee_delete_post = async function(req, res, next) {
     // }
 };
 
-
-// Handle post update on POST.
-// exports.employee_update_post = async function(req, res, next) {
 exports.employee_update_post = [
   
     [
