@@ -1,6 +1,7 @@
 var Expense = require('../../models/expense');
 var models = require('../../models');
 const { check, validationResult } = require('express-validator');
+var checkParamsId = require('../../helpers/checkParams');
 
 
 // Handle expense create on POST.
@@ -49,11 +50,7 @@ exports.expense_create_post = [
             // var status = getStatus(req.body.amount);
             // put default pending in model
             var status;
-            if (req.body.amount <= 1000) {
-                status = 'Approved';
-            } else {
-                status = 'Pending';
-            }
+            status = (req.body.amount <= 1000) ? 'Approved' : 'Pending';
             
             let employee_id = req.body.employee_id;
         
@@ -62,40 +59,31 @@ exports.expense_create_post = [
             // If the category selected in the front end does not exist in DB return 400 error	
             if (!employee) {
                 return res.status(400).json({
-                    // error msg here
+                    status: false,
+                    message: 'Employee does not exist'
                 });
             }
         
-            // var expense = {
-            //     title: req.body.title,
-            //     desc: req.body.desc,
-            //     amount: req.body.amount,
-            //     TypeId: req.body.type,
-            //     CategoryId: req.body.category,
-            //     status: status,
-            //     busines_name: req.body.current_business,
-            //     EmployeeId: employee_id,
-            //     DepartmentId: req.body.department
-            // }
-            
-            models.Expense.create({
+            var expense = {
                 title: req.body.title,
                 desc: req.body.desc,
                 amount: req.body.amount,
                 TypeId: req.body.type,
                 CategoryId: req.body.category,
                 status: status,
-                business_name: req.body.current_business,
+                busines_name: req.body.current_business,
                 EmployeeId: employee_id,
                 DepartmentId: req.body.department
-            }).then(function(expense) {
+            }
+            
+            models.Expense.create(expense).then(function(expense) {
                 res.status(200).json({
                     status: true,
                     data: expense,
                     message: 'Expense created successfully'
                 })
                 console.log("Expense created successfully");
-        });
+            });
         } catch (error) {
             res.status(400).json({
                 status: false,
@@ -107,19 +95,25 @@ exports.expense_create_post = [
 ];
 
 // Handle post delete on POST.
-exports.expense_delete_post = function(req, res, next) {
+exports.expense_delete_post = async function(req, res, next) {
     // validates if the department ID is an integer
-    if (isNaN(Number(req.params.expense_id))) {
-        return res.status(400).json({
-          status: false,
-          message: 'Invalid Expense ID'
-        });
-    }
+    var expense_id = await checkParamsId(req, res, 'Expense', req.params.expense_id);
+    
     // Performs operation
     try {
+        
+      // checks if the ID exists
+      var thisExpense = expense_id ? await models.user.findById(expense_id) : null
+      
+      if (!thisExpense) {
+        return res.status(400).json({
+            status: false,
+            message: 'Expense ID not found'
+          });
+      }
         models.Expense.destroy({
             where: {
-              id: req.params.expense_id
+              id: expense_id
             }
           }).then(function() {
             res.status(200).josn({
@@ -143,74 +137,64 @@ exports.expense_update_post = [
         check('title')
         .isLength({ min: 3, max: 50 }).withMessage('Expense title must be between 3 and 50 characters long')
         .isEmpty().withMessage('Expense title cannot be empty')
-        .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.'),
+        .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.')
+        .optional({checkFalsy:true}),
         check('desc')
         .isLength({ min: 3, max: 50 }).withMessage('Expense description must be between 3 and 50 characters long')
-        .isEmpty().withMessage('Expense description cannot be empty'),
+        .isEmpty().withMessage('Expense description cannot be empty')
+        .optional({checkFalsy:true}),
         check('amount')
         .isLength({ min: 3, max: 50 }).withMessage('Expense title must be between 3 and 50 characters long')
         .isEmpty().withMessage('Expense title cannot be empty')
-        .isNumeric().withMessage('Express amount must be numeric'),
+        .isNumeric().withMessage('Express amount must be numeric')
+        .optional({checkFalsy:true}),
         check('type')
         .isEmpty().withMessage('Type cannot be empty')
-        .isNumeric().withMessage('Type must be numeric'),
+        .isNumeric().withMessage('Type must be numeric')
+        .optional({checkFalsy:true}),
         check('category')
         .isEmpty().withMessage('Category cannot be empty')
-        .isNumeric().withMessage('Category must be numeric'),
+        .isNumeric().withMessage('Category must be numeric')
+        .optional({checkFalsy:true}),
       ],
     async function(req, res, next) {
-        var expense_id = req.params.expense_id
         // checks for validations
         const errors = validationResult(req.body);
         if (!errors.isEmpty()) {
             return res.status(422).json({ status: false, errors: errors.array() });
         }
-        // validates if the department ID is an integer
-        if (isNaN(Number(expense_id))) {
-            return res.status(400).json({
-              status: false,
-              message: 'Invalid Expense ID'
-            });
-        }
+        // validates if the params ID is an integer
+        var expense_id = await checkParamsId(req, res, 'Expense', req.params.expense_id);
+        // Performs operation
+        try {
         // checks if the ID exists
-        const thisExpense = await models.Expense.findById(expense_id)
+        var thisExpense = expense_id ? await models.user.findById(expense_id) : null
         if (!thisExpense) {
           return res.status(400).json({
               status: false,
               message: 'Expense ID not found'
             });
         }
-        // Performs operation
-        try {
-            console.log("ID is " + expense_id);
+        
+            
         
         // var status = getStatus(req.body.amount);
         var status;
-            if (req.body.amount <= 1000) {
-                status = 'Approved';
-            } else {
-                status = 'Pending';
-            }
+            
+        status = (req.body.amount <= 1000) ? 'Approved' : 'Pending';
         
         var expense = {
-            title: req.body.title,
-            desc: req.body.desc,
-            amount: req.body.amount,
-            TypeId: req.body.type,
-            CategoryId: req.body.category,
-            status: status,
+            title: req.body.title ? req.body.title : thisExpense.title,
+            desc: req.body.desc ? req.body.desc : thisExpense.desc,
+            amount: req.body.amount ? req.body.amount : thisExpense.amount,
+            TypeId: req.body.type ? req.body.type : thisExpense.type,
+            CategoryId: req.body.category ? req.body.category : thisExpense.category,
+            status: status ? status : thisExpense.status,
         }
+        
         models.Expense.update(
-            {
-                expense
-            },
-          { // Clause
-                where: 
-                {
-                    id: expense_id
-                }
-            }
-        //   returning: true, where: {id: expense_id} 
+            expense,
+            { where: {id: expense_id} } 
          ).then(function(expense) { 
                 // If an post gets updated successfully, we just redirect to posts list
                 // no need to render a page
@@ -233,24 +217,19 @@ exports.expense_update_post = [
 
 // Display detail page for a specific expense.
 exports.expense_detail = async function(req, res, next) {
-    var expense_id = req.params.expense_id;
-    // validates if the department ID is an integer
-    if (isNaN(Number(expense_id))) {
-        return res.status(400).json({
-          status: false,
-          message: 'Invalid Expense ID'
-        });
-    }
-    // checks if the ID exists
-        const thisExpense = await models.Expense.findById(expense_id)
+    // validates if the params ID is an integer
+    var expense_id = await checkParamsId(req, res, 'Expense', req.params.expense_id);
+    // Performs operation
+    try {
+        // checks if the ID exists
+        var thisExpense = expense_id ? await models.user.findById(expense_id) : null
         if (!thisExpense) {
           return res.status(400).json({
               status: false,
               message: 'Expense ID not found'
             });
         }
-    // Performs operation
-    try {
+    
         models.Expense.findById(
             expense_id,
             {
@@ -403,32 +382,36 @@ exports.index = async function(req, res) {
 };
 
 // Expense Approval
-exports.expense_approval_get = function(req, res) {
-    // validates if the department ID is an integer
-    if (isNaN(Number(req.params.expense_id))) {
-        return res.status(400).json({
-            status: false,
-            message: 'Invalid Expense ID'
-        });
-    }
+exports.expense_approval_get = async function(req, res) {
+    // validates if the params ID is an integer
+    var expense_id = await checkParamsId(req, res, 'Expense', req.params.expense_id);
+    var status_code = await checkParamsId(req, res, 'Status Code', req.params.status_code);
+    
     // Performs operation
     try {
-        let expense_id = req.params.expense_id;
-        let employee_id = req.params.employee_id;
+        // checks if the ID exists
+        var thisExpense = expense_id ? await models.user.findById(expense_id) : null
+        if (!thisExpense) {
+          return res.status(400).json({
+              status: false,
+              message: 'Expense ID not found'
+            });
+        }
         // let status = getAprovalStatus(req.params.status_code)
         var status;
-            if (req.params.status_code == 1) {
-                status = 'Approved';
-            } else if (req.params.status_code == 2) {
-                status = 'Declined';
-            } else {
-                res.status(200).json({
-                    status: true,
-                    message: 'invalid status code'
-                })
-            }
-
-        console.log("The employee id is not null " + employee_id);
+        status = (status_code == 1) ? 'Approved' : (status_code == 2) ? 'Declined' : 'Pending';
+            // if (req.params.status_code == 1) {
+            //     status = 'Approved';
+            // } else if (req.params.status_code == 2) {
+            //     status = 'Declined';
+            // } else {
+            //     res.status(200).json({
+            //         status: true,
+            //         message: 'invalid status code'
+            //     })
+            // }
+                
+        console.log("The status_code is not null " + status_code);
         console.log("The expense id is not null " + expense_id);
         models.Expense.update(
             // Values to update
@@ -442,20 +425,11 @@ exports.expense_approval_get = function(req, res) {
             }
             //   returning: true, where: {id: req.params.scheduleId} 
         ).then(function() {
-            //check if employee id is present in the route
-            if (employee_id) {
-                var message = "Operation Successful"
-                res.status(200).json({
-                    status: true,
-                    message: message
-                })
-            } else {
-                var message = "Operation Failed"
-                res.status(200).json({
-                    status: false,
-                    message: message + 'Employee Id does not exisit'
-                })
-            }
+            var message = "Operation Successful"
+            res.status(200).json({
+                status: true,
+                message: message
+            })
         });
     } catch (error) {
         res.status(400).json({
@@ -473,10 +447,10 @@ async function getAprovalStatus(id) {
 
 async function getStatus(amount) {
     var status;
-    if (amount <= 1000) {
-        return status = 'Approved';
-    } else {
-        return status = 'Pending';
-    }
+    // if (amount <= 1000) {
+    //     return status = 'Approved';
+    // } else {
+    //     return status = 'Pending';
+    // }
     // return status = (amount <= 1000) ? 'Approved' : 'Pending';
 }
