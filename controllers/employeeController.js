@@ -1,4 +1,4 @@
-var Employee = require('../models/employee');
+
 var models = require('../models');
 var employee = require('./../controllers/api/employeeController');
 const request = require('request');

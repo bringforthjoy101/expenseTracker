@@ -1,4 +1,4 @@
-var Employee = require('../../models/employee');
+var Employee = require('../../models/user');
 var models = require('../../models');
 const { check, validationResult } = require('express-validator');
 var checkParamsId = require('../../helpers/checkParams');
