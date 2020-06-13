@@ -103,7 +103,7 @@ exports.expense_delete_post = async function(req, res, next) {
     try {
         
       // checks if the ID exists
-      var thisExpense = expense_id ? await models.user.findById(expense_id) : null
+      var thisExpense = expense_id ? await models.Expense.findById(expense_id) : null
       
       if (!thisExpense) {
         return res.status(400).json({
@@ -168,7 +168,7 @@ exports.expense_update_post = [
         // Performs operation
         try {
         // checks if the ID exists
-        var thisExpense = expense_id ? await models.user.findById(expense_id) : null
+        var thisExpense = expense_id ? await models.Expense.findById(expense_id) : null
         if (!thisExpense) {
           return res.status(400).json({
               status: false,
@@ -222,7 +222,7 @@ exports.expense_detail = async function(req, res, next) {
     // Performs operation
     try {
         // checks if the ID exists
-        var thisExpense = expense_id ? await models.user.findById(expense_id) : null
+        var thisExpense = expense_id ? await models.Expense.findById(expense_id) : null
         if (!thisExpense) {
           return res.status(400).json({
               status: false,
@@ -390,7 +390,7 @@ exports.expense_approval_get = async function(req, res) {
     // Performs operation
     try {
         // checks if the ID exists
-        var thisExpense = expense_id ? await models.user.findById(expense_id) : null
+        var thisExpense = expense_id ? await models.Expense.findById(expense_id) : null
         if (!thisExpense) {
           return res.status(400).json({
               status: false,
