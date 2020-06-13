@@ -25,14 +25,6 @@ module.exports = (sequelize, DataTypes) => {
     }
     });
 
-    models.Expense.belongsTo(models.Employee, {
-      onDelete: "CASCADE",
-      foreignKey: {
-      allowNull: true
-    }
-    });
-
-
     models.Expense.belongsTo(models.Category, {
       onDelete: "CASCADE",
       foreignKey: {
