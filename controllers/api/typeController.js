@@ -8,7 +8,7 @@ exports.type_create_post = [
       // Validation for inputs
       check('type_name')
       .isLength({ min: 3, max: 50 }).withMessage('Type name must be between 3 and 50 characters long')
-      .isEmpty().withMessage('Type name cannot be empty')
+      .not().isEmpty().withMessage('Type name cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Type name must contain only Letters.')
     ],
     function(req, res, next) {

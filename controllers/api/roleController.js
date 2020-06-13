@@ -9,7 +9,7 @@ exports.role_create_post = [
       // Validation for inputs
       check('role_name')
       .isLength({ min: 3, max: 50 }).withMessage('Role name must be between 3 and 50 characters long')
-      .isEmpty().withMessage('Role name cannot be empty')
+      .not().isEmpty().withMessage('Role name cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Role name must contain only Letters.')
     ],
     function(req, res, next) {
