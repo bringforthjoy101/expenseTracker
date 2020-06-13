@@ -131,8 +131,15 @@ exports.category_detail = async function(req, res, next) {
         }
      try {
          models.Category.findById(
-                category_id
-                
+                category_id,
+                {
+                  include: [
+                    {
+                      model: models.Expense,
+                      attributes: ['id', 'title', 'amount', 'status']
+                    },
+                  ],
+                }
         ).then(function(category) {
         // renders an inividual category details page
         if (!category) {

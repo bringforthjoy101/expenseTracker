@@ -135,7 +135,15 @@ exports.type_detail = async function(req, res, next) {
     // Performs operation
     try {
          models.Type.findById(
-                type_id
+                type_id,
+                {
+                  include: [
+                    {
+                      model: models.Expense,
+                      attributes: ['id', 'title', 'amount', 'status']
+                    },
+                  ],
+                }
         ).then(function(type) {
         // renders an inividual type details page
         if (!type) {

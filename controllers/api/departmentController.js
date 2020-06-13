@@ -147,7 +147,6 @@ exports.department_detail = async function(req, res, next) {
                       attributes: ['id', 'firstname', 'lastname']
                     },
                   ],
-                  
                 }
         ).then(function(department) {
         // renders an inividual department details page

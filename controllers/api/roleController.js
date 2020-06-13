@@ -131,7 +131,15 @@ exports.role_detail = async function(req, res, next) {
     // Performs operation
     try {
         models.Role.findById(
-                role_id
+                role_id,
+                {
+                  include: [
+                    {
+                      model: models.user,
+                      attributes: ['id', 'firstname', 'lastname']
+                    },
+                  ],
+                }
         ).then(function(role) {
         // renders an inividual role details page
         if (!role) {
