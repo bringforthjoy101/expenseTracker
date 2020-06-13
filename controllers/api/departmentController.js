@@ -139,7 +139,16 @@ exports.department_detail = async function(req, res, next) {
     // performs operation
     try {
         models.Department.findById(
-                department_id
+                department_id,
+                {
+                  include: [
+                    {
+                      model: models.user,
+                      attributes: ['id', 'firstname', 'lastname']
+                    },
+                  ],
+                  
+                }
         ).then(function(department) {
         // renders an inividual department details page
         if (!department) {
