@@ -34,7 +34,7 @@ router.get('/expense/:expense_id', expense_controller.expense_detail);
 router.get('/expenses', expense_controller.expense_list);
 
 // Approval for Expense
-router.get('/employee/:employee_id/expense/:expense_id/approval/:status_code', expense_controller.expense_approval_get);
+router.get('/expense/:expense_id/approval/:status_code', expense_controller.expense_approval_get);
 
 //  EMPLOYEE ROUTES ///
 
