@@ -33,7 +33,7 @@ exports.employee_create_post = [
       .isInt().withMessage('Role must be numeric'),
     ],
     
-  async function(req, res, next) {
+   function(req, res, next) {
         // checks for validations
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
