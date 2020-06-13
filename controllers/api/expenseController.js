@@ -387,6 +387,9 @@ exports.expense_approval_get = async function(req, res) {
     var expense_id = await checkParamsId(req, res, 'Expense', req.params.expense_id);
     var status_code = await checkParamsId(req, res, 'Status Code', req.params.status_code);
     
+    console.log("The status_code is not null " + status_code);
+        console.log("The expense id is not null " + expense_id);
+    
     // Performs operation
     try {
         // checks if the ID exists
@@ -399,7 +402,7 @@ exports.expense_approval_get = async function(req, res) {
         }
         // let status = getAprovalStatus(req.params.status_code)
         
-        var status = (status_code === 1) ? 'Approved' : (status_code === 2) ? 'Declined' : null;
+        var status = (status_code == 1) ? 'Approved' : (status_code == 2) ? 'Declined' : null;
             // if (req.params.status_code == 1) {
             //     status = 'Approved';
             // } else if (req.params.status_code == 2) {
