@@ -398,8 +398,8 @@ exports.expense_approval_get = async function(req, res) {
             });
         }
         // let status = getAprovalStatus(req.params.status_code)
-        var status;
-        status = (status_code == 1) ? 'Approved' : (status_code == 2) ? 'Declined' : 'Pending';
+        
+        var status = (status_code === 1) ? 'Approved' : (status_code === 2) ? 'Declined' : null;
             // if (req.params.status_code == 1) {
             //     status = 'Approved';
             // } else if (req.params.status_code == 2) {
@@ -410,6 +410,13 @@ exports.expense_approval_get = async function(req, res) {
             //         message: 'invalid status code'
             //     })
             // }
+            
+            if (!status) {
+              return res.status(400).json({
+                  status: false,
+                  message: 'Unidentified status code'
+                });
+            }
                 
         console.log("The status_code is not null " + status_code);
         console.log("The expense id is not null " + expense_id);
