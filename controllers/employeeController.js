@@ -1,14 +1,9 @@
 
 var models = require('../models');
-var employee = require('./../controllers/api/employeeController');
+// var employee = require('./../controllers/api/employeeController');
 const fetch = require('node-fetch');
+const moment = require('moment');
 
-
-// Display employee create form on GET.
-exports.employee_create_get = function(req, res, next) {
-        // create employee GET controller logic here 
-        res.render('forms/employee_form', { title: 'Create Employee',  layout: 'layouts/detail'});
-};
 
 // Handle employee create on POST.
 exports.employee_create_post = async function(req, res, next) {
@@ -231,7 +226,7 @@ exports.employee_detail = async function(req, res, next) {
     // const categories = await models.Category.findAll();
     var id = req.params.employee_id
 
-    const moment = require('moment');    
+        
     
     const data = await fetch(`https://manifest-expensetracker.herokuapp.com/api/expense/employee/${id}`, {method: 'GET'});
     const response = await data.json();
@@ -242,7 +237,6 @@ exports.employee_detail = async function(req, res, next) {
       title: 'Employee Profile',
       layout: 'layouts/list',
       employee: response.data,
-      // employee: req.user, 
       employees: response.employees, 
       expenses: response.expenses,
       departments: response.departments,

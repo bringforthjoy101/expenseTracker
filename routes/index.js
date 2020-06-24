@@ -21,7 +21,7 @@ var role_controller = require('../controllers/roleController');
 var department_controller = require('../controllers/departmentController');
 
 // router.get('/', indexController.getIndex);
-router.get('/', function(req, res) { res.redirect('/login'); });
+router.get('/', function(req, res) { res.redirect('/dashboard'); });
 // authentication
 // router.post('/login', passport.authenticate('local', { successRedirect: '/expense', failureRedirect: '/login' } ));
 router.get('/about', indexController.getAbout);
@@ -60,6 +60,6 @@ router.get('/department/:department_id', department_controller.department_detail
 router.get('/departments', department_controller.department_list);
 
 // GET home page.
-router.get('/', expense_controller.index); 
+router.get('/dashboard', expense_controller.index); 
 
 module.exports = router;

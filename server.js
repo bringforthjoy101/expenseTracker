@@ -114,7 +114,7 @@ app.get('/logout',
 // routing
 //
 app.use('/', index);
-app.use('/expense', function(req, res, next) {
+app.use('/dasboard', function(req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {

@@ -2,6 +2,7 @@ var Expense = require('../models/expense');
 var models = require('../models');
 var tools = require('./../modules/tools');
 const fetch = require('node-fetch');
+const moment = require('moment');
 
 
 exports.expense_create_get = async function(req, res, next) {
@@ -193,139 +194,66 @@ exports.expense_update_post = function(req, res, next) {
 };
 
 // Display detail page for a specific expense.
-exports.expense_detail = function(req, res, next) {
-    const moment = require('moment');
-        // find a post by the primary key Pk
-        models.Expense.findById(
-                req.params.expense_id
-        ).then(function(expense) {
-        // renders an inividual post details page
-        res.render('pages/expense_detail', { 
-            title: 'Expense Details', 
-            expense: expense,
-            moment: moment, 
-            layout: 'layouts/detail'
-        });
-        console.log("Expense deteials renders successfully");
-        });
+exports.expense_detail = async function(req, res, next) {
+    var id = req.params.expense_id
+    const data = await fetch(`https://manifest-expensetracker.herokuapp.com/api/expense/expense/${id}`, {method: 'GET'});
+    const response = await data.json();
+  
+    console.log('This is the response: ' + response);
+    var viewData = {
+        title: 'Expense Details', 
+        expense: response.data,
+        user: req.user,
+        moment: moment, 
+        layout: 'layouts/detail'
+    }
+    res.render('pages/expense_detail', viewData);
+    console.log("Expense deteials renders successfully");
+       
 };
-
-
 
 
 // Display list of all posts.
-exports.expense_list = function(req, res, next) {
-
-    const moment = require('moment');
-        // controller logic to display all posts
-        models.Expense.findAll({
-
-            include: [
-                {
-                  model: models.user,
-                  attributes: ['id', 'firstname', 'lastname']
-                },
-                {
-                    model: models.Category,
-                    attributes: ['id', 'category_name']
-                },
-                {
-                    model: models.Type,
-                    attributes: ['id', 'type_name']
-                },
-                {
-                    model: models.Department,
-                    attributes: ['id', 'dept_name']
-                },
-            ]
-
-        }).then(function(expenses) {
-            models.user.findAll(
-                ).then(function(employees) {
-        // renders a post list page
-        console.log("rendering expense list");
-        res.render('pages/expense_list', { 
-            title: 'All Expenses', 
-            expenses: expenses,
-            employees: employees,
-            user: req.user,
-            moment:moment,
-            layout: 'layouts/list'
-        } );
-        console.log("Expenses list renders successfully");
-        });
-    });
-        
+exports.expense_list = async function(req, res, next) {
+    const data = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/expenses', {method: 'GET'});
+    const response = await data.json();
+    console.log('This is the response: ' + response);
+    
+    var viewData = {
+        title: 'All Expenses', 
+        expenses: response.data,
+        user: req.user,
+        moment:moment,
+        layout: 'layouts/list'
+    }
+    res.render('pages/expense_list', viewData);
+    console.log("Expenses list renders successfully");
 };
 
 // This is the expense homepage.
-exports.index = function(req, res, next) {
-   
+exports.index = async function(req, res, next) {
+    const data = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense', {method: 'GET'});
+    const response = await data.json();
+    console.log('This is the response: ' + response);
     
-    const moment = require('moment');
-    // find the count of posts in database
-      models.Expense.findAndCountAll(
-      ).then(function(expenseCount) {
-        models.user.findAndCountAll(
-            ).then(function(employeeCount) {
+    var viewData = {
+        title: 'Homepage', 
+        expenseCount: response.expenseCount, 
+        employeeCount: response.employeeCount, 
+        expenses: response.expenses,  
+        totalSum: response.totalSum,
+        moment: moment,
+        startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
+        endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),
+        user: req.user,
+        layout: 'layouts/main'
+    }
+          
+    res.render('pages/index', viewData);
 
-        models.Expense.findAll({
-            include: [
-                {
-                  model: models.user,
-                  attributes: ['id', 'firstname', 'lastname']
-                },
-                {
-                    model: models.Category,
-                    attributes: ['id', 'category_name']
-                },
-                {
-                    model: models.Type,
-                    attributes: ['id', 'type_name']
-                },
-                {
-                    model: models.Department,
-                    attributes: ['id', 'dept_name']
-                },
-            ]
-            }).then(function(expenses) {
-
-        models.user.findAll(
-            ).then(function(employee) {
-
-                
-                //models.Expense.filter(type).then(function(type_filter){
-                
-                // let totalSum =  models.Expense.sum('amount')
-                models.Expense.sum('amount', { where: { status: 'Approved' } } ).then(function(totalSum) {
-            console.log("this is the total sum of expenses = " + totalSum);
-            // console.log('this is the user: ' + req.user);
-            console.log(req.isAuthenticated());
-            
-        res.render('pages/index', {
-            title: 'Homepage', 
-            expenseCount: expenseCount, 
-            employeeCount: employeeCount, 
-            expenses: expenses, 
-            employee: employee, 
-            totalSum: totalSum,
-            moment: moment,
-            startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
-            endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),
-            user: req.user,
-            // type_filter: type_filter, 
-            layout: 'layouts/main'
-        });
-
-      });
-    });
-//});
-    });
-    });
-    });
     
     
-    };
+};
 
 // Approve Expense
 exports.expense_approve_get = function (req, res) {

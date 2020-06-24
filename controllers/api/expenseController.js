@@ -366,9 +366,9 @@ exports.index = async function(req, res) {
         
             res.status(200).json({
                 status: true,
-                expenseCount: 'Total numbers of expenses = ' + expenses.length, 
-                employeeCount: 'Total numbers of employees = ' + employees.length, 
-                totalSum: 'Total Sum of Expenses = ' + totalSum,
+                expenseCount: expenses.length, 
+                employeeCount: employees.length, 
+                totalSum: totalSum,
                 expenses: expenses
             })
 
