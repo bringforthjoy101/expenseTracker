@@ -21,7 +21,9 @@ router.get('/', function(req, res, next) {
     var viewData = {
         title: 'Login',
         layout: 'layouts/auth',
+        message: '',
     }
+    console.log(req.session.flash.error);
     res.render('pages/login', viewData);
 });
 
@@ -33,12 +35,20 @@ router.get('/', function(req, res, next) {
 router.post('/signup', function(req, res, next) {
     auth.createUser(req, res, function(data) {
         var viewData = {
-            title: 'Signup page',
+            title: 'Login',
+            layout: 'layouts/auth',
             message: data.message,
         }
-        res.render('loginSignup', viewData);
+        res.render('pages/login', viewData);
     });
 });
+
+// function checkAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) {
+//     return res.redirect("/expense");
+//   }
+//   next();
+// }
 
 
 module.exports = router;

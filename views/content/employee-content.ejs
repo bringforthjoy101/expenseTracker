@@ -38,7 +38,7 @@
                     alt="User profile picture">
                 </div>
 
-                <h3 class="profile-username text-center"><%= employee.first_name %> <%= employee.last_name %></h3>
+                <h3 class="profile-username text-center"><%= employee.firstname %> <%= employee.lastname %></h3>
 
                 <p class="text-muted text-center"><%= employee.Department.dept_name %> (<%= employee.Role.role_name %>)</p>
 
@@ -96,7 +96,7 @@
                                 <p class="badge badge-warning"><%= expense.status %></p>
                                 <% } %>
                             </td>
-                            <td><%= expense.Employee.first_name %> <%= expense.Employee.last_name %></td>
+                            <td><%= expense.Employee.firstname %> <%= expense.Employee.lastname %></td>
                             <td><%= moment(expense.createdAt).fromNow() %></td>
                             <td class="">
                                 <a class="btn btn-primary btn-xs" href="/expense/expense/<%= expense.id %>">
@@ -154,7 +154,7 @@
                                     <p class="badge badge-warning"><%= expense.status %></p>
                                     <% } %>
                                 </td>
-                                <td><%= expense.Employee.first_name %> <%= expense.Employee.last_name %></td>
+                                <td><%= expense.Employee.firstname %> <%= expense.Employee.lastname %></td>
                                 <td><%= moment(expense.createdAt).fromNow() %></td>
                                 <td class="">
                                     <a class="btn btn-primary btn-xs" href="/expense/expense/<%= expense.id %>">
@@ -253,11 +253,11 @@
                             <form action="/expense/employee/<%= employee.id %>/update" method="post" class="form-horizontal">
                                 <div class="form-group">
                                 <label for="inputFirstName">First Name</label>
-                                <input type="text" name="first_name" id="inputFirstName" class="form-control" value="<%= employee.first_name %>">
+                                <input type="text" name="firstname" id="inputFirstName" class="form-control" value="<%= employee.firstname %>">
                                 </div>
                                 <div class="form-group">
                                     <label for="inputLastName">Last Name</label>
-                                    <input type="text" name="last_name" id="inputLastName" class="form-control" value="<%= employee.last_name %>">
+                                    <input type="text" name="lastname" id="inputLastName" class="form-control" value="<%= employee.lastname %>">
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail">Email</label>
@@ -344,7 +344,7 @@
             <tbody>
                 <% employees.forEach(function(employee) { %>
                 <tr>
-                    <td> <img alt="Avatar" class="table-avatar" src="../../public/dist/img/avatar.png"> <%= employee.first_name %> <%= employee.last_name %></td>
+                    <td> <img alt="Avatar" class="table-avatar" src="../../public/dist/img/avatar.png"> <%= employee.firstname %> <%= employee.lastname %></td>
                     <td><%= employee.Department.dept_name %></td>
                     <td>
                         <div class="btn-group">
@@ -447,7 +447,7 @@
                 <tbody>
                     <% employees.forEach(function(employee) { %>
                     <tr>
-                        <td> <img alt="Avatar" class="table-avatar" src="../../public/dist/img/avatar.png"> <%= employee.first_name %> <%= employee.last_name %></td>
+                        <td> <img alt="Avatar" class="table-avatar" src="../../public/dist/img/avatar.png"> <%= employee.firstname %> <%= employee.lastname %></td>
                         <td><%= employee.Department.dept_name %></td>
                         <td><%= employee.Role.role_name %></td>
                         <td class="project-actions text-right">
@@ -484,11 +484,11 @@
                     <form action="/expense/employee/create" method="post">
                         <div class="form-group">
                             <label for="inputFirstName">First Name</label>
-                            <input type="text" name="first_name" id="inputFirstName" class="form-control">
+                            <input type="text" name="firstname" id="inputFirstName" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="inputLastName">Last Name</label>
-                            <input type="text" name="last_name" id="inputLastName" class="form-control">
+                            <input type="text" name="lastname" id="inputLastName" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="inputEmail">Email</label>

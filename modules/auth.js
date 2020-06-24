@@ -35,13 +35,15 @@ auth.initializeStrategy = function(passport) {
                 }
             }).then(function(user) {
                 if (!user) {
+                    
                     return cb(null, false);
                 }
                 if (!isValidPassword(user.password, password)) {
-                    return cb(null, false);
+                    console.log('I am here invalid password');
+                    return cb(null, false, { message: "Password is incorrect" });
                 }
-
                 var userinfo = user.get();
+                console.log('I am user ' + userinfo.firstname);
                 user.update({
                     last_login: Date.now()
                 })
@@ -54,14 +56,18 @@ auth.initializeStrategy = function(passport) {
         }));
 
     passport.serializeUser(function(user, cb) {
+        
         cb(null, user.id);
     });
 
     passport.deserializeUser(function(id, cb) {
+        
         dbLayer.user.findById(id).then(function(user) {
             if (user) {
+                console.log('I am user here !!!');
                 cb(null, user);
             } else {
+                console.log('I am user here !');
                 return cb(null);
             }
         });
@@ -82,7 +88,7 @@ auth.createUser = function(req, res, next) {
                 message: 'That email is already taken'
             });
         } else {
-            var userPassword = generateHash(req.body.passwordReg);
+            var userPassword = generateHash(req.body.password);
             var data = {
                 email: req.body.email,
                 username: req.body.username,
@@ -104,7 +110,7 @@ auth.createUser = function(req, res, next) {
                 if (newUser) {
                     next({
                         success: true,
-                        message: 'User created'
+                        message: 'User created Successfully, Pls Login'
                     });
                 };
             });

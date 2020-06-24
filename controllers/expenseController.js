@@ -1,7 +1,8 @@
 var Expense = require('../models/expense');
 var models = require('../models');
 var tools = require('./../modules/tools');
-var dbLayer = require('../modules/dbLayer');
+const fetch = require('node-fetch');
+
 
 exports.expense_create_get = async function(req, res, next) {
         // renders a post form
@@ -24,9 +25,9 @@ exports.expense_create_post = async function(req, res, next) {
     }else{
       status = 'Pending' 
    }
-    let employee_id = req.body.employee_id;
+    let employee_id = req.user.id // req.body.employee_id;
 
-     const employee = await models.Employee.findById(employee_id);
+     const employee = await models.user.findById(employee_id);
      
      // If the category selected in the front end does not exist in DB return 400 error	
      if (!employee) {
@@ -82,7 +83,7 @@ exports.employee_expense_create_post = async function(req, res, next) {
       
        //This was the category that was selected in the front end.  
     // I queried the database to make sure the category selected exist in DB
-     const employee = await models.Employee.findById(employee_id);
+     const employee = await models.user.findById(employee_id);
      
      // If the category selected in the front end does not exist in DB return 400 error	
      if (!employee) {
@@ -221,12 +222,12 @@ exports.expense_list = function(req, res, next) {
 
             include: [
                 {
-                  model: models.Employee,
-                  attributes: ['id', 'first_name', 'last_name']
+                  model: models.user,
+                  attributes: ['id', 'firstname', 'lastname']
                 },
                 {
                     model: models.Category,
-                    attributes: ['id', 'name']
+                    attributes: ['id', 'category_name']
                 },
                 {
                     model: models.Type,
@@ -239,7 +240,7 @@ exports.expense_list = function(req, res, next) {
             ]
 
         }).then(function(expenses) {
-            models.Employee.findAll(
+            models.user.findAll(
                 ).then(function(employees) {
         // renders a post list page
         console.log("rendering expense list");
@@ -247,6 +248,7 @@ exports.expense_list = function(req, res, next) {
             title: 'All Expenses', 
             expenses: expenses,
             employees: employees,
+            user: req.user,
             moment:moment,
             layout: 'layouts/list'
         } );
@@ -257,19 +259,20 @@ exports.expense_list = function(req, res, next) {
 };
 
 // This is the expense homepage.
-exports.index = function(req, res) {
-
+exports.index = function(req, res, next) {
+   
+    
     const moment = require('moment');
     // find the count of posts in database
       models.Expense.findAndCountAll(
       ).then(function(expenseCount) {
-        models.Employee.findAndCountAll(
+        models.user.findAndCountAll(
             ).then(function(employeeCount) {
 
         models.Expense.findAll({
             include: [
                 {
-                  model: models.Employee,
+                  model: models.user,
                   attributes: ['id', 'firstname', 'lastname']
                 },
                 {
@@ -287,7 +290,7 @@ exports.index = function(req, res) {
             ]
             }).then(function(expenses) {
 
-        models.Employee.findAll(
+        models.user.findAll(
             ).then(function(employee) {
 
                 
@@ -296,7 +299,8 @@ exports.index = function(req, res) {
                 // let totalSum =  models.Expense.sum('amount')
                 models.Expense.sum('amount', { where: { status: 'Approved' } } ).then(function(totalSum) {
             console.log("this is the total sum of expenses = " + totalSum);
-            console.log('this is the user: ' + req.user);
+            // console.log('this is the user: ' + req.user);
+            console.log(req.isAuthenticated());
             
         res.render('pages/index', {
             title: 'Homepage', 
@@ -308,7 +312,7 @@ exports.index = function(req, res) {
             moment: moment,
             startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
             endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),
-            user: req.employee,
+            user: req.user,
             // type_filter: type_filter, 
             layout: 'layouts/main'
         });

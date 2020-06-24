@@ -30,7 +30,7 @@ mySessionStore.sync();
 
 module.exports = session({
     secret: config.sessionSecret,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     store: mySessionStore,
     cookie: {

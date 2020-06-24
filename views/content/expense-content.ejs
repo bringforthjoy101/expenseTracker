@@ -147,7 +147,7 @@
                           <% } %>
                         </td>
                         
-                        <td><%= expense.Employee.first_name %> <%= expense.Employee.last_name %></td>
+                        <td><%= expense.Employee.firstname %> <%= expense.Employee.lastname %></td>
                         <td><%= moment(expense.createdAt).fromNow() %></td>
                         <td class="">
                           <a class="btn btn-primary btn-sm" href="/expense/expense/<%= expense.id %>">
@@ -234,7 +234,7 @@
                     <select class="form-control custom-select" name="employee_id">
                       <option selected disabled>Select an Employee</option>
                         <% employees.forEach(function(employee) { %>
-                        <option value="<%= employee.id %>"><%= employee.first_name %> <%= employee.last_name %></option>
+                        <option value="<%= employee.id %>"><%= employee.firstname %> <%= employee.lastname %></option>
                         <% }); %>
                     </select>
                   </div>

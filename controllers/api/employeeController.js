@@ -1,4 +1,6 @@
-
+var express = require('express');
+var router = express.Router();
+var employee_url = router.get('/api/expense/employees');
 var models = require('../../models');
 const { check, validationResult } = require('express-validator');
 
@@ -182,9 +184,9 @@ exports.employee_update_post = async function(req, res, next) {
 
 // Display list of all employees.
 exports.employee_list = function(req, res, next) {
-
+      console.log('this is request ' + req);
         try {
-          models.Employee.findAll({
+          models.user.findAll({
             include: [
                 {
                   model: models.Department,
@@ -205,7 +207,7 @@ exports.employee_list = function(req, res, next) {
                   message: 'No Employee available'
                 })
               } else {
-                res.status(400).json({
+                res.status(200).json({
                   status: true,
                   data: employees,
                   message: 'Employees Listed successfully'
@@ -220,6 +222,8 @@ exports.employee_list = function(req, res, next) {
             message: `There was an error - ${error}`
           });
         }
+        
+        // console.log('hello here');
         
       
 };
@@ -255,7 +259,7 @@ exports.employee_detail = async function(req, res, next) {
         },
       ],
         where: {
-          EmployeeId: employee_id,
+          userId: employee_id,
         },
     });
 
@@ -278,10 +282,10 @@ exports.employee_detail = async function(req, res, next) {
     });
 
     const employeeExpenses = await  models.Expense.findAndCountAll({
-      where: {EmployeeId: employee_id}
+      where: {userId: employee_id}
     });
 
-    const employeeTotalExpenses = await models.Expense.sum('amount', {where: {EmployeeId: employee_id} });
+    const employeeTotalExpenses = await models.Expense.sum('amount', {where: {userId: employee_id} });
     const categories = await models.Category.findAll();
     const types = await models.Type.findAll();
     const departments = await models.Department.findAll();
@@ -308,7 +312,7 @@ exports.employee_detail = async function(req, res, next) {
           include: [
             {
               model: models.Expense,
-              // attributes: [ 'title', 'desc','amount','category','status','EmployeeId','createdAt','department' ],
+              // attributes: [ 'title', 'desc','amount','category','status','userId','createdAt','department' ],
                   
             },
             {

@@ -19,6 +19,7 @@ var bodyParser = require('body-parser');
 var hbs = require('hbs');
 var ejsLayouts = require('express-ejs-layouts');
 var passport = require('passport');
+const flash = require("express-flash");
 var auth = require('./modules/auth.js');
 
 var env = process.env.NODE_ENV || 'development',
@@ -69,18 +70,19 @@ app.set('config', config);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended: false
+    extended: true
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // session will not work for static content
-app.set('trust proxy', 1) // trust first proxy
+app.set('trust proxy', 1); // trust first proxy
 app.use(sessionManagement);
 // passport initialization
 auth.initializeStrategy(passport);
 app.use(passport.initialize());
-app.use(passport.session())
+app.use(passport.session());
+app.use(flash());
 app.set('passport', passport);
 
 //
@@ -91,27 +93,28 @@ app.use(tools.onRequestStart);
 app.use(tools.onRequestEnd);
 // generate menu of the application
 app.use(tools.generateMainMenu);
-app.use('/user', tools.generateUserMenu);
+app.use('/expense', tools.generateUserMenu);
+
 
 // authentication
-app.post('/login',
-    passport.authenticate('local', {
-        failureRedirect: '/login', successRedirect: '/expense'
-    }),
-    function(req, res) {
-        res.redirect('/expense'); // change back to /user
-    });
+app.post('/login', passport.authenticate('local', { successRedirect: '/expense', failureRedirect: '/login', failureFlash: true } ),
+    // function(req, res) {
+    //     res.redirect('/expense'); // change back to /user
+    // }
+    );
 app.get('/logout',
     function(req, res) {
         req.logout();
         res.redirect('/');
     });
+    
+
 
 //
 // routing
 //
 app.use('/', index);
-app.use('/user', function(req, res, next) {
+app.use('/expense', function(req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {
@@ -133,6 +136,15 @@ app.use('/api/v1/users', usersAPI);
 
 
 app.use('/login', login);
+
+// app.get('/login', function(req, res, next) {
+//     var viewData = {
+//         title: 'Login',
+//         layout: 'layouts/auth',
+//     }
+//     console.log(req.session.flash.error);
+//     res.render('pages/login', viewData);
+// });
 
 //
 // error handling

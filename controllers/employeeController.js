@@ -1,9 +1,7 @@
 
 var models = require('../models');
 var employee = require('./../controllers/api/employeeController');
-const request = require('request');
-
-const path = require('path');
+const fetch = require('node-fetch');
 
 
 // Display employee create form on GET.
@@ -212,160 +210,55 @@ exports.employee_update_post = function(req, res, next) {
 };
 
 // Display list of all employees.
-exports.employee_list = function(req, res, next) {
+exports.employee_list = async function(req, res, next) {
 
-  // request('127.0.0.1:8080/api/expense/employees', function (error, response, body) {
-  //   console.error('error:', error); // Print the error if one occurred
-  //   console.log('statusCode:', response ); // Print the response status code if a response was received
-  //   console.log('body:', body); // Print the HTML for the Google homepage.
-  //   const data = JSON.parse(body)
-
-  //   res.render('pages/employee_list', { 
-  //     title: 'All Employees', 
-  //     employees: data.data,
-  //     layout: 'layouts/list'} );
-  // });
-          // controller logic to display all posts
-          models.Employee.findAll({
-            include: [
-              {
-                model: models.Department,
-                attributes: ['id', 'dept_name']
-              },
-              {
-                model: models.Role,
-                attributes: ['id', 'role_name']
-              }
-          ]
-          }).then(function(employees) {
-            // renders a post list page
-            console.log("rendering employee list");
-            res.render('pages/employee_list', { 
-              title: 'All Employees', 
-              employees: employees,
-              layout: 'layouts/list'} );
-            console.log("Employees list renders successfully");
-            });
-      
+  const data = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/employees', {method: 'GET'});
+  const response = await data.json();
+  
+  console.log(response);
+  
+  var viewData = {
+    title: 'All Employees',
+    layout: 'layouts/list',
+    employees: response.data,
+    user: req.user,
+  }
+  res.render('pages/employee_list', viewData);   
 };
 
 // Display detail page for a specific author.
 exports.employee_detail = async function(req, res, next) {
     // const categories = await models.Category.findAll();
+    var id = req.params.employee_id
 
     const moment = require('moment');    
-
-    console.log("This is the employee id " + req.params.employee_id);
-    console.log("This is the employee department " + req.params.employee_department);
-    // Listing all expenses created by an employee
-    const expenses = await models.Expense.findAll({
-      include: [
-        {
-          model: models.Employee,
-          attributes: ['id', 'first_name', 'last_name','DepartmentId']
-        },
-    ],
-      where: {
-        EmployeeId: req.params.employee_id,
-      },
-  });
-
-    // Listing all expenses created by all employees
-    const deptExpenses = await models.Expense.findAll({
-      where: {
-        DepartmentId: req.params.employee_department,
-      },
-    });
+    
+    const data = await fetch(`https://manifest-expensetracker.herokuapp.com/api/expense/employee/${id}`, {method: 'GET'});
+    const response = await data.json();
+    
+    console.log(response);
+    
+    var viewData = {
+      title: 'Employee Profile',
+      layout: 'layouts/list',
+      employee: response.data,
+      // employee: req.user, 
+      employees: response.employees, 
+      expenses: response.expenses,
+      departments: response.departments,
+      roles: response.roles, 
+      deptExpenses: response.deptExpenses,
+      allExpenses: response.allExpenses,
+      employeeTotalExpenses: response.employeeTotalExpenses,
+      employeeExpenses: response.employeeExpenses,
+      categories: response.categories,
+      types: response.types,
+      moment: moment, 
+      layout: 'layouts/detail',
+      user: req.user,
+    }
+    res.render('pages/employee_detail', viewData); 
 
     
-
-    const allExpenses = await models.Expense.findAll({
-      include: [
-        {
-          model: models.Employee,
-          attributes: ['id', 'first_name', 'last_name']
-        },
-    ]
-  });
-
-    const employeeExpenses = await  models.Expense.findAndCountAll({
-      where: {EmployeeId: req.params.employee_id}
-    });
-
-    const employeeTotalExpenses = await models.Expense.sum('amount', {where: {EmployeeId: req.params.employee_id} });
-
-    
-
-    console.log("This is the expenses for that employed id " + req.params.employee_id);
-    console.log("This is the expenses for that employee dept " + req.params.employee_department);
-
-     // find a post by the primary key Pk
-     models.Employee.findById(
-      req.params.employee_id, 
-      {
-          include: [
-            {
-              model: models.Expense,
-              // attributes: [ 'title', 'desc','amount','category','status','EmployeeId','createdAt','department' ],
-                  
-            },
-            {
-              model: models.Department,
-              attributes: ['id', 'dept_name']
-            },
-            {
-              model: models.Role,
-              attributes: ['id', 'role_name']
-            }
-               ]
-          }
-      ).then(function(employee) {
-        models.Employee.findAll({
-          include: [
-            {
-              model: models.Department,
-              attributes: ['id', 'dept_name']
-            },
-            {
-              model: models.Role,
-              attributes: ['id', 'role_name']
-            }
-          ]
-        }).then(function(employees) {
-            models.Category.findAll().then(function(categories) {
-              models.Type.findAll().then(function(types) {
-                  models.Department.findAll().then(function(departments) {
-                    models.Role.findAll({
-                      where: {
-                        status: 'open'
-                      }
-                    }).then(function(roles) {
-                      
-
-      // console.log("This is employee expense " + employee.expenses.length);
-      // renders an inividual post details page
-      res.render('pages/employee_detail', { 
-        title: 'Employee Profile', 
-        employee: employee, 
-        employees:employees, 
-        expenses: expenses,
-        departments: departments,
-        roles: roles, 
-        deptExpenses: deptExpenses,
-        allExpenses: allExpenses,
-        employeeTotalExpenses: employeeTotalExpenses,
-        employeeExpenses: employeeExpenses,
-        categories: categories,
-        types: types,
-        moment: moment, 
-        layout: 'layouts/detail'
-      });
-      console.log("Employee detials renders successfully");
-      });
-      });
-      });
-      });
-      });
-      });
 };
 
