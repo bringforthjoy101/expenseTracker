@@ -51,8 +51,6 @@ router.get('/employee/:employee_id/expense/:expense_id/disapprove', expense_cont
 
 //  EMPLOYEE ROUTES ///
 
-// GET request for creating employee. NOTE This must come before route for id (i.e. display employee).
-router.get('/employee/create', employee_controller.employee_create_get);
 
 // POST request for creating employee.
 router.post('/employee/create', employee_controller.employee_create_post);

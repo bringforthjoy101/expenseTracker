@@ -30,7 +30,7 @@ var index = require('./routes/index');
 var login = require('./routes/login');
 var user = require('./routes/user');
 var users = require('./routes/users');
-var expense = require('./routes/expense');
+// var expense = require('./routes/expense');
 // var expenseAPI = require('./routes/api/expense');
 var expenseAPI = require('./routes/api');
 
@@ -93,11 +93,11 @@ app.use(tools.onRequestStart);
 app.use(tools.onRequestEnd);
 // generate menu of the application
 app.use(tools.generateMainMenu);
-app.use('/expense', tools.generateUserMenu);
+app.use('/dashboard', tools.generateUserMenu);
 
 
 // authentication
-app.post('/login', passport.authenticate('local', { successRedirect: '/expense', failureRedirect: '/login', failureFlash: true } ),
+app.post('/login', passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login', failureFlash: true } ),
     // function(req, res) {
     //     res.redirect('/expense'); // change back to /user
     // }
@@ -114,7 +114,7 @@ app.get('/logout',
 // routing
 //
 app.use('/', index);
-app.use('/dasboard', function(req, res, next) {
+app.use('/dashboard', function(req, res, next) {
     if (req.isAuthenticated()) {
         next();
     } else {
@@ -127,7 +127,7 @@ app.use('/user', function(req, res, next) {
 });
 app.use('/user', user);
 app.use('/users', users);
-app.use('/expense', expense);
+// app.use('/dashboard', index);
 app.use('/api/expense', expenseAPI);
 
 //// API ENDPOINTS ///
