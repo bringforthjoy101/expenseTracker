@@ -201,13 +201,15 @@ exports.expense_detail = async function(req, res, next) {
   
     console.log('This is the response: ' + response);
     var viewData = {
-        title: 'Expense Details', 
+        title: 'Expense Details',
+        page:'expensePage',
+        display:'expenseDetail',
         expense: response.data,
-        user: req.user,
+        // user: req.user,
         moment: moment, 
-        layout: 'layouts/detail'
+        layout: 'layouts/main'
     }
-    res.render('pages/expense_detail', viewData);
+    res.render('pages/index', viewData);
     console.log("Expense deteials renders successfully");
        
 };
@@ -220,13 +222,15 @@ exports.expense_list = async function(req, res, next) {
     console.log('This is the response: ' + response);
     
     var viewData = {
-        title: 'All Expenses', 
+        title: 'All Expenses',
+        page:'expensePage',
+        display:'expenseList',
         expenses: response.data,
-        user: req.user,
+        // user: req.user,
         moment:moment,
-        layout: 'layouts/list'
+        layout: 'layouts/main'
     }
-    res.render('pages/expense_list', viewData);
+    res.render('pages/index', viewData);
     console.log("Expenses list renders successfully");
 };
 
@@ -250,19 +254,7 @@ exports.index = async function(req, res, next) {
         // user: req.user,
         layout: 'layouts/main'
     }
-    res.render('pages/index', {
-        title: 'Homepage', 
-        page: 'homePage',
-        expenseCount: response.expenseCount, 
-        employeeCount: response.employeeCount, 
-        expenses: response.expenses,  
-        totalSum: response.totalSum,
-        moment: moment,
-        // startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
-        // endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),
-        // user: req.user,
-        layout: 'layouts/main'
-    });
+    res.render('pages/index', viewData);
 };
 
 

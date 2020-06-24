@@ -16,13 +16,13 @@
                             <b>₦ <%= Number (expense.amount || 0).toLocaleString(); %></b> <br>
                              
                             <% if (expense.status == 'Approved') { %>
-                                <span class="badge badge-sucess"><%= expense.status %></span> <br>    
+                                <span class="badge badge-success"><%= expense.status %></span> <br>    
                             <% } else if (expense.status == 'Pending') { %>
                                 <span class="badge badge-warning"><%= expense.status %></span> <br>
                             <% } else { %>
                                 <span class="badge badge-danger"><%= expense.status %></span> <br>
                             <% } %>
-                            <%= moment(expense.createdAt).startOf('hour').fromNow() %>
+                            <%= moment(expense.createdAt).fromNow() %>
                         </div>
                     </div>
                 </div>
@@ -40,10 +40,10 @@
                 <div class="kt-portlet__body">
                     <div class="kt-section">
                         <div class="kt-section__info">
-                            Type: <%= expense.type %> <br>
-                            Category: <%= expense.category %> <br>
-                            Employee: <%= expense.employee_id %> <br>
-                            department: <%= expense.department %> <br>
+                            <b>Type:</b> <%= expense.Type.type_name %> <br>
+                            <b>Category:</b> <%= expense.Category.category_name %> <br>
+                            <b>Employee:</b> <%= expense.user.firstname %> <br>
+                            <b>Department:</b> <%= expense.Department.dept_name %> <br>
                         </div>
                     </div>
                 </div>

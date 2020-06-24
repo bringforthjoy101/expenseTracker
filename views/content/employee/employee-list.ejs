@@ -67,22 +67,22 @@
 									<img src="/assets/media/users/100_3.jpg" alt="photo">
 								</div>
 								<div class="kt-user-card-v2__details">
-									<a href="#" class="kt-user-card-v2__name"><%= employee.firstname %> <%= employee.lastname %></a>
-									<span class="kt-user-card-v2__desc"><%= employee.role %></span>
+									<a href="/employee/<%= employee.id %>" class="kt-user-card-v2__name"><%= employee.firstname %> <%= employee.lastname %></a>
+									<span class="kt-user-card-v2__desc"><%= employee.Role.role_name %></span>
 								</div>
 							</div>
                         </td>
                         <td><%= employee.email %></td>
-						<td><%= employee.department %></td>
-						<td><%= employee.role %></td>
+						<td><%= employee.Department.dept_name %></td>
+						<td><%= employee.Role.role_name %></td>
 						<td nowrap> 
-							<a href="<%= employee.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
+							<a href="/employee/<%= employee.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
 								<i class="la la-eye"></i>
 							</a>
-							<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
+							<a href="/employee/<%= employee.id %>/update" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
 							  <i class="la la-edit"></i>
 							</a>
-							<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
+							<a href="/employee/<%= employee.id %>/delete" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
 								<i class="la la-trash"></i>
 							</a>
 							

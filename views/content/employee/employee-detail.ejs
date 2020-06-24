@@ -15,7 +15,7 @@
                             <b> Full Name: </b><%= employee.firstname %> <%= employee.lastname %><br>
                             <b> Role: </b><%= employee.role %><br>
                             <b> Department: </b><%= employee.department %><br>
-                            <b> Joined since: </b><%= moment(employee.createdAt).startOf('hour').fromNow() %>
+                            <b> Joined since: </b><%= moment(employee.createdAt)('hour').fromNow() %>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% employee.expenses.forEach(function(expense) { %>
+                                    <% employee.Expenses.forEach(function(expense) { %>
                                     <tr>
                                         <td><%= expense.id %></td>
                                         <td><%= expense.title %></td>
@@ -58,7 +58,7 @@
                                             <td><span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
                                         <% } %>
                                         <td><%= expense.employee_id %></td>
-                                        <td><%= moment(expense.createdAt).startOf('hour').fromNow() %></td>
+                                        <td><%= moment(expense.createdAt).fromNow() %></td>
                                         <td nowrap> 
                                             <a href="<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                 <i class="la la-eye"></i>

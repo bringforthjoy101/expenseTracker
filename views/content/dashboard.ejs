@@ -119,8 +119,8 @@
 						<% } else { %>
 							<td><span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
 						<% } %>
-						<td><%= expense.userId %></td>
-						<td><%= moment(expense.createdAt).startOf('hour').fromNow() %></td>
+						<td><%= expense.user.firstname %> <%= expense.user.lastname %></td>
+						<td><%= moment(expense.createdAt).fromNow() %></td>
 						<td nowrap> 
 							<a href="<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
 								<i class="la la-eye"></i>

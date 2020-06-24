@@ -299,6 +299,14 @@ exports.employee_detail = async function(req, res, next) {
         {
           model: models.Role,
           attributes: ['id', 'role_name']
+        },
+        {
+          model: models.Type,
+          attributes: ['id', 'role_name']
+        },
+        {
+          model: models.user,
+          attributes: ['id', 'firstname', 'lastname']
         }
       ]
     });

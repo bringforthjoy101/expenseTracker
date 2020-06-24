@@ -214,11 +214,13 @@ exports.employee_list = async function(req, res, next) {
   
   var viewData = {
     title: 'All Employees',
-    layout: 'layouts/list',
+    layout: 'layouts/main',
+    page:'employeePage', 
+    display: 'employeeList',
     employees: response.data,
-    user: req.user,
+    // user: req.user,
   }
-  res.render('pages/employee_list', viewData);   
+  res.render('pages/index', viewData);   
 };
 
 // Display detail page for a specific author.
@@ -235,7 +237,8 @@ exports.employee_detail = async function(req, res, next) {
     
     var viewData = {
       title: 'Employee Profile',
-      layout: 'layouts/list',
+      page:'employeePage',
+      display:'employeeDetail',
       employee: response.data,
       employees: response.employees, 
       expenses: response.expenses,
@@ -248,10 +251,10 @@ exports.employee_detail = async function(req, res, next) {
       categories: response.categories,
       types: response.types,
       moment: moment, 
-      layout: 'layouts/detail',
-      user: req.user,
+    //   user: req.user,
+      layout: 'layouts/main'
     }
-    res.render('pages/employee_detail', viewData); 
+    res.render('pages/index', viewData); 
 
     
 };

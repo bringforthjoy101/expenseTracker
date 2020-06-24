@@ -64,7 +64,7 @@
 					<% expenses.forEach(function(expense) { %>
 					<tr>
 						<td><%= expense.id %></td>
-						<td><%= expense.title %></td>
+						<td><a href="/expense/<%= expense.id %>"><%= expense.title %></a></td>
 						<td>₦ <%= Number (expense.amount || 0).toLocaleString(); %></td>
 						<% if (expense.status == 'Approved') { %>
 							<td><span class="kt-badge kt-badge--success kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
@@ -73,16 +73,16 @@
 						<% } else { %>
 							<td><span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
 						<% } %>
-						<td><%= expense.employee_id %></td>
-						<td><%= moment(expense.createdAt).startOf('hour').fromNow() %></td>
+						<td><%= expense.user.firstname %> <%= expense.user.lastname %></td>
+						<td><%= moment(expense.createdAt).fromNow() %></td>
 						<td nowrap> 
-							<a href="<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
+							<a href="/expense/<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
 								<i class="la la-eye"></i>
 							</a>
-							<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
+							<a href="/expense/<%= expense.id %>/update" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit">
 							  <i class="la la-edit"></i>
 							</a>
-							<a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
+							<a href="/expense/<%= expense.id %>/delete" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
 								<i class="la la-trash"></i>
 							</a>
 							
