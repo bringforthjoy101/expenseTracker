@@ -232,28 +232,40 @@ exports.expense_list = async function(req, res, next) {
 
 // This is the expense homepage.
 exports.index = async function(req, res, next) {
+    
     const data = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense', {method: 'GET'});
     const response = await data.json();
     console.log('This is the response: ' + response);
     
     var viewData = {
         title: 'Homepage', 
+        page: 'homePage',
         expenseCount: response.expenseCount, 
         employeeCount: response.employeeCount, 
         expenses: response.expenses,  
         totalSum: response.totalSum,
         moment: moment,
-        startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
-        endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),
-        user: req.user,
+        // startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
+        // endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),
+        // user: req.user,
         layout: 'layouts/main'
     }
-          
-    res.render('pages/index', viewData);
-
-    
-    
+    res.render('pages/index', {
+        title: 'Homepage', 
+        page: 'homePage',
+        expenseCount: response.expenseCount, 
+        employeeCount: response.employeeCount, 
+        expenses: response.expenses,  
+        totalSum: response.totalSum,
+        moment: moment,
+        // startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
+        // endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),
+        // user: req.user,
+        layout: 'layouts/main'
+    });
 };
+
+
 
 // Approve Expense
 exports.expense_approve_get = function (req, res) {

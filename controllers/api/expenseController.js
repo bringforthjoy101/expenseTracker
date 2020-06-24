@@ -116,7 +116,7 @@ exports.expense_delete_post = async function(req, res, next) {
               id: expense_id
             }
           }).then(function() {
-            res.status(200).josn({
+            res.status(200).json({
                 status: true,
                 message: 'Expense Deleted Successfully'
             })

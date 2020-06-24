@@ -11,6 +11,8 @@
  */
 var express = require('express');
 var router = express.Router();
+const fetch = require('node-fetch');
+const moment = require('moment');
 var indexController = require('../controllers/indexController');
 var passport = require('passport');
 var employee_controller = require('../controllers/employeeController');
@@ -28,10 +30,12 @@ router.get('/about', indexController.getAbout);
 
 router.get('/signup', function(req, res, next) {
     var viewData = {
-        title: 'Sign Up',
+        title: 'Sign Up', 
+        page: 'authPage',
+        display: 'signup',
         layout: 'layouts/auth',
     }
-    res.render('pages/signup', viewData);
+    res.render('pages/index', viewData);
 });
 
 /// EXPENSE ROUTES ///
@@ -60,7 +64,9 @@ router.get('/department/:department_id', department_controller.department_detail
 router.get('/departments', department_controller.department_list);
 
 // GET home page.
-// router.get('/dashboard', expense_controller.index);
+router.get('/dashboard', expense_controller.index);
+
+    
 
 
 module.exports = router;

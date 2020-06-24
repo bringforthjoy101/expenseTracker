@@ -93,7 +93,7 @@ app.use(tools.onRequestStart);
 app.use(tools.onRequestEnd);
 // generate menu of the application
 app.use(tools.generateMainMenu);
-app.use('/dashboard', tools.generateUserMenu);
+// app.use('/dashboard', tools.generateUserMenu);
 
 
 // authentication
@@ -114,18 +114,17 @@ app.get('/logout',
 // routing
 //
 app.use('/', index);
+// app.use('/dashboard', function(req, res, next) {
+//     if (req.isAuthenticated()) {
+//         next();
+//     } else {
+//         res.redirect('/login?m=not-logged-in');
+//     }
+// });
 app.use('/dashboard', function(req, res, next) {
-    if (req.isAuthenticated()) {
-        next();
-    } else {
-        res.redirect('/login?m=not-logged-in');
-    }
-});
-app.use('/user', function(req, res, next) {
     res.locals.layout = 'layout_user';
     next();
 });
-app.use('/user', user);
 app.use('/users', users);
 // app.use('/dashboard', index);
 app.use('/api/expense', expenseAPI);

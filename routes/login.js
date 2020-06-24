@@ -19,12 +19,14 @@ var loginController = require('../controllers/loginController');
 
 router.get('/', function(req, res, next) {
     var viewData = {
-        title: 'Login',
+        title: 'Login', 
+        page: 'authPage',
+        display: 'login',
         layout: 'layouts/auth',
         message: '',
     }
     console.log(req.session.flash.error);
-    res.render('pages/login', viewData);
+    res.render('pages/index', viewData);
 });
 
 // router.post('/', function(req, res, next) {
