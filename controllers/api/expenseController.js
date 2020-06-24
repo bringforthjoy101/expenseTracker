@@ -71,7 +71,7 @@ exports.expense_create_post = [
                 TypeId: req.body.type,
                 CategoryId: req.body.category,
                 status: status,
-                busines_name: req.body.current_business,
+                business_name: req.body.current_business,
                 userId: employee_id,
                 DepartmentId: req.body.department
             }
