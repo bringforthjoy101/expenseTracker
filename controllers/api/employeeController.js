@@ -254,7 +254,7 @@ exports.employee_detail = async function(req, res, next) {
     const expenses = await models.Expense.findAll({
       include: [
         {
-          model: models.Employee,
+          model: models.user,
           attributes: ['id', 'firstname', 'lastname','DepartmentId']
         },
       ],
@@ -300,14 +300,6 @@ exports.employee_detail = async function(req, res, next) {
           model: models.Role,
           attributes: ['id', 'role_name']
         },
-        {
-          model: models.Type,
-          attributes: ['id', 'role_name']
-        },
-        {
-          model: models.user,
-          attributes: ['id', 'firstname', 'lastname']
-        }
       ]
     });
 
