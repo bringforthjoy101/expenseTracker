@@ -46,16 +46,18 @@ var KTLoginPage = function () {
 			}, 2000);
 
 			// ajax form submit:  http://jquery.malsup.com/form/
-			form.ajaxSubmit({
-				url: '',
-				success: function (response, status, xhr, $form) {
-					// similate 2s delay
-					setTimeout(function () {
-						KTApp.unprogress(btn[0]);
-						showErrorMsg(form, 'danger', 'Incorrect username or password. Please try again.');
-					}, 2000);
-				}
-			});
+			// form.ajaxSubmit({
+			// 	url: 'http://manifest-expensetracker.herokuapp.com/login/',
+			// 	type: 'post',
+			// 	success: function (response, status, xhr, $form) {
+			// 		// similate 2s delay
+			// 		setTimeout(function () {
+			// 			KTApp.unprogress(btn[0]);
+			// 			showErrorMsg(form, 'danger', 'Incorrect username or password. Please try again.');
+			// 			// location.href = `http://manifest-expensetracker.herokuapp.com/dashboard`;
+			// 		}, 2000);
+			// 	}
+			// });
 		});
 	}
 

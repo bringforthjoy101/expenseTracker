@@ -15,12 +15,12 @@ function authorize(roles = []) {
             // check if the user has logged in...
             if (req.isAuthenticated()) {
             
-            console.log("The logged in user role is = " + req.user.role );
+            console.log("The logged in user role is = " + req.user.Role.role_name );
     
    // compare the role with the required role for authorization i.e. authorize(Role.Manager) in router
   // you can change this in the router for the user role you want to give access to... i.e. authorize(Role.Staff)
 
-            if (roles.length && !roles.includes(req.user.role)) {
+            if (roles.length && !roles.includes(req.user.Role.role_name)) {
                 // user's role is not authorized
                 return res.status(401).json({ message: 'Unauthorized page for this user' });
             }

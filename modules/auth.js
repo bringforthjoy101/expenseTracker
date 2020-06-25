@@ -36,7 +36,7 @@ auth.initializeStrategy = function(passport) {
             }).then(function(user) {
                 if (!user) {
                     
-                    return cb(null, false);
+                    return cb(null, false, { message: "No user with that email address" });
                 }
                 if (!isValidPassword(user.password, password)) {
                     console.log('I am here invalid password');
@@ -95,6 +95,7 @@ auth.createUser = function(req, res, next) {
                 password: userPassword,
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
+                current_business: req.body.business,
                 RoleId: req.body.role,
                 DepartmentId: req.body.dept
                 // more info here for user

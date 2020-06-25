@@ -105,7 +105,7 @@ app.post('/login', passport.authenticate('local', { successRedirect: '/dashboard
 app.get('/logout',
     function(req, res) {
         req.logout();
-        res.redirect('/');
+        res.redirect('/login');
     });
     
 
@@ -114,13 +114,6 @@ app.get('/logout',
 // routing
 //
 app.use('/', index);
-// app.use('/dashboard', function(req, res, next) {
-//     if (req.isAuthenticated()) {
-//         next();
-//     } else {
-//         res.redirect('/login?m=not-logged-in');
-//     }
-// });
 app.use('/dashboard', function(req, res, next) {
     res.locals.layout = 'layout_user';
     next();
@@ -136,16 +129,6 @@ app.use('/api/v1/users', usersAPI);
 
 app.use('/login', login);
 
-// app.get('/login', function(req, res, next) {
-//     var viewData = {
-//         title: 'Login',
-//         layout: 'layouts/auth',
-//     }
-//     console.log(req.session.flash.error);
-//     res.render('pages/login', viewData);
-// });
-
-//
 // error handling
 //
 // catch 404 and forward to error handler
@@ -163,7 +146,16 @@ app.use(function(err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('pages/error');
+    var viewData = {
+        parent: 'Home',
+        parentUrl: '/dashboard',
+        title: 'Error',
+        user: req.user,
+        error: err,
+        page: 'errorPage',
+        layout: 'layouts/auth'
+    }
+    res.render('pages/error', viewData);
 });
 
 module.exports = app;

@@ -3,14 +3,61 @@
 		<div class="kt-login-v2__title">
 			<h3>Register Account</h3>
 		</div>
-
+		
+        <div class="kt-section__info">
+        	<% if (typeof errors != 'undefined') { %> 
+	        <div class="alert alert-bold alert-solid-warning alert-dismissible" role="alert">
+	            <ul>
+	            <% errors.forEach(error => { %>
+	                <li>
+	        			<div class="alert-text"><%= error.message %></div>
+	        			<div class="alert-close">
+	                        <i class="flaticon2-cross kt-icon-sm" data-dismiss="alert"></i>
+	                    </div>
+	                </li>
+	            <% }) %> 
+	            </ul>
+	        </div>
+	        <% } %>
+        </div>
+        
+            
+		
 		<!--begin::Form-->
-		<form class="kt-login-v2__form kt-form" action="" autocomplete="off" id="kt_login_form">
+		<form class="kt-login-v2__form kt-form" action="/login/signup/" method="post" autocomplete="off" id="kt_login_form">
+			<div class="form-group">
+				<input class="form-control" type="text" placeholder="Firstname" name="firstname" autocomplete="off">
+			</div>
+			<div class="form-group">
+				<input class="form-control" type="text" placeholder="Lastname" name="lastname" autocomplete="off">
+			</div>
 			<div class="form-group">
 				<input class="form-control" type="text" placeholder="Username" name="username" autocomplete="off">
 			</div>
 			<div class="form-group">
+				<input class="form-control" type="email" placeholder="Email" name="email" autocomplete="off">
+			</div>
+			<div class="form-group">
 				<input class="form-control" type="password" placeholder="Password" name="password" autocomplete="off">
+			</div>
+			<div class="form-group">
+				<input class="form-control" type="text" placeholder="Business" name="business" autocomplete="off">
+			</div>
+			<div class="form-group">
+				<select class="form-control" id="dept" name="dept">
+					<option>Select Department</option>
+					<% departments.forEach(function(department) { %>
+					<option value="<%= department.id %>"><%= department.dept_name%></option>
+					<% }); %>
+				</select>
+			</div>
+			<div class="form-group">
+				<select class="form-control" id="role" name="role">
+					<option>Select Role</option>
+					<% roles.forEach(function(role) { %>
+					<option value="<%= role.id %>"><%= role.role_name%></option>
+					<% }); %>
+				</select>
 			</div>
 
 			<!--begin::Action-->

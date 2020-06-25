@@ -3,11 +3,56 @@
         <div class="kt-login-v2__title">
             <h3>Sign to Account</h3>
         </div>
-
+        
+            
+        <% if (typeof errors != 'undefined') { %>
+        <div class="alert alert-bold alert-solid-danger alert-dismissible" role="alert">
+            <ul>
+                <% errors.forEach(error => { %>
+                    <li>
+            			<div class="alert-text"><%= error.message %></div>
+            			<div class="alert-close">
+                            <i class="flaticon2-cross kt-icon-sm" data-dismiss="alert"></i>
+                        </div>
+                    </li>
+                <% }) %> 
+            </ul>
+        </div>
+        <% } %>
+        
+        <% if(messages.success_msg) { %>
+        <div class="alert alert-bold alert-solid-success alert-dismissible" role="alert">
+            <div class="alert-text"><%= messages.success_msg %></div>
+			<div class="alert-close">
+                <i class="flaticon2-cross kt-icon-sm" data-dismiss="alert"></i>
+            </div>
+        </div>
+        <% } %>
+        
+        <% if(messages.error) { %>
+        <div class="alert alert-bold alert-solid-danger alert-dismissible" role="alert">
+            <div class="alert-text"><%= messages.error %></div>
+			<div class="alert-close">
+                <i class="flaticon2-cross kt-icon-sm" data-dismiss="alert"></i>
+            </div>
+        </div>
+        <% } %>
+        
+        <% if(message) { %>
+        <div class="alert alert-bold alert-solid-danger alert-dismissible" role="alert">
+            <div class="alert-text"><%= message %></div>
+			<div class="alert-close">
+                <i class="flaticon2-cross kt-icon-sm" data-dismiss="alert"></i>
+            </div>
+        </div>
+        <% } %>
+            
+		
+          
         <!--begin::Form-->
-        <form class="kt-login-v2__form kt-form" action="" autocomplete="off" id="kt_login_form">
+        <form class="kt-login-v2__form kt-form" action="/login" method="post" autocomplete="off" id="kt_login_form">
             <div class="form-group">
-                <input class="form-control" type="text" placeholder="Username" name="username" autocomplete="off">
+                <input class="form-control" type="email" placeholder="Email" name="email" autocomplete="off">
             </div>
             <div class="form-group">
                 <input class="form-control" type="password" placeholder="Password" name="password" autocomplete="off">

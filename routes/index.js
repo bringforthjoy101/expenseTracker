@@ -22,17 +22,30 @@ var type_controller = require('../controllers/typeController');
 var role_controller = require('../controllers/roleController');
 var department_controller = require('../controllers/departmentController');
 
+// Middlewares
+var requireLogin = require('../middlewares/requireLogin');
+
 // router.get('/', indexController.getIndex);
 router.get('/', function(req, res) { res.redirect('/dashboard'); });
 // authentication
 // router.post('/login', passport.authenticate('local', { successRedirect: '/expense', failureRedirect: '/login' } ));
 router.get('/about', indexController.getAbout);
 
-router.get('/signup', function(req, res, next) {
+router.get('/signup', async function(req, res, next) {
+    const roles = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/roles', {method: 'GET'});
+    const departments = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/departments', {method: 'GET'});
+    const response = await roles.json();
+    const response2 = await departments.json();
+    
+    console.log(response);
+    console.log(response2);
+    
     var viewData = {
         title: 'Sign Up', 
         page: 'authPage',
         display: 'signup',
+        roles: response.data,
+        departments: response2.data,
         layout: 'layouts/auth',
     }
     res.render('pages/index', viewData);
@@ -40,31 +53,34 @@ router.get('/signup', function(req, res, next) {
 
 /// EXPENSE ROUTES ///
 
-router.get('/expense/:expense_id', expense_controller.expense_detail);
-router.get('/expenses', expense_controller.expense_list);
+router.get('/expense/:expense_id', requireLogin, expense_controller.expense_detail);
+router.get('/allExpenses', requireLogin, expense_controller.expense_list);
+router.get('/newExpense', requireLogin, expense_controller.expense_new);
+router.post('/createExpense', requireLogin, expense_controller.expense_create_post);
+
 
 //  EMPLOYEE ROUTES ///
-router.get('/employee/:employee_id/', employee_controller.employee_detail);
-router.get('/employees', employee_controller.employee_list);
+router.get('/employee/:employee_id/', requireLogin, employee_controller.employee_detail);
+router.get('/allEmployees', requireLogin, employee_controller.employee_list);
 
 // /// Category ROUTES ///
-router.get('/category/:category_id', category_controller.category_detail);
-router.get('/categories', category_controller.category_list);
+router.get('/category/:category_id', requireLogin, category_controller.category_detail);
+router.get('/categories', requireLogin, category_controller.category_list);
 
 // /// Type ROUTES ///
-router.get('/type/:type_id', type_controller.type_detail);
-router.get('/types', type_controller.type_list);
+router.get('/type/:type_id', requireLogin, type_controller.type_detail);
+router.get('/types', requireLogin, type_controller.type_list);
 
 // /// ROLE ROUTES ///
-router.get('/role/:role_id', role_controller.role_detail);
-router.get('/roles', role_controller.role_list);
+router.get('/role/:role_id', requireLogin, role_controller.role_detail);
+router.get('/employee/roles', requireLogin, role_controller.role_list);
 
 // /// DEPARTMENT ROUTES ///
-router.get('/department/:department_id', department_controller.department_detail);
-router.get('/departments', department_controller.department_list);
+router.get('/department/:department_id', requireLogin, department_controller.department_detail);
+router.get('/employee/departments', requireLogin, department_controller.department_list);
 
 // GET home page.
-router.get('/dashboard', expense_controller.index);
+router.get('/dashboard', requireLogin, expense_controller.index);
 
     
 

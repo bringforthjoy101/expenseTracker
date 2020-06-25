@@ -8,6 +8,10 @@ case 'expenseList' : %>
 case 'expenseDetail' : %>
 <%- include ('../../content/expense/expense-detail') %>
        <% break;
+
+case 'expenseCreate' : %>
+<%- include ('../../content/expense/expense-create') %>
+       <% break;
        
 default : %>
        <%- include ('../../pages/index') %>

@@ -3,6 +3,7 @@ var models = require('../models');
 // var employee = require('./../controllers/api/employeeController');
 const fetch = require('node-fetch');
 const moment = require('moment');
+const apiUrl = require('../helpers/apiUrl');
 
 
 // Handle employee create on POST.
@@ -206,8 +207,9 @@ exports.employee_update_post = function(req, res, next) {
 
 // Display list of all employees.
 exports.employee_list = async function(req, res, next) {
-
-  const data = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/employees', {method: 'GET'});
+console.log('this is the api url ' + apiUrl);
+//   const data = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/employees', {method: 'GET'});
+const data = await fetch(`${apiUrl}/employees`, {method: 'GET'});
   const response = await data.json();
   
   console.log(response);
@@ -218,19 +220,15 @@ exports.employee_list = async function(req, res, next) {
     page:'employeePage', 
     display: 'employeeList',
     employees: response.data,
-    // user: req.user,
+    user: req.user,
   }
   res.render('pages/index', viewData);   
 };
 
 // Display detail page for a specific author.
 exports.employee_detail = async function(req, res, next) {
-    // const categories = await models.Category.findAll();
     var id = req.params.employee_id
-
-        
-    
-    const data = await fetch(`https://manifest-expensetracker.herokuapp.com/api/expense/employee/${id}`, {method: 'GET'});
+    const data = await fetch(`${apiUrl}/employee/${id}`, {method: 'GET'});
     const response = await data.json();
     
     console.log(response);
@@ -251,7 +249,7 @@ exports.employee_detail = async function(req, res, next) {
       categories: response.categories,
       types: response.types,
       moment: moment, 
-    //   user: req.user,
+      user: req.user,
       layout: 'layouts/main'
     }
     res.render('pages/index', viewData); 

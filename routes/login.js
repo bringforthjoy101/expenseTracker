@@ -11,13 +11,15 @@
  */
 var express = require('express');
 var router = express.Router();
+var fetch = require('node-fetch');
 var auth = require('./../modules/auth');
 var loginController = require('../controllers/loginController');
 
 // router.get('/', loginController.getLogin);
 // router.get('/', loginController.getSignup);
 
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
+    
     var viewData = {
         title: 'Login', 
         page: 'authPage',
@@ -34,15 +36,64 @@ router.get('/', function(req, res, next) {
 //     passport.authenticate('local', { failureRedirect: '/login?f=1', successRedirect: '/dashboard' });
 // });
 
-router.post('/signup', function(req, res, next) {
-    auth.createUser(req, res, function(data) {
+router.post('/signup', async function(req, res, next) {
+    let { firstname, lastname, username, email, password, business, dept, role } = req.body;
+
+    let errors = [];
+
+      console.log({
+        firstname,
+        email,
+        password,
+      });
+    
+      if (!firstname || !lastname || !email || !password || !business || !dept || !role ) {
+        errors.push({ message: "Please enter all fields" });
+      }
+    
+      if (password.length < 6) {
+        errors.push({ message: "Password must be a least 6 characters long" });
+      }
+      
+      if (username.length < 8) {
+        errors.push({ message: "Username must be a least 6 characters long" });
+      }
+    
+    //   if (password !== password2) {
+    //     errors.push({ message: "Passwords do not match" });
+    //   }
+    if (errors.length > 0) {
+        const roles = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/roles', {method: 'GET'});
+        const departments = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/departments', {method: 'GET'});
+        const response = await roles.json();
+        const response2 = await departments.json();
         var viewData = {
-            title: 'Login',
+            title: 'Sign Up', 
+            page: 'authPage',
+            display: 'signup',
+            errors, 
+            firstname, lastname, username, 
+            email, password, 
+            business, dept, role,
+            roles: response.data,
+            departments: response2.data,
             layout: 'layouts/auth',
-            message: data.message,
         }
-        res.render('pages/login', viewData);
-    });
+        res.render("pages/index", viewData);
+      } else {
+        auth.createUser(req, res, function(data) {
+            console.log('this is the sigup status ' + data.success);
+            
+            var viewData = {
+                title: 'Login',
+                page: 'authPage',
+                display: 'login',
+                layout: 'layouts/auth',
+                message: data.message,
+            }
+            res.render('pages/index', viewData);
+        });
+      }
 });
 
 // function checkAuthenticated(req, res, next) {

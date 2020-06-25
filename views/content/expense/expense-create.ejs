@@ -1,0 +1,155 @@
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+	<!--begin::Portlet-->
+	
+	<div class="kt-portlet">
+		<div class="kt-portlet__head">
+			<div class="kt-portlet__head-label">
+				<h3 class="kt-portlet__head-title">Basic Form Layout</h3>
+			</div>
+		</div>
+		
+		<div class="">
+	        <h6 class="text-danger" id="errDisplay"></h6>
+	    </div>
+
+		<!--begin::Form-->
+		<form class="kt-form" action="#" id="createExpense" onsubmit="submitExpense(event)">
+			<div class="kt-portlet__body">
+				<div class="kt-section kt-section--first">
+					<div class="form-group">
+						<label>Expense Title:</label>
+						<input type="text" name="title" id="title" class="form-control" placeholder="Expense Title">
+						<span class="form-text text-muted">Please enter the expense title</span>
+					</div>
+					<div class="form-group">
+						<label>Expense Description:</label>
+						<input type="text" name="desc" id="desc" class="form-control" placeholder="Expense Desciption">
+						<span class="form-text text-muted">Please enter the expense description</span>
+					</div>
+					<div class="form-group">
+						<label>Amount:</label>
+						<input type="number" name="amount" id="amount" class="form-control" placeholder="Expense Amount">
+					</div>
+					<div class="form-group">
+						<label>Type:</label>
+						<select class="form-control kt-select2" id="kt_select2_1" name="type" id="type">
+					    	<option >Select Type</option>
+					    	<% types.forEach(function(type) { %>
+					    		<option value="<%= type.id %>" ><%= type.type_name %></option>
+					    	<% });%>
+					    </select>
+					</div>
+					<div class="form-group">
+						<label>Category:</label>
+						<select class="form-control kt-select2" id="kt_select2_2" name="category" id="category">
+					    	<option >Select Category</option>
+					    	<% categories.forEach(function(category) { %>
+					    		<option value="<%= category.id %>" ><%= category.category_name %></option>
+					    	<% });%>
+					    </select>
+					</div>
+				</div>
+			</div>
+			<div class="kt-portlet__foot">
+				<div class="kt-form__actions">
+					<button type="submit" id="expenseSubmitBtn" class="btn btn-primary">Submit Expense</button>
+				</div>
+			</div>
+		</form>
+
+		<!--end::Form-->
+	</div>
+
+	<!--end::Portlet-->
+</div>
+
+
+<script>
+const userId = `<%= user.id %>`;
+const DepartmentId = `<%= user.DepartmentId %>`;
+const business_name = `<%= user.current_business %>`;
+const submitBtn = document.getElementById('expenseSubmitBtn');
+
+submitBtn.addEventListener('click', ()=>{
+  submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
+});
+
+const submitExpense = async (event) => {
+	try {
+  event.preventDefault();
+  //const form = event.target;
+  const form = document.getElementById('createExpense');
+  const formData = {
+          title: form.title.value,
+          desc: form.desc.value,
+          amount: form.amount.value,
+          type: form.type.value,
+          category: form.category.value,
+          current_business: business_name,
+          department: DepartmentId,
+          employee_id: userId,
+        }
+  
+  console.log(formData);
+  
+  
+    const expense = await createExpense(formData);
+    let errors = '';
+    console.log(expense);
+    if (expense.status) {
+      //swal.fire(
+      //  'Awesome!',
+      //  'Your task submission was successful!',
+      //  'success'
+      //)
+      location.href = `/expense/${expense.data.id}`;
+    } else {
+      submitBtn.innerHTML = 'Submit Expense';
+      for (let i = 0; i < expense.errors.length; i++) {
+        errors += expense.errors[i].msg;
+        if (i < expense.errors.length - 1) errors += ', ';
+      }
+      console.log(errors);
+      document.getElementById('errDisplay').innerHTML = errors;
+      //swal.fire(
+      //  'Oops!',
+      //  `Your task submission was unsuccessful!`,
+      //  'error'
+      //)
+    }
+  } catch (error) {
+    console.log(error);
+    // show network error notification
+    // swal.fire(
+    //   'Oops!',
+    //   'An error was encountered! Please review your network connection.',
+    //   'error'
+    // )
+  }
+
+};
+
+const createExpense = async (data) => {
+    console.log(data)
+    try {
+      const expense = await fetch(`${Route.apiRoot}/expense/create`, {
+        // mode: 'no-cors',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      return await expense.json();
+    } catch (error) {
+      console.log(error);
+      // show network error notification
+      //swal.fire(
+      //  'Oops!',
+      //  'An error was encountered! Please review your network connection.',
+      //  'error'
+      //)
+    }
+  };
+</script>
+

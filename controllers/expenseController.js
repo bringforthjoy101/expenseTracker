@@ -3,6 +3,7 @@ var models = require('../models');
 var tools = require('./../modules/tools');
 const fetch = require('node-fetch');
 const moment = require('moment');
+const apiUrl = require('../helpers/apiUrl');
 
 
 exports.expense_create_get = async function(req, res, next) {
@@ -11,192 +12,46 @@ exports.expense_create_get = async function(req, res, next) {
         res.render('forms/expense_form', { title: 'Create Expense', categories: categories,  layout: 'layouts/detail'});
         console.log("Expense form renders successfully")
 };
-// Display expense create form on GET.
-// exports.expense_create_get = function(req, res, next) {
-//         // renders a post form
-//         res.render('forms/expense_form', { title: 'Create Expense', layout: 'layouts/detail'});
-//         console.log("Expense form renders successfully");
-// };
+
 
 // Handle expense create on POST.
 exports.expense_create_post = async function(req, res, next) {
-    var status;
-    if (req.body.amount <= 1000){
-        status = 'Approved'
-    }else{
-      status = 'Pending' 
-   }
-    let employee_id = req.user.id // req.body.employee_id;
-
-     const employee = await models.user.findById(employee_id);
-     
-     // If the category selected in the front end does not exist in DB return 400 error	
-     if (!employee) {
-          return res.status(400);
-     }
-
-     models.Expense.create({
-        title: req.body.title,
-        desc: req.body.desc,
-        amount: req.body.amount,
-        TypeId: req.body.type,
-        CategoryId: req.body.category,
-        status: status,
-        EmployeeId: employee_id,
-        DepartmentId: req.body.department
-    }).then(function() {
-        console.log("Expense created successfully");
-       // check if there was an error during post creation
-        res.redirect('/expense/expenses/');
-  });
-     // if it exist then add the expense and employee into the EmployeeExpense table.
-
-        //   await employee.addExpense(expense).then(function() {
-
-        //     res.redirect('/expense/employee/' + employee_id);
-        //   });
-
-
-           // check if there was an error during post creation
-            // res.redirect('/expense/employee/' + employee_id);
-};
-
-// Handle expense create on POST.
-exports.employee_expense_create_post = async function(req, res, next) {
-    var status;
-    if (req.body.amount <= 1000){
-        status = 'Approved'
-    }else{
-      status = 'Pending' 
-   }
-   let employee_id = req.body.employee_id;
-     // create a new post based on the fields in our post model
-     // I have create two fields, but it can be more for your model
-    //  const expense = await models.Expense.create({
-    //         title: req.body.title,
-    //         desc: req.body.desc,
-    //         amount: req.body.amount,
-    //         type: req.body.type,
-    //         category: req.body.category,
-    //         status: status,
-    //         employee_id: employee_id
-    //   });
-      
-       //This was the category that was selected in the front end.  
-    // I queried the database to make sure the category selected exist in DB
-     const employee = await models.user.findById(employee_id);
-     
-     // If the category selected in the front end does not exist in DB return 400 error	
-     if (!employee) {
-          return res.status(400);
-     }
-
-     models.Expense.create({
-        title: req.body.title,
-        desc: req.body.desc,
-        amount: req.body.amount,
-        TypeId: req.body.type,
-        CategoryId: req.body.category,
-        status: status,
-        EmployeeId: employee_id,
-        DepartmentId: req.body.department
-    }).then(function() {
-        console.log("Expense created successfully");
-       // check if there was an error during post creation
-        res.redirect('/expense/employee/' + employee_id);
-  });
-     // if it exist then add the expense and employee into the EmployeeExpense table.
-
-        //   await employee.addExpense(expense).then(function() {
-
-        //     res.redirect('/expense/employee/' + employee_id);
-        //   });
-
-
-           // check if there was an error during post creation
-            // res.redirect('/expense/employee/' + employee_id);
-};
-
-// Display expense delete form on GET.
-exports.expense_delete_get = function(req, res, next) {
-       models.Expense.destroy({
-            // find the post_id to delete from database
-            where: {
-              id: req.params.expense_id
-            }
-          }).then(function() {
-           // If an post gets deleted successfully, we just redirect to posts list
-           // no need to render a page
-            res.redirect('/expense/employee/' + req.params.expense_id);
-            console.log("Post deleted successfully");
-          });
-};
-
-// Handle post delete on POST.
-exports.expense_delete_post = function(req, res, next) {
-          models.Expense.destroy({
-            // find the post_id to delete from database
-            where: {
-              id: req.params.expense_id
-            }
-          }).then(function() {
-           // If an post gets deleted successfully, we just redirect to posts list
-           // no need to render a page
-            res.redirect('/expense/employee/' + req.params.expense_id);
-            console.log("Expense deleted successfully");
-          });
-
- };
-
-// Display expense update form on GET.
-exports.expense_update_get = function(req, res, next) {
-        // Find the expense you want to update
-        console.log("ID is " + req.params.expense_id);
-        models.Expense.findById(
-                req.params.expense_id
-        ).then(function(expense) {
-               // renders a expense form
-               res.render('forms/expense_form', { title: 'Update Expense', expense: expense, layout: 'layouts/detail'});
-               console.log("Expense update get successful");
-          });
-        
-};
-
-// Handle expense update on POST.
-exports.expense_update_post = function(req, res, next) {
-        console.log("ID is " + req.params.expense_id);
-        models.Expense.update(
-        // Values to update
-        // if (estatus = pending) {
-        //    
-       // }
-            {
-            date: req.body.date,
-            detail: req.body.detail,
+    try {
+        const body = { 
+            title: req.body.title,
+            desc: req.body.desc,
             amount: req.body.amount,
             type: req.body.type,
             category: req.body.category,
-            estatus: 'Approved'
-            },
-          { // Clause
-                where: 
-                {
-                    id: req.params.expense_id
-                }
+            business_name: req.user.current_business,
+            department: req.user.DepartmentId,
+            employee_id: req.user.id
+        };
+        
+        const data = await fetch(`${apiUrl}/create`, {
+                method: 'post', 
+                body: JSON.stringify(body),
+                headers: { 'Content-Type': 'application/json' },
+            });
+            
+            const expense = await data.json();
+            if (expense.status) {
+                res.redirect("/expense/" + expense.data.id );
             }
-        //   returning: true, where: {id: req.params.expense_id} 
-         ).then(function() { 
-                // If an post gets updated successfully, we just redirect to posts list
-                // no need to render a page
-                res.redirect("/expense/expenses");  
-                console.log("Expense updated successfully");
-          });
+    } catch (error) {
+        res.status(400).json({
+            status: false,
+            message: `There was an error - ${error}`
+        });
+    }
+        
 };
+
 
 // Display detail page for a specific expense.
 exports.expense_detail = async function(req, res, next) {
     var id = req.params.expense_id
-    const data = await fetch(`https://manifest-expensetracker.herokuapp.com/api/expense/expense/${id}`, {method: 'GET'});
+    const data = await fetch(`${apiUrl}/expense/${id}`, {method: 'GET'});
     const response = await data.json();
   
     console.log('This is the response: ' + response);
@@ -205,28 +60,34 @@ exports.expense_detail = async function(req, res, next) {
         page:'expensePage',
         display:'expenseDetail',
         expense: response.data,
-        // user: req.user,
+        user: req.user,
         moment: moment, 
         layout: 'layouts/main'
     }
     res.render('pages/index', viewData);
-    console.log("Expense deteials renders successfully");
+    console.log("Expense one details renders successfully");
        
 };
 
 
 // Display list of all posts.
 exports.expense_list = async function(req, res, next) {
-    const data = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/expenses', {method: 'GET'});
-    const response = await data.json();
-    console.log('This is the response: ' + response);
+    const data = await fetch(`${apiUrl}/expenses`, {method: 'GET'});
+    const data2 = await fetch(`${apiUrl}/categories`, {method: 'GET'});
+    const data3 = await fetch(`${apiUrl}/types`, {method: 'GET'});
+    const expenses = await data.json();
+    const categories = await data2.json();
+    const types = await data3.json();
+    console.log('This is the response: ' + expenses);
     
     var viewData = {
         title: 'All Expenses',
         page:'expensePage',
         display:'expenseList',
-        expenses: response.data,
-        // user: req.user,
+        expenses: expenses.data,
+        categories: categories.data,
+        types: types.data,
+        user: req.user,
         moment:moment,
         layout: 'layouts/main'
     }
@@ -234,10 +95,30 @@ exports.expense_list = async function(req, res, next) {
     console.log("Expenses list renders successfully");
 };
 
+// New Expense.
+exports.expense_new = async function(req, res, next) {
+    const data = await fetch(`${apiUrl}/categories`, {method: 'GET'});
+    const data2 = await fetch(`${apiUrl}/types`, {method: 'GET'});
+    const categories = await data.json();
+    const types = await data2.json();
+    console.log('this is the category ' + categories);
+    console.log('this is the type ' + types);
+    var viewData = {
+        title: 'Expense Create',
+        page:'expensePage',
+        display:'expenseCreate',
+        categories: categories.data,
+        types: types.data,
+        user: req.user,
+        layout: 'layouts/main'
+    }
+    res.render('pages/index', viewData);
+};
+
 // This is the expense homepage.
 exports.index = async function(req, res, next) {
     
-    const data = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense', {method: 'GET'});
+    const data = await fetch(`${apiUrl}`, {method: 'GET'});
     const response = await data.json();
     console.log('This is the response: ' + response);
     
@@ -249,9 +130,9 @@ exports.index = async function(req, res, next) {
         expenses: response.expenses,  
         totalSum: response.totalSum,
         moment: moment,
-        // startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
-        // endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),
-        // user: req.user,
+        startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
+        endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),
+        user: req.user,
         layout: 'layouts/main'
     }
     res.render('pages/index', viewData);
