@@ -281,12 +281,66 @@ exports.expense_detail = async function(req, res, next) {
 
 
 
-// Display list of all posts.
+// Display list of all expenses.
 exports.expense_list = function(req, res, next) {
     // var user_business_name = req.params.user_busines_name;
     try {
         models.Expense.findAll({
             // where: {business_name: user_business_name},
+            include: [
+                {
+                  model: models.user,
+                  attributes: ['id', 'firstname', 'lastname']
+                },
+                {
+                    model: models.Category,
+                    attributes: ['id', 'category_name']
+                },
+                {
+                    model: models.Type,
+                    attributes: ['id', 'type_name']
+                },
+                {
+                    model: models.Department,
+                    attributes: ['id', 'dept_name']
+                },
+            ]
+
+        }).then(function(expenses) {
+        // renders a post list page
+        console.log("rendering expense list");
+        if (expenses.length === 0) {
+            res.json({
+              status: false,
+              data: 'None',
+              message: 'No Expense available'
+            })
+          } else {
+            res.json({
+              status: true,
+              data: expenses,
+              message: 'Expenses Listed successfully'
+            })
+          }
+        
+        console.log("Expenses list renders successfully");
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: false,
+            message: `There was an error - ${error}`
+        });
+    }
+        
+        
+};
+
+// Display list of my expenses.
+exports.my_expenses = function(req, res, next) {
+    // var user_business_name = req.params.user_busines_name;
+    try {
+        models.Expense.findAll({
+            where: {business_name: req.user.current_business, userId: req.user.id},
             include: [
                 {
                   model: models.user,

@@ -33,6 +33,7 @@ router.get('/expense/:expense_id', expense_controller.expense_detail);
 
 // GET request for list of all Expense.
 router.get('/expenses', expense_controller.expense_list);
+router.get('/myExpenses', expense_controller.my_expenses);
 
 // Approval for Expense
 router.get('/expense/:expense_id/approval/:status_code', expense_controller.expense_approval_get);
