@@ -170,11 +170,11 @@ const submitExpense = async (event) => {
     let errors = '';
     console.log(expense);
     if (expense.status) {
-      //swal.fire(
-      //  'Awesome!',
-      //  'Your task submission was successful!',
-      //  'success'
-      //)
+      swal.fire(
+        'Awesome!',
+        'Expense updated!',
+        'success'
+      )
       location.href = `/expense/${expenseId}`;
     } else {
       submitBtn.innerHTML = 'Update Expense';
@@ -186,18 +186,18 @@ const submitExpense = async (event) => {
       document.getElementById('errDisplay').innerHTML = errors;
       swal.fire(
         'Oops!',
-        `Expense updated successfully!`,
+        `Operation unsuccessful!`,
         'error'
       )
     }
   } catch (error) {
     console.log(error);
-    show network error notification
-    swal.fire(
-      'Oops!',
-      'An error was encountered! Please review your network connection.',
-      'error'
-    )
+    // show network error notification
+    // swal.fire(
+    //   'Oops!',
+    //   'An error was encountered! Please review your network connection.',
+    //   'error'
+    // )
   }
 
 };
@@ -216,12 +216,12 @@ const updateExpense = async (data) => {
       return await expense.json();
     } catch (error) {
       console.log(error);
-      show network error notification
-      swal.fire(
-        'Oops!',
-        'An error was encountered! Please review your network connection.',
-        'error'
-      )
+      // show network error notification
+      //swal.fire(
+      //  'Oops!',
+      //  'An error was encountered! Please review your network connection.',
+      //  'error'
+      //)
     }
   };
   
@@ -235,7 +235,7 @@ const updateExpense = async (data) => {
       if (response.status) {
         swal.fire(
             'Sucessful!',
-            'Expense was deleted successfully!',
+            'Expense deleted successfully!',
             'success'
           )
           location.href = `/expenses`;
@@ -255,7 +255,7 @@ const updateExpense = async (data) => {
     if (approval.status) {
       swal.fire(
         'Awesome!',
-        'Reviewed Successfully',
+        'Expense Reviwed Successfully',
         'success'
       )
       location.href = `/expense/${expenseId}`;
@@ -271,11 +271,11 @@ const updateExpense = async (data) => {
   const onErrorCatch = (error) => {
     console.log(error);
       // show network error notification
-      swal.fire(
-        'Oops!',
-        'An error was encountered! Please review your network connection.',
-        'error'
-      )
+    //   swal.fire(
+    //     'Oops!',
+    //     'An error was encountered! Please review your network connection.',
+    //     'error'
+    //   )
   }
   // Submission grading functions
   const approveExpense = async () => {

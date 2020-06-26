@@ -4,8 +4,8 @@ class Routes {
   }
 
   get root () {
-    // return 'https://manifest-expensetracker.herokuapp.com/';
-    return 'https://d56db9add77f4f85b2d170b091d7493f.vfs.cloud9.us-east-1.amazonaws.com';
+    return 'https://manifest-expensetracker.herokuapp.com/';
+    // return 'https://d56db9add77f4f85b2d170b091d7493f.vfs.cloud9.us-east-1.amazonaws.com';
     // return 'http://localhost:8080/'; // 
   };
 
