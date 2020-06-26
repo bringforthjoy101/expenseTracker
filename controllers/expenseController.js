@@ -70,9 +70,34 @@ exports.expense_detail = async function(req, res, next) {
 };
 
 
-// Display list of all posts.
+// Display list of all Expenses.
 exports.expense_list = async function(req, res, next) {
     const data = await fetch(`${apiUrl}/expenses`, {method: 'GET'});
+    const data2 = await fetch(`${apiUrl}/categories`, {method: 'GET'});
+    const data3 = await fetch(`${apiUrl}/types`, {method: 'GET'});
+    const expenses = await data.json();
+    const categories = await data2.json();
+    const types = await data3.json();
+    console.log('This is the response: ' + expenses);
+    
+    var viewData = {
+        title: 'All Expenses',
+        page:'expensePage',
+        display:'expenseList',
+        expenses: expenses.data,
+        categories: categories.data,
+        types: types.data,
+        user: req.user,
+        moment:moment,
+        layout: 'layouts/main'
+    }
+    res.render('pages/index', viewData);
+    console.log("Expenses list renders successfully");
+};
+
+// Display list of my Expenses.
+exports.my_expense_list = async function(req, res, next) {
+    const data = await fetch(`${apiUrl}/myExpenses`, {method: 'GET'});
     const data2 = await fetch(`${apiUrl}/categories`, {method: 'GET'});
     const data3 = await fetch(`${apiUrl}/types`, {method: 'GET'});
     const expenses = await data.json();
