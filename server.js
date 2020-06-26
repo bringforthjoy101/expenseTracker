@@ -108,13 +108,14 @@ app.get('/logout',
         res.redirect('/login');
     });
     
-// const authenticationMiddleware = (req, res, next) => {
-//     if( req.isAuthenticated() ) {
-//         return next();
-//     }
-//     res.redirect('/login/?m=not-logged-in');
-// };
-// app.use(authenticationMiddleware);
+const authenticationMiddleware = (req, res, next) => {
+    if( req.isAuthenticated() ) {
+        return next();
+    }
+    return res.status(401).send({error: 'You must be logged in'});
+    // res.redirect('/login/?m=not-logged-in');
+};
+app.use(authenticationMiddleware);
     
 
 
@@ -128,7 +129,7 @@ app.use('/dashboard', function(req, res, next) {
 });
 app.use('/users', users);
 // app.use('/dashboard', index);
-// app.use('/api/expense', authenticationMiddleware);
+app.use('/api/expense', authenticationMiddleware);
 app.use('/api/expense', expenseAPI);
 
 //// API ENDPOINTS ///
