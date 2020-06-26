@@ -423,7 +423,8 @@ exports.index = async function(req, res) {
                 expenseCount: expenses.length, 
                 employeeCount: employees.length, 
                 totalSum: totalSum,
-                expenses: expenses
+                expenses: expenses,
+                user: req.user
             })
 
         });
