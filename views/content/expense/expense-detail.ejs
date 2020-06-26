@@ -184,20 +184,20 @@ const submitExpense = async (event) => {
       }
       console.log(errors);
       document.getElementById('errDisplay').innerHTML = errors;
-      //swal.fire(
-      //  'Oops!',
-      //  `Your task submission was unsuccessful!`,
-      //  'error'
-      //)
+      swal.fire(
+        'Oops!',
+        `Expense updated successfully!`,
+        'error'
+      )
     }
   } catch (error) {
     console.log(error);
-    // show network error notification
-    // swal.fire(
-    //   'Oops!',
-    //   'An error was encountered! Please review your network connection.',
-    //   'error'
-    // )
+    show network error notification
+    swal.fire(
+      'Oops!',
+      'An error was encountered! Please review your network connection.',
+      'error'
+    )
   }
 
 };
@@ -216,12 +216,12 @@ const updateExpense = async (data) => {
       return await expense.json();
     } catch (error) {
       console.log(error);
-      // show network error notification
-      //swal.fire(
-      //  'Oops!',
-      //  'An error was encountered! Please review your network connection.',
-      //  'error'
-      //)
+      show network error notification
+      swal.fire(
+        'Oops!',
+        'An error was encountered! Please review your network connection.',
+        'error'
+      )
     }
   };
   
@@ -233,11 +233,11 @@ const updateExpense = async (data) => {
       });
       let response = await expense.json();
       if (response.status) {
-        // swal.fire(
-        //     'Sucessful!',
-        //     'Task was deleted successfully!',
-        //     'success'
-        //   )
+        swal.fire(
+            'Sucessful!',
+            'Expense was deleted successfully!',
+            'success'
+          )
           location.href = `/expenses`;
       }
     } catch (error) {
@@ -253,29 +253,29 @@ const updateExpense = async (data) => {
   
   const onActionCompleted = (approval) => {
     if (approval.status) {
-    //   swal.fire(
-    //     'Awesome!',
-    //     'Submission Graded Successfully',
-    //     'success'
-    //   )
+      swal.fire(
+        'Awesome!',
+        'Reviewed Successfully',
+        'success'
+      )
       location.href = `/expense/${expenseId}`;
     } else {
-    //   swal.fire(
-    //     'Oops!',
-    //     `An error was encountered! Please reload and try again.`,
-    //     'error'
-    //   )
+      swal.fire(
+        'Oops!',
+        `An error was encountered! Please reload and try again.`,
+        'error'
+      )
     }
   }
 
   const onErrorCatch = (error) => {
     console.log(error);
       // show network error notification
-    //   swal.fire(
-    //     'Oops!',
-    //     'An error was encountered! Please review your network connection.',
-    //     'error'
-    //   )
+      swal.fire(
+        'Oops!',
+        'An error was encountered! Please review your network connection.',
+        'error'
+      )
   }
   // Submission grading functions
   const approveExpense = async () => {

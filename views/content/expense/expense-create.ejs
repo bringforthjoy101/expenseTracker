@@ -97,11 +97,11 @@ const submitExpense = async (event) => {
     let errors = '';
     console.log(expense);
     if (expense.status) {
-      //swal.fire(
-      //  'Awesome!',
-      //  'Your task submission was successful!',
-      //  'success'
-      //)
+      swal.fire(
+        'Awesome!',
+        'Expense created!',
+        'success'
+      )
       location.href = `/expense/${expense.data.id}`;
     } else {
       submitBtn.innerHTML = 'Submit Expense';
@@ -111,20 +111,20 @@ const submitExpense = async (event) => {
       }
       console.log(errors);
       document.getElementById('errDisplay').innerHTML = errors;
-      //swal.fire(
-      //  'Oops!',
-      //  `Your task submission was unsuccessful!`,
-      //  'error'
-      //)
+      swal.fire(
+        'Oops!',
+        `Operation was not successful!`,
+        'error'
+      )
     }
   } catch (error) {
     console.log(error);
-    // show network error notification
-    // swal.fire(
-    //   'Oops!',
-    //   'An error was encountered! Please review your network connection.',
-    //   'error'
-    // )
+    show network error notification
+    swal.fire(
+      'Oops!',
+      'An error was encountered! Please review your network connection.',
+      'error'
+    )
   }
 
 };
@@ -144,11 +144,11 @@ const createExpense = async (data) => {
     } catch (error) {
       console.log(error);
       // show network error notification
-      //swal.fire(
-      //  'Oops!',
-      //  'An error was encountered! Please review your network connection.',
-      //  'error'
-      //)
+      swal.fire(
+        'Oops!',
+        'An error was encountered! Please review your network connection.',
+        'error'
+      )
     }
   };
 </script>
