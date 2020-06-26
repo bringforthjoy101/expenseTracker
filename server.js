@@ -108,13 +108,13 @@ app.get('/logout',
         res.redirect('/login');
     });
     
-const authenticationMiddleware = (req, res, next) => {
-    if( req.isAuthenticated() ) {
-        return next();
-    }
-    res.redirect('/login/?m=not-logged-in');
-};
-app.use(authenticationMiddleware);
+// const authenticationMiddleware = (req, res, next) => {
+//     if( req.isAuthenticated() ) {
+//         return next();
+//     }
+//     res.redirect('/login/?m=not-logged-in');
+// };
+// app.use(authenticationMiddleware);
     
 
 
