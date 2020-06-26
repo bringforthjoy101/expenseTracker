@@ -119,7 +119,7 @@ router.get('/department/:department_id', department_controller.department_detail
 router.get('/departments', department_controller.department_list);
 
 // GET home page.
-router.get('/', requireLogin, expense_controller.index); 
+router.get('/', expense_controller.index); 
 
 // export all the router created
 module.exports = router;
