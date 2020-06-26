@@ -52,14 +52,22 @@ exports.expense_create_post = async function(req, res, next) {
 exports.expense_detail = async function(req, res, next) {
     var id = req.params.expense_id
     const data = await fetch(`${apiUrl}/expense/${id}`, {method: 'GET'});
+    const data2 = await fetch(`${apiUrl}/categories`, {method: 'GET'});
+    const data3 = await fetch(`${apiUrl}/types`, {method: 'GET'});
     const response = await data.json();
+    const categories = await data2.json();
+    const types = await data3.json();
   
     console.log('This is the response: ' + response);
     var viewData = {
         title: 'Expense Details',
         page:'expensePage',
         display:'expenseDetail',
+        parent: 'Expense List',
+        parentUrl: '/allExpenses',
         expense: response.data,
+        categories: categories.data,
+        types: types.data,
         user: req.user,
         moment: moment, 
         layout: 'layouts/main'
@@ -84,6 +92,8 @@ exports.expense_list = async function(req, res, next) {
         title: 'All Expenses',
         page:'expensePage',
         display:'expenseList',
+        parent: 'Dashboard',
+        parentUrl: '/dashboard',
         expenses: expenses.data,
         categories: categories.data,
         types: types.data,
@@ -109,6 +119,8 @@ exports.my_expense_list = async function(req, res, next) {
         title: 'All Expenses',
         page:'expensePage',
         display:'expenseList',
+        parent: 'Dashboard',
+        parentUrl: '/dashboard',
         expenses: expenses.data,
         categories: categories.data,
         types: types.data,
@@ -132,6 +144,8 @@ exports.expense_new = async function(req, res, next) {
         title: 'Expense Create',
         page:'expensePage',
         display:'expenseCreate',
+        parent: 'Dashboard',
+        parentUrl: '/dashboard',
         categories: categories.data,
         types: types.data,
         user: req.user,
@@ -150,6 +164,8 @@ exports.index = async function(req, res, next) {
     var viewData = {
         title: 'Homepage', 
         page: 'homePage',
+        parent: 'Dashboard',
+        parentUrl: '/dashboard',
         expenseCount: response.expenseCount, 
         employeeCount: response.employeeCount, 
         expenses: response.expenses,  
