@@ -115,7 +115,7 @@ const authenticationMiddleware = (req, res, next) => {
     return res.status(401).send({error: 'You must be logged in'});
     // res.redirect('/login/?m=not-logged-in');
 };
-app.use(authenticationMiddleware);
+// app.use(authenticationMiddleware);
     
 
 
@@ -129,7 +129,7 @@ app.use('/dashboard', function(req, res, next) {
 });
 app.use('/users', users);
 // app.use('/dashboard', index);
-// app.use('/api/expense', authenticationMiddleware);
+app.use('/api/expense', authenticationMiddleware);
 app.use('/api/expense', expenseAPI);
 
 //// API ENDPOINTS ///
