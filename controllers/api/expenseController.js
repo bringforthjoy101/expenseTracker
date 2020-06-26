@@ -424,7 +424,6 @@ exports.index = async function(req, res) {
                 employeeCount: employees.length, 
                 totalSum: totalSum,
                 expenses: expenses,
-                user: req.user
             })
 
         });
