@@ -1,54 +1,10 @@
-var Expense = require('../models/expense');
-var models = require('../models');
 var tools = require('./../modules/tools');
 const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
 
 
-exports.expense_create_get = async function(req, res, next) {
-        // renders a post form
-        const categories = await models.Category.findAll();
-        res.render('forms/expense_form', { title: 'Create Expense', categories: categories,  layout: 'layouts/detail'});
-        console.log("Expense form renders successfully")
-};
-
-
-// Handle expense create on POST.
-exports.expense_create_post = async function(req, res, next) {
-    try {
-        const body = { 
-            title: req.body.title,
-            desc: req.body.desc,
-            amount: req.body.amount,
-            type: req.body.type,
-            category: req.body.category,
-            business_name: req.user.current_business,
-            department: req.user.DepartmentId,
-            employee_id: req.user.id
-        };
-        
-        const data = await fetch(`${apiUrl}/create`, {
-                method: 'post', 
-                body: JSON.stringify(body),
-                headers: { 'Content-Type': 'application/json' },
-            });
-            
-            const expense = await data.json();
-            if (expense.status) {
-                res.redirect("/expense/" + expense.data.id );
-            }
-    } catch (error) {
-        res.status(400).json({
-            status: false,
-            message: `There was an error - ${error}`
-        });
-    }
-        
-};
-
-
-// Display detail page for a specific expense.
+// Read one expense.
 exports.expense_detail = async function(req, res, next) {
     var id = req.params.expense_id
     const data = await fetch(`${apiUrl}/expense/${id}`, {method: 'GET'});
@@ -76,7 +32,6 @@ exports.expense_detail = async function(req, res, next) {
     console.log("Expense one details renders successfully");
        
 };
-
 
 // Display list of all Expenses.
 exports.expense_list = async function(req, res, next) {

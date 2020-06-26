@@ -56,7 +56,6 @@ router.get('/signup', async function(req, res, next) {
 router.get('/expense/:expense_id', requireLogin, expense_controller.expense_detail);
 router.get('/allExpenses', requireLogin, expense_controller.expense_list);
 router.get('/newExpense', requireLogin, expense_controller.expense_new); // renders the expense create page
-router.post('/createExpense', requireLogin, expense_controller.expense_create_post);
 router.get('/myExpenses', requireLogin, expense_controller.my_expense_list);
 
 
