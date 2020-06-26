@@ -112,8 +112,9 @@ exports.expense_new = async function(req, res, next) {
 // This is the expense homepage.
 exports.index = async function(req, res, next) {
     
-    const data = await fetch(`${apiUrl}`, {method: 'GET'});
+    const data = await fetch(`${apiUrl}`, {method: 'GET', headers: {}});
     const response = await data.json();
+    console.log('this is the auth ' + req.isAuthenticated())
     console.log('This is the response: ' + response);
     
     var viewData = {
