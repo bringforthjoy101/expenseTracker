@@ -13,6 +13,7 @@ exports.expense_detail = async function(req, res, next) {
     const response = await data.json();
     const categories = await data2.json();
     const types = await data3.json();
+    console.log()
   
     console.log('This is the response: ' + response);
     var viewData = {
