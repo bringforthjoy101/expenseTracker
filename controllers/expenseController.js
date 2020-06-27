@@ -2,14 +2,20 @@ var tools = require('./../modules/tools');
 const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
-
+const encode = require('base-64');
 
 // Read one expense.
 exports.expense_detail = async function(req, res, next) {
+    
+    console.log('Logged in User Email ' + req.user.email);
+    console.log('Logged in User Password ' + req.user.password);
+    
     var id = req.params.expense_id
+    
     const data = await fetch(`${apiUrl}/expense/${id}`, {method: 'GET'});
     const data2 = await fetch(`${apiUrl}/categories`, {method: 'GET'});
     const data3 = await fetch(`${apiUrl}/types`, {method: 'GET'});
+    
     const response = await data.json();
     const categories = await data2.json();
     const types = await data3.json();
