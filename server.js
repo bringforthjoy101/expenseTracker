@@ -129,7 +129,7 @@ app.use('/dashboard', function(req, res, next) {
 });
 app.use('/users', users);
 // app.use('/dashboard', index);
-// app.use('/api/expense', authenticationMiddleware);
+app.use('/api/expense', authenticationMiddleware);
 app.use('/api/expense', expenseAPI);
 
 //// API ENDPOINTS ///
