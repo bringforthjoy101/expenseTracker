@@ -21,6 +21,8 @@ exports.expense_detail = async function(req, res, next) {
         display:'expenseDetail',
         parent: 'Expense List',
         parentUrl: '/allExpenses',
+        api: 'expense',
+        id: id,
         expense: response.data,
         categories: categories.data,
         types: types.data,
@@ -49,6 +51,7 @@ exports.expense_list = async function(req, res, next) {
         display:'expenseList',
         parent: 'Dashboard',
         parentUrl: '/dashboard',
+        api: 'expense',
         expenses: expenses.data,
         categories: categories.data,
         types: types.data,
@@ -76,6 +79,7 @@ exports.my_expense_list = async function(req, res, next) {
         display:'expenseList',
         parent: 'Dashboard',
         parentUrl: '/dashboard',
+        api: 'expense',
         expenses: expenses.data,
         categories: categories.data,
         types: types.data,
@@ -101,6 +105,7 @@ exports.expense_new = async function(req, res, next) {
         display:'expenseCreate',
         parent: 'Dashboard',
         parentUrl: '/dashboard',
+        api: 'expense',
         categories: categories.data,
         types: types.data,
         user: req.user,
@@ -114,7 +119,7 @@ exports.index = async function(req, res, next) {
     
     const data = await fetch(`${apiUrl}`, {method: 'GET', headers: {}});
     const response = await data.json();
-    console.log('this is the auth ' + req.isAuthenticated())
+    console.log('this is the auth token ' + req.session.passport.user.token)
     console.log('This is the response: ' + response);
     
     var viewData = {
@@ -122,6 +127,7 @@ exports.index = async function(req, res, next) {
         page: 'homePage',
         parent: 'Dashboard',
         parentUrl: '/dashboard',
+        api: 'dashboard',
         expenseCount: response.expenseCount, 
         employeeCount: response.employeeCount, 
         expenses: response.expenses,  
