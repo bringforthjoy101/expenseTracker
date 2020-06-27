@@ -135,7 +135,7 @@ exports.index = async function(req, res, next) {
     
     console.log('headers sent to fetch request ' + headers);
     
-    const data = await fetch(`${apiUrl}`, {method: 'GET', headers: headers});
+    const data = await fetch(`${apiUrl}`, {method: 'GET', headers: headers, credentials: 'include' });
     
     console.log('data from API fetch '  + data);
     
@@ -167,7 +167,7 @@ async function getAuthenticate(req,res) {
     let h = new Headers();
     h.append('Accept' , 'application/json');
     let encoded = window.btoa('req.user.email:req.user.password');
-    let auth = 'Basics ' + encoded;
+    let auth = 'Basic ' + encoded;
     console.log(auth);
     h.append('Authorization' , auth);
     console.log('headers' + h);
