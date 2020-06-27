@@ -109,6 +109,7 @@ app.get('/logout',
     });
     
 const authenticationMiddleware = (req, res, next) => {
+    console.log('this is req.user' + req.user + 'this is req.user.email' + req.user.email + 'this is req.user.password' + req.user.password);
     if( req.isAuthenticated() ) {
         return next();
     }
@@ -123,13 +124,18 @@ const authenticationMiddleware = (req, res, next) => {
 // routing
 //
 app.use('/', index);
-app.use('/dashboard', function(req, res, next) {
+
+app.use('/dashboard', 
+    function(req, res, next) {
     res.locals.layout = 'layout_user';
     next();
 });
+
 app.use('/users', users);
+
 // app.use('/dashboard', index);
-// app.use('/api/expense', authenticationMiddleware);
+app.use('/api/expense', authenticationMiddleware);
+
 app.use('/api/expense', expenseAPI);
 
 //// API ENDPOINTS ///

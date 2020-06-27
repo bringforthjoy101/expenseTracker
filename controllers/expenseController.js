@@ -2,7 +2,14 @@ var tools = require('./../modules/tools');
 const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
-const encode = require('base-64');
+
+const Headers = global.Headers || require("fetch-headers");
+require('jsdom-global')();
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const DOM = new JSDOM('<!doctype html><html><body></body></html>');
+const { window } = DOM;
+
 
 // Read one expense.
 exports.expense_detail = async function(req, res, next) {
@@ -124,8 +131,16 @@ exports.expense_new = async function(req, res, next) {
 // This is the expense homepage.
 exports.index = async function(req, res, next) {
     
-    const data = await fetch(`${apiUrl}`, {method: 'GET', headers: {}});
+    var headers = await getAuthenticate(req, res);
+    
+    console.log('headers sent to fetch request ' + headers);
+    
+    const data = await fetch(`${apiUrl}`, {method: 'GET', headers: headers});
+    
+    console.log('data from API fetch '  + data);
+    
     const response = await data.json();
+    
     console.log('this is the auth token ' + req.session.passport.user.token)
     console.log('This is the response: ' + response);
     
@@ -147,3 +162,14 @@ exports.index = async function(req, res, next) {
     }
     res.render('pages/index', viewData);
 };
+
+async function getAuthenticate(req,res) {
+    let h = new Headers();
+    h.append('Accept' , 'application/json');
+    let encoded = window.btoa('req.user.email:req.user.password');
+    let auth = 'Basics ' + encoded;
+    console.log(auth);
+    h.append('Authorization' , auth);
+    console.log('headers' + h);
+    return h;
+}
