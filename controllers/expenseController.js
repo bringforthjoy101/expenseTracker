@@ -135,7 +135,7 @@ exports.index = async function(req, res, next) {
     
     console.log('headers sent to fetch request ' + headers);
     
-    const data = await fetch(`${apiUrl}`, {method: 'GET', headers: headers, credentials: 'include' });
+    const data = await fetch(`${apiUrl}`, {method: 'GET', headers: headers});
     
     console.log('data from API fetch '  + data);
     
