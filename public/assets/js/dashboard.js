@@ -50,7 +50,8 @@ const insertExpenseList = async (userId) => {
 			search: {
 				input: $('#generalSearch')
 			},
-
+      
+      
 			// columns definition
 			columns: [
         // {
@@ -89,9 +90,7 @@ const insertExpenseList = async (userId) => {
           field: 'user',
           title: 'Employee',
           template: function(row) {
-            console.log('this is the user ' + row['Type.type_name']);
-            return row["user.firstname"] + ' ' + row["user.lastname"];
-            
+            return row.user["firstname"] + ' ' + row.user["lastname"];
           }
         }, 
         {
@@ -147,8 +146,3 @@ const insertTotalSum = async (userId) => {
     <span class="kt-widget-3__content-number" id="totalSum">${Number (totalSum || 0).toLocaleString()}</span>
   `;  
 };
-
-// number.toLocaleString()
-// Number(${totalSum}).toLocaleString()
-
-// ${Number (totalSum || 0).toLocaleString()}

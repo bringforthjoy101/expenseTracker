@@ -4,11 +4,46 @@
 const getExpenseData = async (id) =>{
   try {
     const response = await fetch(`${Route.apiRoot}/expense/${id}`, {
-      // mode: 'no-cors',
       method: 'GET',
     });
     let expenseData = await response.json();
     return expenseData;
+  } catch (error) {
+  console.log(error);
+    // show network error notification
+    swal.fire(
+      'Oops!',
+      'An error was encountered! Please review your network connection.',
+      'error'
+    )
+  }
+};
+
+const getExpenseTypeList = async (id) =>{
+  try {
+    const response = await fetch(`${Route.apiRoot}/types`, {
+      method: 'GET',
+    });
+    let expenseTypeList = await response.json();
+    return expenseTypeList;
+  } catch (error) {
+  console.log(error);
+    // show network error notification
+    swal.fire(
+      'Oops!',
+      'An error was encountered! Please review your network connection.',
+      'error'
+    )
+  }
+};
+
+const getExpenseCategoryList = async (id) =>{
+  try {
+    const response = await fetch(`${Route.apiRoot}/categories`, {
+      method: 'GET',
+    });
+    let expenseCategoryList = await response.json();
+    return expenseCategoryList;
   } catch (error) {
   console.log(error);
     // show network error notification
@@ -74,6 +109,120 @@ const insertExpenseData = async (id) =>{
             </div>
 
         `;
+        // const thisUserId = `<%=user.id%>`
+        // if (expense.userId == req.user.id || req.user.RoleId == 1) { 
+        // document.getElementById('expenseAction').innerHTML = `
+           
+        //     <div class="dropdown dropdown-block text-right">
+        //         <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
+        //             <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        //               <i class="flaticon-more-1"></i>
+        //             </button>
+        //       		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        //                 <!-- Button trigger modal -->
+        //                 <% if (user.id == expense.userId) { %>
+        //           			<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
+        //                       Edit
+        //                     </button>
+        //                     <a class="dropdown-item text-danger" onclick="deleteExpense()">Delete</a>
+        //                 <% } %>
+        //                 <% if (user.RoleId == 1) { %>
+        //                     <% if (expense.status == 'Pending') { %>
+        //                         <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
+        //                         <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
+        //                     <% } else if (expense.status == 'Approved') { %>
+        //                         <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
+        //                     <% } else { %>
+        //                         <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
+        //                     <% } %>
+        //                 <% } %>
+                        
+        //       		</div>
+        //       	</span>
+        // 	</div>
+      	  
+        // `;
+        // }
+
+    } catch (err) {
+      console.log(err);
+      document.getElementById('expenseDetail').innerHTML = `
+        <div class="kt-portlet__body" id="expenseDetail">
+          <div class="">
+            <div class="kt-widget__label">
+              <span class="kt-widget__desc">
+                <h5>An Error Occured, please refresh page this.</h5>
+              </span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  } else {
+    document.getElementById('expenseDetail').innerHTML = `
+      <div class="kt-portlet__body" id="expenseDetail">
+        <div class="">
+          <div class="kt-widget__label">
+            <span class="kt-widget__desc">
+              <h5>An Error Occured, please refresh page.</h5>
+            </span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+}
+
+const updateExpenseData = async (id) =>{
+  const expenseData = await getExpenseData(id);
+  const typeList = await getExpenseTypeList(id);
+  const categoryList = await getExpenseCategoryList(id);
+  if (expenseData.status) {
+    try {
+      const expense = expenseData.data;
+      const { types } = typeList;
+      const categories = categoryList.data;
+      
+      console.log(expense)
+      console.log('this is types ' + types)
+      document.getElementById('expenseForm').innerHTML = `
+        
+  				  <div class="form-group">
+  						<label>Expense Title:</label>
+  						<input type="text" name="title" id="title" value="${ expense.title }" class="form-control" placeholder="Expense Title">
+  						<span class="form-text text-muted">Please enter the expense title</span>
+  					</div>
+  					<div class="form-group">
+  						<label>Expense Description:</label>
+  						<input type="text" name="desc" id="desc" value="${ expense.desc }" class="form-control" placeholder="Expense Desciption">
+  						<span class="form-text text-muted">Please enter the expense description</span>
+  					</div>
+  					<div class="form-group">
+  						<label>Amount:</label>
+  						<input type="number" name="amount" id="amount" value="${ expense.amount }" class="form-control" placeholder="Expense Amount">
+  					</div>
+  					<div class="form-group">
+  						<label>Type:</label>
+  						<select class="form-control kt-select2" id="kt_select2_2_modal" name="type" id="type"> 
+  						    <option value="${ expense.TypeId }">${ expense.Type.type_name }</option>`
+    						    types.forEach(type => {
+    					    		`<option value="${ type.id }" >${ type.type_name }</option>`
+    					    	});
+  						`</select>
+  					</div>
+  					<div class="form-group">
+  						<label>Category:</label>
+  						<select class="form-control kt-select2" id="kt_select2_3_modal" name="category">
+  						    <option value="${ expense.CategoryId}">${ expense.Category.category_name }</option>`
+  					    	categories.forEach(category => {
+  					    		`<option value="${ category.id }" >${ category.category_name }</option>`
+  					    	});
+  						`</select>
+  					</div>
+  				
+
+        `;
         
 
     } catch (err) {
@@ -105,6 +254,12 @@ const insertExpenseData = async (id) =>{
   }
 
 }
+
+
+
+
+
+
 
 
 
@@ -250,7 +405,7 @@ const insertExpenseList = async (userId) => {
           title: 'Employee',
           template: function(row) {
             console.log('this is the user ' + row['Type.type_name']);
-            return row["user.firstname"] + ' ' + row["user.lastname"];
+            return row.user["firstname"] + ' ' + row.user["lastname"];
             
           }
         }, 

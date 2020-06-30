@@ -1,87 +1,16 @@
-<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
-    <% if (expense.userId == user.id || user.RoleId == 1) { %>
-        <div class="dropdown dropdown-block text-right">
-        <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
-            <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="flaticon-more-1"></i>
-            </button>
-      		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <!-- Button trigger modal -->
-                <% if (user.id == expense.userId) { %>
-          			<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
-                      Edit
-                    </button>
-                    <a class="dropdown-item text-danger" onclick="deleteExpense()">Delete</a>
-                <% } %>
-                <% if (user.RoleId == 1) { %>
-                    <% if (expense.status == 'Pending') { %>
-                        <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
-                        <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
-                    <% } else if (expense.status == 'Approved') { %>
-                        <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
-                    <% } else { %>
-                        <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
-                    <% } %>
-                <% } %>
-                
-      		</div>
-      	</span>
-	</div>
-	<% } %>
+
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid" >
+    <div id="expenseAction" ></div>
+      
 	<div class="">
 	    <h6 class="text-danger" id="errDisplay"></h6>
 	</div>
     <div class="row">
         <div class="col-xl-6" id="expenseDetail">
 
-            <!--begin::Portlet-->
-            <div class="kt-portlet">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title"><%= expense.title %></h3>
-                    </div>
-                </div>
-                <div class="kt-portlet__body">
-                    <div class="kt-section">
-                        <div class="kt-section__info">
-                            <%= expense.desc %> <br>
-                            <b>₦ <%= Number (expense.amount || 0).toLocaleString(); %></b> <br>
-                             
-                            <% if (expense.status == 'Approved') { %>
-                                <span class="badge badge-success"><%= expense.status %></span> <br>    
-                            <% } else if (expense.status == 'Pending') { %>
-                                <span class="badge badge-warning"><%= expense.status %></span> <br>
-                            <% } else { %>
-                                <span class="badge badge-danger"><%= expense.status %></span> <br>
-                            <% } %>
-                            <%= moment(expense.createdAt).fromNow() %>
-                        </div>
-                    </div>
-                </div>
+            <div class="kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--center kt-spinner--input">
+                <input  type="text" class="form-control"/>
             </div>
-
-            <!--end::Portlet-->
-
-            <!--begin::Portlet-->
-            <div class="kt-portlet">
-                <div class="kt-portlet__head">
-                    <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title">Expense Details</h3>
-                    </div>
-                </div>
-                <div class="kt-portlet__body">
-                    <div class="kt-section">
-                        <div class="kt-section__info">
-                            <b>Type:</b> <%= expense.Type.type_name %> <br>
-                            <b>Category:</b> <%= expense.Category.category_name %> <br>
-                            <b>Employee:</b> <%= expense.user.firstname %> <br>
-                            <b>Department:</b> <%= expense.Department.dept_name %> <br>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--end::Portlet-->
         </div>
     </div>
 </div>
@@ -96,46 +25,14 @@
 					<span aria-hidden="true" class="la la-remove"></span>
 				</button>
 			</div>
-			<form class="kt-form kt-form--fit kt-form--label-right" id="updateExpense" action="#" onsubmit="submitExpense(event)">
-				<div class="modal-body">
-				    <div class="form-group">
-						<label>Expense Title:</label>
-						<input type="text" name="title" id="title" value="<%= expense.title %>" class="form-control" placeholder="Expense Title">
-						<span class="form-text text-muted">Please enter the expense title</span>
-					</div>
-					<div class="form-group">
-						<label>Expense Description:</label>
-						<input type="text" name="desc" id="desc" value="<%= expense.desc %>" class="form-control" placeholder="Expense Desciption">
-						<span class="form-text text-muted">Please enter the expense description</span>
-					</div>
-					<div class="form-group">
-						<label>Amount:</label>
-						<input type="number" name="amount" id="amount" value="<%= expense.amount %>" class="form-control" placeholder="Expense Amount">
-					</div>
-					<div class="form-group">
-						<label>Type:</label>
-						<select class="form-control kt-select2" id="kt_select2_2_modal" name="type" id="type"> 
-						    <option value="<%= expense.TypeId %>"><%= expense.Type.type_name %></option>
-					    	<% types.forEach(function(type) { %>
-					    		<option value="<%= type.id %>" ><%= type.type_name %></option>
-					    	<% });%>
-						</select>
-					</div>
-					<div class="form-group">
-						<label>Category:</label>
-						<select class="form-control kt-select2" id="kt_select2_3_modal" name="category">
-						    <option value="<%= expense.CategoryId%>"><%= expense.Category.category_name %></option>
-					    	<% categories.forEach(function(category) { %>
-					    		<option value="<%= category.id %>" ><%= category.category_name %></option>
-					    	<% });%>
-						</select>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<!--<button type="button" class="btn btn-brand" data-dismiss="modal">Close</button>-->
-					<button type="submit" class="btn btn-brand" id="expenseUpdateBtn">Update Expense</button>
-				</div>
-			</form>
+			<div class="modal-body" id="expenseForm">
+			  
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-brand" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-secondary">Submit</button>
+			</div>
+			
 		</div>
 	</div>
 </div>
@@ -143,12 +40,13 @@
 
 <script>
 const userId = `<%= user.id %>`;
-const expenseId = `<%= expense.id %>`;
-const submitBtn = document.getElementById('expenseUpdateBtn');
+const userRoleId = `<%= user.RoleId %>`;
+const expenseId = `<%= id %>`;
+// const submitBtn = document.getElementById('expenseUpdateBtn');
 
-submitBtn.addEventListener('click', ()=>{
-  submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
-});
+// submitBtn.addEventListener('click', ()=>{
+//   submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
+// });
 
 const submitExpense = async (event) => {
 	try {
@@ -326,4 +224,122 @@ const updateExpense = async (data) => {
         }
       })
   };
+  
+  async function expenseAction() {
+    try {
+      const response = await fetch(`${Route.apiRoot}/expense/${expenseId}`, {
+        method: 'GET',
+      });
+      let expenseData = await response.json();
+      const expense = expenseData.data;
+      console.log(expense);
+      console.log('I am loaded1');
+      console.log('this is expense user ID ' + expense.userId )
+      if (expense.userId == `${userId}` || `${userRoleId}` == 1) { 
+        document.getElementById('expenseAction').innerHTML = `
+            <div class="dropdown dropdown-block text-right">
+                <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
+                    <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="flaticon-more-1"></i>
+                    </button>
+              		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="userAction">
+                        
+                         
+              		</div>
+              	</span>
+        	</div>
+      	  
+        `;
+        console.log('I am loaded');
+        if (userId == expense.userId) { 
+          document.getElementById('userAction').innerHTML = `
+      			<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
+              Edit
+            </button>
+            <a class="dropdown-item text-danger" onclick="deleteExpense()">Delete</a>
+          `;
+          }
+          
+        if (userRoleId == 1) { 
+            if (expense.status == 'Pending') { 
+              document.getElementById('userAction').innerHTML += `
+                <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
+                <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
+                `;
+            } else if (expense.status == 'Approved') { 
+              document.getElementById('userAction').innerHTML += `
+                <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
+                `;
+            } else { 
+              document.getElementById('userAction').innerHTML += `
+                <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
+                `;
+            } 
+        }
+         
+        }
+    } catch (error) {
+      console.log('this is the error ' + error);
+    }
+  }
+  expenseAction();
+  // const expenseAction = async () => {
+  //   try {
+  //     const response = await fetch(`${Route.apiRoot}/expense/${expenseId}`, {
+  //       method: 'GET',
+  //     });
+  //     let expenseData = await response.json();
+  //     const expense = expenseData.data;
+  //     console.log(expense);
+  //     if (expense.userId == userId || userRoleId == 1) { 
+  //       document.getElementById('expenseAction').innerHTML = `
+           
+  //           <div class="dropdown dropdown-block text-right">
+  //               <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
+  //                   <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  //                     <i class="flaticon-more-1"></i>
+  //                   </button>
+  //             		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="userAction">
+  //                       <!-- Button trigger modal -->`
+                         
+                          
+                        
+  //             	`	</div>
+  //             	</span>
+  //       	</div>
+      	  
+  //       `;
+  //       if (userId == expense.userId) { 
+  //         document.getElementById('userAction').innerHTML = `
+  //     			<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
+  //             Edit
+  //           </button>
+  //           <a class="dropdown-item text-danger" onclick="deleteExpense()">Delete</a>
+  //         `;
+  //         }
+          
+  //       if (userRoleId == 1) { 
+  //           if (expense.status == 'Pending') { 
+  //             document.getElementById('userAction').innerHTML += `
+  //               <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
+  //               <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
+  //               `;
+  //           } else if (expense.status == 'Approved') { 
+  //             document.getElementById('userAction').innerHTML += `
+  //               <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
+  //               `;
+  //           } else { 
+  //             document.getElementById('userAction').innerHTML += `
+  //               <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
+  //               `;
+  //           } 
+  //       }
+         
+  //       }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+    
+  // };
+  
 </script>
