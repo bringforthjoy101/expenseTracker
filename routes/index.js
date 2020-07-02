@@ -26,7 +26,7 @@ var department_controller = require('../controllers/departmentController');
 var requireLogin = require('../middlewares/requireLogin');
 
 // router.get('/', indexController.getIndex);
-router.get('/', function(req, res) { res.redirect('/dashboard'); });
+router.get('/', function(req, res) { res.redirect('/login'); });
 // authentication
 // router.post('/login', passport.authenticate('local', { successRedirect: '/expense', failureRedirect: '/login' } ));
 router.get('/about', indexController.getAbout);

@@ -13,11 +13,20 @@ const apiUrl = require('../helpers/apiUrl');
 
 // Read one expense.
 exports.expense_detail = async function(req, res, next) {
+    var id = req.params.expense_id;
     
     console.log('Logged in User Email ' + req.user.email);
     console.log('Logged in User Password ' + req.user.password);
+    const data = await fetch(`${apiUrl}/expenses`, {method: 'GET'});
+    const data2 = await fetch(`${apiUrl}/categories`, {method: 'GET'});
+    const data3 = await fetch(`${apiUrl}/types`, {method: 'GET'});
+    const data4 = await fetch(`${apiUrl}/expense/${id}`, {method: 'GET'});
+    const expenses = await data.json();
+    const categories = await data2.json();
+    const types = await data3.json();
+    const expense = await data4.json();
     
-    var id = req.params.expense_id
+    
 
     var viewData = {
         title: 'Expense Details',
@@ -27,6 +36,10 @@ exports.expense_detail = async function(req, res, next) {
         parentUrl: '/allExpenses',
         api: 'expense',
         id: id,
+        expense: expense.data,
+        expenses: expenses.data,
+        types: types.data,
+        categories: categories.data,
         user: req.user,
         moment: moment, 
         layout: 'layouts/main'
@@ -75,9 +88,9 @@ exports.my_expense_list = async function(req, res, next) {
     console.log('This is the response: ' + expenses);
     
     var viewData = {
-        title: 'All Expenses',
+        title: 'My Expenses',
         page:'expensePage',
-        display:'expenseList',
+        display:'myExpenseList',
         parent: 'Dashboard',
         parentUrl: '/dashboard',
         api: 'expense',
@@ -94,25 +107,34 @@ exports.my_expense_list = async function(req, res, next) {
 
 // create New Expense.
 exports.expense_new = async function(req, res, next) {
-    const data = await fetch(`${apiUrl}/categories`, {method: 'GET'});
-    const data2 = await fetch(`${apiUrl}/types`, {method: 'GET'});
-    const categories = await data.json();
-    const types = await data2.json();
-    console.log('this is the category ' + categories);
-    console.log('this is the type ' + types);
-    var viewData = {
-        title: 'Expense Create',
-        page:'expensePage',
-        display:'expenseCreate',
-        parent: 'Dashboard',
-        parentUrl: '/dashboard',
-        api: 'expense',
-        categories: categories.data,
-        types: types.data,
-        user: req.user,
-        layout: 'layouts/main'
+    try {
+        const data = await fetch(`${apiUrl}/categories`, {method: 'GET'});
+        const data2 = await fetch(`${apiUrl}/types`, {method: 'GET'});
+        const categories = await data.json();
+        const types = await data2.json();
+        console.log('this is create expense');
+        console.log('this is the category ' + categories.data);
+        console.log('this is the type ' + types.data);
+        var viewData = {
+            title: 'Expense Create',
+            page:'expensePage',
+            display:'expenseCreate',
+            parent: 'Dashboard',
+            parentUrl: '/dashboard',
+            api: 'expense',
+            categories: categories.data,
+            types: types.data,
+            user: req.user,
+            layout: 'layouts/main'
+        }
+        res.render('pages/index', viewData);
+    } catch (error) {
+        res.json({
+            status: false,
+            message: `there was an error - ${error}`
+        })
     }
-    res.render('pages/index', viewData);
+    
 };
 
 // This is the expense homepage.

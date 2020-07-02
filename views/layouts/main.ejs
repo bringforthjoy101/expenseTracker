@@ -68,11 +68,11 @@ License: You must have a valid license purchased only from https://themes.getboo
 				<script>
 					insertExpenseList(`<%=user.id%>`);
 				</script>
-			<% } else { %> 
+			<% } else if  (display == 'expenseDetail') { %> 
 				<script>
 					insertExpenseData(`<%=id%>`);
-					updateExpenseData(`<%=id%>`);
 				</script>
+			<% } else { %>
 			<% } %>
 		<% } else if (page == 'employeePage') { %>
 			<% if (display == 'employeeList') { %>

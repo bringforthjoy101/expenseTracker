@@ -25,13 +25,45 @@
 					<span aria-hidden="true" class="la la-remove"></span>
 				</button>
 			</div>
-			<div class="modal-body" id="expenseForm">
-			  
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-brand" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-secondary">Submit</button>
-			</div>
+			<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="updateExpense" onsubmit="submitExpense(event)">
+  			<div class="modal-body" id="expenseForm">
+  			  <div class="form-group">
+  						<label>Expense Title:</label>
+  						<input type="text" name="title" id="title" value="<%= expense.title %>" class="form-control" placeholder="Expense Title">
+  						<span class="form-text text-muted">Please enter the expense title</span>
+  					</div>
+  					<div class="form-group">
+  						<label>Expense Description:</label>
+  						<input type="text" name="desc" id="desc" value="<%= expense.desc %>" class="form-control" placeholder="Expense Desciption">
+  						<span class="form-text text-muted">Please enter the expense description</span>
+  					</div>
+  					<div class="form-group">
+  						<label>Amount:</label>
+  						<input type="number" name="amount" id="amount" value="<%= expense.amount %>" class="form-control" placeholder="Expense Amount">
+  					</div>
+  					<div class="form-group">
+  						<label>Type:</label>
+  						<select class="form-control kt-select2" id="kt_select2_2_modal" name="type" id="type"> 
+  						    <option value="<%= expense.TypeId %>"><%= expense.Type.type_name %></option>
+    						  <% types.forEach(function(type) { %>
+						    		<option value="<%= type.id %>" ><%= type.type_name %></option>
+						    	<% });%>
+  						</select>
+  					</div>
+  					<div class="form-group">
+  						<label>Category:</label>
+  						<select class="form-control kt-select2" id="kt_select2_3_modal" name="category" id="category">
+  						    <option value="<%= expense.CategoryId %>"><%= expense.Category.category_name %></option>
+  					      <% categories.forEach(function(category) { %>
+						    		<option value="<%= category.id %>" ><%= category.category_name %></option>
+						    	<% });%>
+  						</select>
+  					</div>
+  			</div>
+  			<div class="modal-footer">
+  				<button type="submit" class="btn btn-brand" id="expenseUpdateBtn" >Update</button>
+  			</div>
+			</form>
 			
 		</div>
 	</div>
@@ -42,11 +74,11 @@
 const userId = `<%= user.id %>`;
 const userRoleId = `<%= user.RoleId %>`;
 const expenseId = `<%= id %>`;
-// const submitBtn = document.getElementById('expenseUpdateBtn');
+const submitBtn = document.getElementById('expenseUpdateBtn');
 
-// submitBtn.addEventListener('click', ()=>{
-//   submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
-// });
+submitBtn.addEventListener('click', ()=>{
+  submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
+});
 
 const submitExpense = async (event) => {
 	try {

@@ -109,40 +109,6 @@ const insertExpenseData = async (id) =>{
             </div>
 
         `;
-        // const thisUserId = `<%=user.id%>`
-        // if (expense.userId == req.user.id || req.user.RoleId == 1) { 
-        // document.getElementById('expenseAction').innerHTML = `
-           
-        //     <div class="dropdown dropdown-block text-right">
-        //         <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
-        //             <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        //               <i class="flaticon-more-1"></i>
-        //             </button>
-        //       		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        //                 <!-- Button trigger modal -->
-        //                 <% if (user.id == expense.userId) { %>
-        //           			<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
-        //                       Edit
-        //                     </button>
-        //                     <a class="dropdown-item text-danger" onclick="deleteExpense()">Delete</a>
-        //                 <% } %>
-        //                 <% if (user.RoleId == 1) { %>
-        //                     <% if (expense.status == 'Pending') { %>
-        //                         <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
-        //                         <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
-        //                     <% } else if (expense.status == 'Approved') { %>
-        //                         <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
-        //                     <% } else { %>
-        //                         <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
-        //                     <% } %>
-        //                 <% } %>
-                        
-        //       		</div>
-        //       	</span>
-        // 	</div>
-      	  
-        // `;
-        // }
 
     } catch (err) {
       console.log(err);
@@ -181,7 +147,7 @@ const updateExpenseData = async (id) =>{
   if (expenseData.status) {
     try {
       const expense = expenseData.data;
-      const { types } = typeList;
+      const types = typeList.data;
       const categories = categoryList.data;
       
       console.log(expense)
@@ -205,24 +171,21 @@ const updateExpenseData = async (id) =>{
   					<div class="form-group">
   						<label>Type:</label>
   						<select class="form-control kt-select2" id="kt_select2_2_modal" name="type" id="type"> 
-  						    <option value="${ expense.TypeId }">${ expense.Type.type_name }</option>`
-    						    types.forEach(type => {
-    					    		`<option value="${ type.id }" >${ type.type_name }</option>`
-    					    	});
-  						`</select>
+  						    <option value="${ expense.TypeId }">${ expense.Type.type_name }</option>
+    						    
+  						</select>
   					</div>
   					<div class="form-group">
   						<label>Category:</label>
-  						<select class="form-control kt-select2" id="kt_select2_3_modal" name="category">
-  						    <option value="${ expense.CategoryId}">${ expense.Category.category_name }</option>`
-  					    	categories.forEach(category => {
-  					    		`<option value="${ category.id }" >${ category.category_name }</option>`
-  					    	});
-  						`</select>
+  						<select class="form-control kt-select2" id="kt_select2_3_modal" name="category" id="category">
+  						    <option value="${ expense.CategoryId}">${ expense.Category.category_name }</option>
+  					    
+  						</select>
   					</div>
   				
 
         `;
+        
         
 
     } catch (err) {
@@ -232,7 +195,7 @@ const updateExpenseData = async (id) =>{
           <div class="">
             <div class="kt-widget__label">
               <span class="kt-widget__desc">
-                <h5>An Error Occured, please refresh page this.</h5>
+                <h5>An Error Occured, please refresh page.</h5>
               </span>
             </div>
           </div>
@@ -254,7 +217,6 @@ const updateExpenseData = async (id) =>{
   }
 
 }
-
 
 
 
@@ -321,10 +283,6 @@ const getExpenseList = async (userId) =>{
     const expenses = await fetch(`${Route.apiRoot}/expenses`, {
       // mode: 'no-cors',
       method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({ userId })
     });
     return await expenses.json();
   } catch (error) {
