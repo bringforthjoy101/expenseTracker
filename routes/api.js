@@ -14,6 +14,7 @@ var department_controller = require('../controllers/api/departmentController');
 const authorize = require('../middlewares/authorize');
 const Role = require('../helpers/role');
 const requireLogin = require('../middlewares/requireLogin');
+const requireAdmin = require('../middlewares/requireAdmin');
 
 
 /// EXPENSE ROUTES ///
@@ -36,7 +37,7 @@ router.get('/expenses', expense_controller.expense_list);
 router.get('/myExpenses', expense_controller.my_expenses);
 
 // Approval for Expense
-router.get('/expense/:expense_id/approval/:status_code', expense_controller.expense_approval_get);
+router.get('/expense/:expense_id/approval/:status_code', requireAdmin, expense_controller.expense_approval_get);
 
 //  EMPLOYEE ROUTES ///
 

@@ -1,113 +1,132 @@
 var Type = require('../models/type');
 var models = require('../models');
-
-
-// Display TYPE create form on GET.
-exports.type_create_get = function(req, res, next) {
-        // create type GET controller logic here 
-        res.render('forms/type_form', { title: 'Create Type',  layout: 'layouts/detail'});
-};
+const fetch = require('node-fetch');
+const moment = require('moment');
+const apiUrl = require('../helpers/apiUrl');
+const { check, validationResult } = require('express-validator');
 
 // Handle type create on POST.
-exports.type_create_post = function(req, res, next) {
-     models.Type.create({
-            type_name: req.body.type_name
-        }).then(function(type) {
-            console.log("Type created successfully");
-           // check if there was an error during post creation
-            res.redirect('/expense/types');
-      });
-   
-};
+exports.type_create_post = [
+    [
+      // Validation for inputs
+      check('type_name')
+      .isLength({ min: 3, max: 50 }).withMessage('Type name must be between 3 and 50 characters long')
+      .not().isEmpty().withMessage('Type name cannot be empty')
+      .matches(/^[A-Za-z\s]+$/).withMessage('Type name must contain only Letters.')
+    ],
+    function(req, res, next) {
+        // checks for validations
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ status: false, errors: errors.array() });
+        }
+        try {
+            models.Type.create({
+                type_name: req.body.type_name
+            }).then(function(type) {
+                  res.status(200).json({
+                    status: true,
+                    data: type,
+                    message: 'Type created successfully'
+                  })
+                    console.log("Type created successfully");
+              });
+           
+        } catch (error) {
+            // check if there was an error during operation
+            res.status(400).json({
+              status: false,
+              message: `There was an error - ${error}`
+            });
+        }
+    }
+];
 
-// Display type delete form on GET.
-exports.type_delete_get = function(req, res, next) {
-       models.Type.destroy({
+
+// Handle type delete on POST.
+exports.type_delete_post = async function(req, res, next) {
+    var type_id = req.params.type_id
+    // validates if the department ID is an integer
+    if (isNaN(Number(type_id))) {
+        return res.status(400).json({
+          status: false,
+          message: 'Invalid Type ID'
+        });
+    }
+    // checks if the ID exists
+    const thisType = await models.Type.findById(type_id);
+    if (!thisType) {
+      return res.status(400).json({
+          status: false,
+          message: 'Type ID not found'
+        });
+    }
+    // performs operation
+    try {
+        models.Type.destroy({
             // find the type_id to delete from database
             where: {
-              id: req.params.type_id
+              id: type_id
             }
           }).then(function(type) {
            // If an type gets deleted successfully, we just redirect to comments list
            // no need to render a page
-            res.redirect('/expense/types');
+           res.status(200).json({
+            status: true,
+            message: 'Type deleted successfully'
+          })
             console.log("Type deleted successfully");
           });
-};
-
-// Handle type delete on POST.
-exports.type_delete_post = function(req, res, next) {
-         models.Type.destroy({
-            // find the post_id to delete from database
-            where: {
-              id: req.params.type_id
-            }
-          }).then(function() {
-           // If an post gets deleted successfully, we just redirect to posts list
-           // no need to render a page
-            res.redirect('/expense/types');
-            console.log("Type deleted successfully");
-          });
-};
-
-// Display type update form on GET.
-exports.type_update_get = function(req, res, next) {
-         // Find the post you want to update
-        console.log("ID is " + req.params.type_id);
-        models.Type.findById(
-                req.params.type_id
-        ).then(function(type) {
-               // renders a type form
-               res.render('forms/type_form', { title: 'Update Type', type: type, layout: 'layouts/detail'});
-               console.log("Type update get successful");
-          });
-};
-
-// Handle type update on POST.
-exports.type_update_post = function(req, res, next) {
-       console.log("ID is " + req.params.type_id);
-        models.Type.update(
-        // Values to update
-            {
-            type_name: req.body.type_name
-            },
-          { // Clause
-                where: 
-                {
-                    id: req.params.type_id
-                }
-            }
-        //   returning: true, where: {id: req.params.post_id} 
-         ).then(function() { 
-                // If an type gets updated successfully, we just redirect to types list
-                // no need to render a page
-                res.redirect("/expense/types");  
-                console.log("Type updated successfully");
-          });
+    } catch (error) {
+        // check if there was an error during operation
+        res.status(400).json({
+          status: false,
+          message: `There was an error - ${error}`
+        });
+    }
 };
 
 // Display list of all types.
-exports.type_list = function(req, res, next) {
-          // controller logic to display all comments
-        models.Type.findAll(
-        ).then(function(types) {
-        // renders a post list page
-        console.log("rendering type list");
-        res.render('pages/type_list', { title: 'Type List', types: types, layout: 'layouts/list'} );
-        console.log("Types list renders successfully");
-        });
+exports.type_list = async function(req, res, next) {
+    
+    
+    var viewData = {
+        title: 'All types',
+        page:'typePage',
+        display:'typeList',
+        parent: 'Dashboard',
+        parentUrl: '/dashboard',
+        api: 'type',
+        user: req.user,
+        moment:moment,
+        layout: 'layouts/main'
+    }
+    res.render('pages/index', viewData);
+    console.log("Expenses list renders successfully");
 };
 
 // Display detail page for a specific type.
-exports.type_detail = function(req, res, next) {
-     // find a comment by the primary key Pk
-        models.Type.findById(
-                req.params.type_id
-        ).then(function(type) {
-        // renders an inividual type details page
-        res.render('pages/type_detail', { title: 'Type Details', type: type, layout: 'layouts/detail'} );
-        console.log("Type detials renders successfully");
-        });
+exports.type_detail = async function(req, res, next) {
+    var id = req.params.type_id;
+    const data = await fetch(`${apiUrl}/type/${id}`, {method: 'GET'});
+    const type = await data.json();
+    console.log('this is type ' + type);
+
+    var viewData = {
+        title: 'Type Details',
+        page:'typePage',
+        display:'typeDetail',
+        parent: 'Type List',
+        parentUrl: '/types',
+        api: 'type',
+        type: type.data,
+        id: id,
+        user: req.user,
+        moment: moment, 
+        layout: 'layouts/main'
+    }
+    res.render('pages/index', viewData);
+    console.log("Expense one details renders successfully");
 };
 
  

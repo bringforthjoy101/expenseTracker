@@ -68,6 +68,10 @@ License: You must have a valid license purchased only from https://themes.getboo
 				<script>
 					insertExpenseList(`<%=user.id%>`);
 				</script>
+			<% } else if  (display == 'myExpenseList') { %> 
+				<script>
+					insertMyExpenseList(`<%=user.id%>`);
+				</script>
 			<% } else if  (display == 'expenseDetail') { %> 
 				<script>
 					insertExpenseData(`<%=id%>`);
@@ -83,6 +87,14 @@ License: You must have a valid license purchased only from https://themes.getboo
 				<script>
 					insertEmployeeData(`<%=user.id%>`);
 				</script>
+			<% } %>
+		<% } else if (page == 'typePage') { %>
+			<% if (display == 'typeList') { %>
+				<script>
+					insertTypeList(`<%=user.id%>`);
+				</script>
+			<% } else { %> 
+				
 			<% } %>
 		<% } else { %>
 			<script>

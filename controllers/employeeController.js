@@ -18,6 +18,7 @@ const data = await fetch(`${apiUrl}/employees`, {method: 'GET'});
     display: 'employeeList',
     parent: 'Dashboard',
     parentUrl: '/dashboard',
+    api: 'employee',
     employees: response.data,
     user: req.user,
   }
@@ -38,6 +39,7 @@ exports.employee_detail = async function(req, res, next) {
         display:'employeeDetail',
         parent: 'Employees List',
         parentUrl: '/allEmployees',
+        api: 'employee',
         employee: response.data,
         employees: response.employees, 
         expenses: response.expenses,

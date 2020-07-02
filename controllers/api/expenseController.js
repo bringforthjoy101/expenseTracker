@@ -286,7 +286,7 @@ exports.expense_list = function(req, res, next) {
     // var user_business_name = req.params.user_busines_name;
     try {
         models.Expense.findAll({
-            // where: {business_name: user_business_name},
+            where: {business_name: req.user.current_business},
             include: [
                 {
                   model: models.user,
@@ -392,10 +392,11 @@ exports.my_expenses = function(req, res, next) {
 // This is the expense homepage.
 exports.index = async function(req, res) {
     try {
-        const employees = await models.user.findAll();
-        const totalSum = await models.Expense.sum('amount', { where: { status: 'Approved' } } );
-            
+        const employees = await models.user.findAll({where:{current_business: req.user.current_business,}});
+        const totalSum = await models.Expense.sum('amount', { where: { business_name: req.user.current_business, status: 'Approved' } } );
+            // where: { business_name: req.user.current_business, userId: req.user.id},
         models.Expense.findAll({
+            where: { business_name: req.user.current_business},
             include: [
                 {
                     model: models.user,
@@ -454,19 +455,10 @@ exports.expense_approval_get = async function(req, res) {
               message: 'Expense ID not found'
             });
         }
-        // let status = getAprovalStatus(req.params.status_code)
+        
         
         var status = (status_code == 1) ? 'Approved' : (status_code == 2) ? 'Declined' : null;
-            // if (req.params.status_code == 1) {
-            //     status = 'Approved';
-            // } else if (req.params.status_code == 2) {
-            //     status = 'Declined';
-            // } else {
-            //     res.status(200).json({
-            //         status: true,
-            //         message: 'invalid status code'
-            //     })
-            // }
+            
             
             if (!status) {
               return res.status(400).json({
@@ -487,7 +479,7 @@ exports.expense_approval_get = async function(req, res) {
                     id: expense_id
                 }
             }
-            //   returning: true, where: {id: req.params.scheduleId} 
+            
         ).then(function() {
             var message = "Operation Successful"
             res.status(200).json({
@@ -511,10 +503,4 @@ async function getAprovalStatus(id) {
 
 async function getStatus(amount) {
     var status;
-    // if (amount <= 1000) {
-    //     return status = 'Approved';
-    // } else {
-    //     return status = 'Pending';
-    // }
-    // return status = (amount <= 1000) ? 'Approved' : 'Pending';
 }

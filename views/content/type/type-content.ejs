@@ -1,0 +1,16 @@
+<!--BOOK VIEW STARTS HERE -->
+<!--complete logic for book view-->
+<% switch (display) {
+    case 'typeList' : %>
+           <%- include ('../../content/type/type-list') %>
+           <% break;
+     
+    case 'typeDetail' : %>
+        <%- include ('../../content/type/type-detail') %>
+           <% break;
+           
+    default : %>
+           <%- include ('../../pages/index') %>
+           <%  
+    } %>
+     

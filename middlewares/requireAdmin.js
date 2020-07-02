@@ -8,7 +8,7 @@ module.exports = (req, res, next) =>  {
 
     const thisExpense =  models.Expense.findById(req.params.expense_id);
 
-    if(req.user.roleId !== 1 && req.user.DepartmentId !== thisExpense.DepartmentId) {
+    if(req.user.roleId !== 1 && req.user.current_business !== thisExpense.business_name && req.user.DepartmentId !== thisExpense.DepartmentId) {
      console.log('Un authtorised user trying to access the site')
      return res.status(401).send({error: 'Permission denied! '});
    }
