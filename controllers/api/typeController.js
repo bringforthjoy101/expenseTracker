@@ -153,7 +153,7 @@ exports.type_detail = async function(req, res, next) {
               message: 'Type not found'
           });
           } else {
-          res.staatus(200).json({
+          res.status(200).json({
               status: true,
               data: type,
               message: 'Type details rendered successfully'
