@@ -131,8 +131,8 @@ const insertTypeData = async (id) =>{
 
     } catch (err) {
       console.log(err);
-      document.getElementById('expenseDetail').innerHTML = `
-        <div class="kt-portlet__body" id="expenseDetail">
+      document.getElementById('typeDetail').innerHTML = `
+        <div class="kt-portlet__body" id="typeDetail">
           <div class="">
             <div class="kt-widget__label">
               <span class="kt-widget__desc">
@@ -144,8 +144,8 @@ const insertTypeData = async (id) =>{
       `;
     }
   } else {
-    document.getElementById('expenseDetail').innerHTML = `
-      <div class="kt-portlet__body" id="expenseDetail">
+    document.getElementById('typeDetail').innerHTML = `
+      <div class="kt-portlet__body" id="typeDetail">
         <div class="">
           <div class="kt-widget__label">
             <span class="kt-widget__desc">
@@ -158,3 +158,100 @@ const insertTypeData = async (id) =>{
   }
 
 }
+
+const insertTypeExpenseList = async (id) => {
+  const typeData = await getTypeData(id);
+  const type = typeData.data;
+  console.log(type.Expenses)
+  
+	// paginated table
+		var datatable = $('.kt_datatable').KTDatatable({
+			// datasource definition
+			data: {
+				type: 'local',
+				source: type.Expenses,
+				pageSize: 15,
+			},
+
+			// layout definition
+			layout: {
+				scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
+				footer: false // display/hide footer
+			},
+
+			// column sorting
+			sortable: true,
+
+			pagination: true,
+
+			search: {
+				input: $('#generalSearch')
+			},
+      
+      
+			// columns definition
+			columns: [
+        // {
+				// 	field: 'UserId',
+        //   title: '#',
+        //   width: 60,
+				// 	type: 'number',
+        // },
+        {
+          field: 'title',
+          title: 'Title',
+          template: function(row) {
+            return `<a href="/expense/` + row["id"] + `">` + row["title"] + `</a>`
+          },
+        }, 
+        {
+          field: 'amount',
+          title: 'Amount',
+          template: function(row) { 
+            return `₦` + Number(row["amount"]).toLocaleString()
+          },
+          type: 'number',
+        },
+        {
+          field: 'status',
+          title: 'Status',
+          template: function(row) {
+            var type = (row["status"] == 'Approved') ? 'success' 
+              : (row["status"] == 'Pending') ? 'warning' 
+              : (row["status"] == 'Declined') ? 'danger'
+              : null;
+            return `<span class="kt-badge kt-badge--${type} kt-badge--inline kt-badge--pill">` + row["status"] + `</span>`
+          }
+        },
+        // {
+        //   field: 'user',
+        //   title: 'Employee',
+        //   template: function(row) {
+        //     return row.user["firstname"] + ' ' + row.user["lastname"];
+        //   }
+        // }, 
+    //     {
+				// 	field: 'createdAt',
+				// 	title: 'Time',
+				// 	template: function(row) {
+				// 	  return moment(row["createdAt"]).fromNow();
+    //         // return row["createdAt"];
+    //       }
+				// // 	type: 'number',
+    // //       width: 100,
+    //     }
+      ],
+
+		});
+
+    $('#kt_form_status').on('change', function() {
+      datatable.search($(this).val().toLowerCase(), 'status');
+    });
+
+    $('#kt_form_type').on('change', function() {
+      datatable.search($(this).val().toLowerCase(), 'type');
+    });
+
+    $('#kt_form_status,#kt_form_type').selectpicker();
+    
+};
