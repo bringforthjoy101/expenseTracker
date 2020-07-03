@@ -75,7 +75,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(cors({
-    origin:'https://d56db9add77f4f85b2d170b091d7493f.vfs.cloud9.us-east-1.amazonaws.com/',
+    origin:'https://manifest-expensetracker.herokuapp.com/',
     credentials:'true'
 }));
 app.use(express.static(path.join(__dirname, 'public')));

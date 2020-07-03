@@ -6,11 +6,56 @@
 	    <h6 class="text-danger" id="errDisplay"></h6>
 	</div>
     <div class="row">
-        <div class="col-xl-6" id="expenseDetail">
+        <div class="col-xl-6" id="">
 
-            <div class="kt-spinner kt-spinner--sm kt-spinner--success kt-spinner--center kt-spinner--input">
-                <input  type="text" class="form-control"/>
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title"><%= expense.title %></h3>
+                    </div>
+                </div>
+                <div class="kt-portlet__body">
+                    <div class="kt-section">
+                        <div class="kt-section__info">
+                            <%= expense.desc %> <br>
+                            <b>₦ <%= Number (expense.amount || 0).toLocaleString(); %></b> <br>
+                             
+                            <% if (expense.status == 'Approved') { %>
+                                <span class="badge badge-success"><%= expense.status %></span> <br>    
+                            <% } else if (expense.status == 'Pending') { %>
+                                <span class="badge badge-warning"><%= expense.status %></span> <br>
+                            <% } else { %>
+                                <span class="badge badge-danger"><%= expense.status %></span> <br>
+                            <% } %>
+                            <%= moment(expense.createdAt).fromNow() %>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!--end::Portlet-->
+
+            <!--begin::Portlet-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">Expense Details</h3>
+                    </div>
+                </div>
+                <div class="kt-portlet__body">
+                    <div class="kt-section">
+                        <div class="kt-section__info">
+                            <b>Type:</b> <%= expense.Type.type_name %> <br>
+                            <b>Category:</b> <%= expense.Category.category_name %> <br>
+                            <b>Employee:</b> <%= expense.user.firstname %> <br>
+                            <b>Department:</b> <%= expense.Department.dept_name %> <br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--end::Portlet-->
         </div>
     </div>
 </div>
@@ -123,11 +168,11 @@ const submitExpense = async (event) => {
   } catch (error) {
     console.log(error);
     // show network error notification
-    // swal.fire(
-    //   'Oops!',
-    //   'An error was encountered! Please review your network connection.',
-    //   'error'
-    // )
+    swal.fire(
+      'Oops!',
+      'An error was encountered! Please review your network connection.',
+      'error'
+    )
   }
 
 };
@@ -315,63 +360,5 @@ const updateExpense = async (data) => {
     }
   }
   expenseAction();
-  // const expenseAction = async () => {
-  //   try {
-  //     const response = await fetch(`${Route.apiRoot}/expense/${expenseId}`, {
-  //       method: 'GET',
-  //     });
-  //     let expenseData = await response.json();
-  //     const expense = expenseData.data;
-  //     console.log(expense);
-  //     if (expense.userId == userId || userRoleId == 1) { 
-  //       document.getElementById('expenseAction').innerHTML = `
-           
-  //           <div class="dropdown dropdown-block text-right">
-  //               <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
-  //                   <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  //                     <i class="flaticon-more-1"></i>
-  //                   </button>
-  //             		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="userAction">
-  //                       <!-- Button trigger modal -->`
-                         
-                          
-                        
-  //             	`	</div>
-  //             	</span>
-  //       	</div>
-      	  
-  //       `;
-  //       if (userId == expense.userId) { 
-  //         document.getElementById('userAction').innerHTML = `
-  //     			<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
-  //             Edit
-  //           </button>
-  //           <a class="dropdown-item text-danger" onclick="deleteExpense()">Delete</a>
-  //         `;
-  //         }
-          
-  //       if (userRoleId == 1) { 
-  //           if (expense.status == 'Pending') { 
-  //             document.getElementById('userAction').innerHTML += `
-  //               <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
-  //               <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
-  //               `;
-  //           } else if (expense.status == 'Approved') { 
-  //             document.getElementById('userAction').innerHTML += `
-  //               <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
-  //               `;
-  //           } else { 
-  //             document.getElementById('userAction').innerHTML += `
-  //               <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
-  //               `;
-  //           } 
-  //       }
-         
-  //       }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-    
-  // };
   
 </script>

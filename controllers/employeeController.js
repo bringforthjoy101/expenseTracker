@@ -5,11 +5,13 @@ const apiUrl = require('../helpers/apiUrl');
 
 // Display list of all employees.
 exports.employee_list = async function(req, res, next) {
-console.log('this is the api url ' + apiUrl);
-const data = await fetch(`${apiUrl}/employees`, {
-  method: 'GET',
-  credentials: 'same-origin'
-});
+  console.log('this is the api url ' + apiUrl);
+  const data = await fetch(`${apiUrl}/employees`, {
+    method: 'GET',
+    headers:{
+      cookie: req.headers.cookie,
+    }
+  });                             
   const response = await data.json();
   
   console.log(response);
@@ -33,7 +35,9 @@ exports.employee_detail = async function(req, res, next) {
     var id = req.params.employee_id
     const data = await fetch(`${apiUrl}/employee/${id}`, {
       method: 'GET',
-      credentials: 'include'
+      headers:{
+        cookie: req.headers.cookie,
+      }
     });
     const response = await data.json();
     

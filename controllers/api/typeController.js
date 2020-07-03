@@ -140,7 +140,13 @@ exports.type_detail = async function(req, res, next) {
                   include: [
                     {
                       model: models.Expense,
-                      attributes: ['id', 'title', 'amount', 'status']
+                      attributes: ['id', 'title', 'amount', 'status'],
+                      include: [
+                        {
+                            model: models.user,
+                            attributes: ['firstname', 'lastname'],
+                        },
+                    ]
                     },
                   ],
                 }
