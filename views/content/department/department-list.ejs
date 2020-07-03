@@ -2,19 +2,19 @@
 	<div class="kt-portlet">
 			<div class="kt-portlet__head">
 				<div class="kt-portlet__head-label">
-					<h3 class="kt-portlet__head-title">All Expense Types</h3>
+					<h3 class="kt-portlet__head-title">All Employee Departments</h3>
 				</div>
 				<div class="">
 					<h6 class="text-danger" id="errDisplay"></h6>
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
-						<a href="#" class="btn btn-brand btn-bold btn-upper btn-font-sm" data-toggle="modal" data-target="#createTypeModal">
+						<a href="#" class="btn btn-brand btn-bold btn-upper btn-font-sm" data-toggle="modal" data-target="#createDepartmentModal">
 							<i class="la la-plus"></i>
 							Create New
 						</a>
 						<!-- Modal -->
-						<div class="modal fade" id="createTypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal fade" id="createDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									<div class="modal-header">
@@ -23,17 +23,17 @@
 											<span aria-hidden="true">&times;</span>
 										</button>
 									</div>
-									<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="createType" onsubmit="submitType(event)">
+									<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="createDepartment" onsubmit="submitDepartment(event)">
 										<div class="modal-body">
 											<div class="form-group">
-												<label>Type Name:</label>
-												<input type="text" name="type_name" id="type_name" class="form-control" placeholder="Type Name">
-												<span class="form-text text-muted">Please enter the type name</span>
+												<label>Department Name:</label>
+												<input type="text" name="dept_name" id="dept_name" class="form-control" placeholder="Department Name">
+												<span class="form-text text-muted">Please enter the department name</span>
 											</div>
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
-											<button type="submit" class="btn btn-brand" id="typeSubmitBtn">Create</button>
+											<button type="submit" class="btn btn-brand" id="departmentSubmitBtn">Create</button>
 										</div>
 									</form>
 								</div>
@@ -46,12 +46,12 @@
 			<div class="kt-portlet__body">
 				<div class="kt-section">
 					<div class="kt-section__content kt-section__content--border">
-						<% types.forEach(function(type) { %>
+						<% departments.forEach(function(department) { %>
 							<div class="list-group">
-								<a href="/type/<%= type.id %>" class="list-group-item list-group-item-action flex-column align-items-start">
+								<a href="/department/<%= department.id %>" class="list-group-item list-group-item-action flex-column align-items-start">
 									<div class="d-flex w-100 justify-content-between">
-										<h5 class="mb-1"><%= type.type_name %></h5>
-										<small><%= moment(type.createdAt).fromNow() %></small>
+										<h5 class="mb-1"><%= department.dept_name %></h5>
+										<small><%= moment(department.createdAt).fromNow() %></small>
 									</div>
 								</a>
 							</div>
@@ -64,38 +64,38 @@
 
 <script>
 	const userId = `<%= user.id %>`;
-	const submitBtn = document.getElementById('typeSubmitBtn');
+	const submitBtn = document.getElementById('departmentSubmitBtn');
 	
 	submitBtn.addEventListener('click', ()=>{
 	  submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
 	});
 	
-	const submitType = async (event) => {
+	const submitDepartment = async (event) => {
 		try {
 	  event.preventDefault();
-	  const form = document.getElementById('createType');
+	  const form = document.getElementById('createDepartment');
 	  const formData = {
-	          type_name: form.type_name.value,
+	          dept_name: form.dept_name.value,
 	          //current_business: business_name,
 	        }
 	  
 	  console.log(formData);
 	  
-	    const type = await createType(formData);
+	    const department = await createDepartment(formData);
 	    let errors = '';
-	    console.log(type);
-	    if (type.status) {
+	    console.log(department);
+	    if (department.status) {
 	      swal.fire(
 	        'Awesome!',
-	        'Type created!',
+	        'Department created!',
 	        'success'
 	      )
-	      location.href = `/types`;
+	      location.href = `/departments`;
 	    } else {
 	      submitBtn.innerHTML = 'Create';
-	      for (let i = 0; i < type.errors.length; i++) {
-	        errors += type.errors[i].msg;
-	        if (i < type.errors.length - 1) errors += ', ';
+	      for (let i = 0; i < department.errors.length; i++) {
+	        errors += department.errors[i].msg;
+	        if (i < department.errors.length - 1) errors += ', ';
 	      }
 	      console.log(errors);
 	      document.getElementById('errDisplay').innerHTML = errors;
@@ -117,10 +117,10 @@
 	
 	};
 	
-	const createType = async (data) => {
+	const createDepartment = async (data) => {
 	    console.log(data)
 	    try {
-	      const type = await fetch(`${Route.apiRoot}/type/create`, {
+	      const department = await fetch(`${Route.apiRoot}/department/create`, {
 	        // mode: 'no-cors',
 	        method: 'POST',
 	        headers: {
@@ -128,7 +128,7 @@
 	        },
 	        body: JSON.stringify(data)
 	      });
-	      return await type.json();
+	      return await department.json();
 	    } catch (error) {
 	      console.log(error);
 	      // show network error notification

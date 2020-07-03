@@ -1,36 +1,44 @@
-<% if (page) { %>
-       <% switch (page) {
-              
-       case 'homePage' : %>
-              <%- include ('../content/dashboard') %>
-              <% break;
+
+<% switch (page) {
        
-       case 'authPage' : %>
-              <%- include ('../content/auth/auth-content') %>
-              <% break;
-              
-       case 'typePage' : %>
-       <%- include ('../content/type/type-content') %>
-              <% break;
-        
-       case 'expensePage' : %>
-       <%- include ('../content/expense/expense-content') %>
-              <% break;
-       
-       case 'employeePage' : %>
-       <%- include ('../content/employee/employee-content') %>
-              <% break;
-              
-       
-       
-       case 'errorPage' : %>
-       <%- include ('../content/error') %>
-              <% break;
-       
-       default : %>
-              <%- include ('../content/dashboard') %>
-              <%  
-       } %>
-<% } else { %>
+case 'homePage' : %>
        <%- include ('../content/dashboard') %>
-<% } %>
+       <% break;
+
+case 'authPage' : %>
+       <%- include ('../content/auth/auth-content') %>
+       <% break;
+       
+case 'typePage' : %>
+<%- include ('../content/type/type-content') %>
+       <% break;
+       
+case 'categoryPage' : %>
+<%- include ('../content/category/category-content') %>
+       <% break;
+ 
+case 'expensePage' : %>
+<%- include ('../content/expense/expense-content') %>
+       <% break;
+       
+case 'rolePage' : %>
+<%- include ('../content/role/role-content') %>
+       <% break;
+       
+case 'departmentPage' : %>
+<%- include ('../content/department/department-content') %>
+       <% break;
+
+case 'employeePage' : %>
+<%- include ('../content/employee/employee-content') %>
+       <% break;
+       
+
+case 'errorPage' : %>
+<%- include ('../content/error') %>
+       <% break;
+
+default : %>
+       <%- include ('../content/dashboard') %>
+       <%  
+} %>

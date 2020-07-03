@@ -258,6 +258,7 @@ exports.employee_list = function(req, res, next) {
 
         try {
           models.user.findAll({
+            // where:{},
             include: [
                 {
                   model: models.Department,

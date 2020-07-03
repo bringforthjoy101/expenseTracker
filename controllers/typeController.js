@@ -25,7 +25,7 @@ exports.type_list = async function(req, res, next) {
         layout: 'layouts/main'
     }
     res.render('pages/index', viewData);
-    console.log("Expenses list renders successfully");
+    console.log("Types list renders successfully");
 };
 
 // Display detail page for a specific type.
@@ -54,7 +54,7 @@ exports.type_detail = async function(req, res, next) {
         layout: 'layouts/main'
     }
     res.render('pages/index', viewData);
-    console.log("Expense one details renders successfully");
+    console.log("Type details renders successfully");
 };
 
  

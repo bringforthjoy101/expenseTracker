@@ -15,50 +15,60 @@
 		</div>
 	
 		<div class="kt-portlet__body">
-			
-			<!--begin: Datatable -->
-			
-			<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
-				<thead>
-					<tr>
-						<th>Title</th>
-						<th>Amount</th>
-						<th>Status</th>
-						<th>Employee</th>
-						<th>Time</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					<% type.Expenses.forEach(function(expense) { %>
-					<% 
-						const type = (expense.status == 'Approved') ? 'success' 
-			              : (expense.status == 'Pending') ? 'warning' 
-			              : (expense.status == 'Declined') ? 'danger'
-			              : null;
-		             %>
-					<tr>
-						<td><a href="/expense/<%= expense.id %>"><%= expense.title %></a></td>
-						<td>₦ <%= Number (expense.amount || 0).toLocaleString(); %></td>
-						<td><span class="kt-badge kt-badge--<%=type%> kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
-						<td><%= expense.user.firstname %> <%= expense.user.lastname %></td>
-						<td><%= moment(expense.createdAt).fromNow() %></td>
-						<td nowrap> 
-							<a href="/expense/<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
-								<i class="la la-eye"></i>
-							</a>
-							<a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete" onclick="deleteExpense(<%=expense.id%>)">
-								<i class="la la-trash"></i>
-							</a>
-							
-						</td>
-					</tr>
-					<% }); %>
-					
-				</tbody>
-			</table>
-
-			<!--end: Datatable -->
+			<% if (type.Expenses.length == 0 ) { %>
+			  <div class="alert alert-light alert-elevate" role="alert">
+      		<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
+      		<div class="alert-text">
+      			<h3 class="kt-portlet__head-title">
+      			  No expenses created yet for this type
+      			</h3>
+      		</div>
+      	</div>
+			<% } else { %>
+  			<!--begin: Datatable -->
+  			
+  			<table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+  				<thead>
+  					<tr>
+  						<th>Title</th>
+  						<th>Amount</th>
+  						<th>Status</th>
+  						<th>Employee</th>
+  						<th>Time</th>
+  						<th>Actions</th>
+  					</tr>
+  				</thead>
+  				<tbody>
+  					<% type.Expenses.forEach(function(expense) { %>
+    					<% 
+    						const type = (expense.status == 'Approved') ? 'success' 
+    			              : (expense.status == 'Pending') ? 'warning' 
+    			              : (expense.status == 'Declined') ? 'danger'
+    			              : null;
+    		             %>
+    					<tr>
+    						<td><a href="/expense/<%= expense.id %>"><%= expense.title %></a></td>
+    						<td>₦ <%= Number (expense.amount || 0).toLocaleString(); %></td>
+    						<td><span class="kt-badge kt-badge--<%=type%> kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
+    						<td><%= expense.user.firstname %> <%= expense.user.lastname %></td>
+    						<td><%= moment(expense.createdAt).fromNow() %></td>
+    						<td nowrap> 
+    							<a href="/expense/<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
+    								<i class="la la-eye"></i>
+    							</a>
+    							<a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete" onclick="deleteExpense(<%=expense.id%>)">
+    								<i class="la la-trash"></i>
+    							</a>
+    							
+    						</td>
+    					</tr>
+  					<% }); %>
+  					
+  				</tbody>
+  			</table>
+  
+  			<!--end: Datatable -->
+			<% } %>
 		</div>
 	</div>
     
@@ -77,10 +87,10 @@
 			<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="updateType" onsubmit="submitType(event)">
   			<div class="modal-body" id="typeForm">
   			  <div class="form-group">
-  						<label>Type Name:</label>
-  						<input type="text" name="type_name" id="type_name" value="<%= type.type_name %>" class="form-control" placeholder="Type Name">
-  						<span class="form-text text-muted">Please enter the type name</span>
-  					</div>
+						<label>Type Name:</label>
+						<input type="text" name="type_name" id="type_name" value="<%= type.type_name %>" class="form-control" placeholder="Type Name">
+						<span class="form-text text-muted">Please enter the type name</span>
+					</div>
   			</div>
   			<div class="modal-footer">
   				<button type="submit" class="btn btn-brand" id="typeUpdateBtn" >Update</button>
@@ -171,32 +181,82 @@ const updateType = async (data) => {
     }
   };
   
- const deleteType = async ()=>{
-    try {
-      const type = await fetch(`${Route.apiRoot}/type/${typeId}/delete`, {
-        // mode: 'no-cors',
-        method: 'POST'
+ const deleteType = async (id)=>{
+   Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be reversible!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete it!'
+      }).then( async (result) => {
+        if (result.value) {
+          try {
+            const type = await fetch(`${Route.apiRoot}/type/${typeId}/delete`, {
+              // mode: 'no-cors',
+              method: 'POST'
+            });
+            let response = await type.json();
+            if (response.status) {
+              swal.fire(
+                  'Sucessful!',
+                  'Type deleted successfully!',
+                  'success'
+                )
+                location.href = `/types`;
+            }
+          } catch (error) {
+            console.log(error);
+            // show network error notification
+            swal.fire(
+              'Oops!',
+              'An error was encountered! Please review your network connection.',
+              'error'
+            )
+          }
+        }
       });
-      let response = await type.json();
-      if (response.status) {
-        swal.fire(
-            'Sucessful!',
-            'Expense deleted successfully!',
-            'success'
-          )
-          location.href = `/types`;
-      }
-    } catch (error) {
-      console.log(error);
-      // show network error notification
-      swal.fire(
-        'Oops!',
-        'An error was encountered! Please review your network connection.',
-        'error'
-      )
-    }
   }
   
+
+	const deleteExpense = async (expenseId)=>{
+		Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be reversible!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete it!'
+      }).then( async (result) => {
+        if (result.value) {
+		    try {
+		      const expense = await fetch(`${Route.apiRoot}/expense/${expenseId}/delete`, {
+		        // mode: 'no-cors',
+		        method: 'POST'
+		      });
+		      let response = await expense.json();
+		      if (response.status) {
+		        swal.fire(
+		            'Sucessful!',
+		            'Expense deleted successfully!',
+		            'success'
+		          )
+		          location.href = `/allExpenses`;
+		      }
+		    } catch (error) {
+		      console.log(error);
+		      // show network error notification
+		      swal.fire(
+		        'Oops!',
+		        'An error was encountered! Please review your network connection.',
+		        'error'
+		      )
+		    }
+        }
+  });
+	}
   
   async function action() {
     try {
@@ -212,7 +272,7 @@ const updateType = async (data) => {
                         <button type="button" class="dropdown-item" data-toggle="modal" data-target="#editType">
                           Edit
                         </button>
-                        <a class="dropdown-item text-danger" onclick="deleteExpense()">Delete</a>    
+                        <a class="dropdown-item text-danger" onclick="deleteType()">Delete</a>    
               		</div>
               	</span>
         	</div>

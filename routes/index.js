@@ -73,11 +73,11 @@ router.get('/types', requireLogin, type_controller.type_list);
 
 // /// ROLE ROUTES ///
 router.get('/role/:role_id', requireLogin, role_controller.role_detail);
-router.get('/employee/roles', requireLogin, role_controller.role_list);
+router.get('/roles', requireLogin, role_controller.role_list);
 
 // /// DEPARTMENT ROUTES ///
 router.get('/department/:department_id', requireLogin, department_controller.department_detail);
-router.get('/employee/departments', requireLogin, department_controller.department_list);
+router.get('/departments', requireLogin, department_controller.department_list);
 
 // GET home page.
 router.get('/dashboard', requireLogin, expense_controller.index);
