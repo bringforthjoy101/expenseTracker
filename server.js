@@ -74,7 +74,10 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin:'https://d56db9add77f4f85b2d170b091d7493f.vfs.cloud9.us-east-1.amazonaws.com/',
+    credentials:'true'
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // session will not work for static content

@@ -8,7 +8,7 @@ exports.employee_list = async function(req, res, next) {
 console.log('this is the api url ' + apiUrl);
 const data = await fetch(`${apiUrl}/employees`, {
   method: 'GET',
-  credentials: 'include'
+  credentials: 'same-origin'
 });
   const response = await data.json();
   
