@@ -109,7 +109,7 @@ app.get('/logout',
     });
     
 const authenticationMiddleware = (req, res, next) => {
-    console.log('this is req.user' + req.user + 'this is req.user.email' + req.user.email + 'this is req.user.password' + req.user.password);
+    // console.log('this is req.user' + req.user + 'this is req.user.email' + req.user.email + 'this is req.user.password' + req.user.password);
     if( req.isAuthenticated() ) {
         return next();
     }
@@ -134,7 +134,7 @@ app.use('/dashboard',
 app.use('/users', users);
 
 // app.use('/dashboard', index);
-// app.use('/api/expense', authenticationMiddleware);
+app.use('/api/expense', authenticationMiddleware);
 
 app.use('/api/expense', expenseAPI);
 
