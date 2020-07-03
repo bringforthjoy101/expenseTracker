@@ -50,6 +50,7 @@ exports.employee_detail = async function(req, res, next) {
         parent: 'Employees List',
         parentUrl: '/allEmployees',
         api: 'employee',
+        id: id,
         employee: response.data,
         expenses: response.expenses,
         moment: moment, 

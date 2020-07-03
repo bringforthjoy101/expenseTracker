@@ -196,6 +196,13 @@ exports.expense_new = async function(req, res, next) {
 // This is the expense homepage.
 exports.index = async function(req, res, next) {
     
+    const data = await fetch(`${apiUrl}`, {
+        method: 'GET',
+        headers:{
+          cookie: req.headers.cookie,
+        }
+    });
+    const response = await data.json();
     
     var viewData = {
         title: 'Homepage', 
@@ -203,10 +210,10 @@ exports.index = async function(req, res, next) {
         parent: 'Dashboard',
         parentUrl: '/dashboard',
         api: 'dashboard',
-        // expenseCount: response.expenseCount, 
-        // employeeCount: response.employeeCount, 
-        // expenses: response.expenses,  
-        // totalSum: response.totalSum,
+        expenseCount: response.expenseCount, 
+        employeeCount: response.employeeCount, 
+        expenses: response.expenses,  
+        totalSum: response.totalSum,
         moment: moment,
         startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
         endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),

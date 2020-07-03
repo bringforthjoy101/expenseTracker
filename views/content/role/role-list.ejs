@@ -2,35 +2,38 @@
 	<div class="kt-portlet">
 			<div class="kt-portlet__head">
 				<div class="kt-portlet__head-label">
-					<h3 class="kt-portlet__head-title">All Expense Categories</h3>
+					<h3 class="kt-portlet__head-title">All Employee Roles</h3>
+				</div>
+				<div class="">
+					<h6 class="text-danger" id="errDisplay"></h6>
 				</div>
 				<div class="kt-portlet__head-toolbar">
 					<div class="kt-portlet__head-wrapper">
-						<a href="#" class="btn btn-brand btn-bold btn-upper btn-font-sm" data-toggle="modal" data-target="#createCategoryModal">
+						<a href="#" class="btn btn-brand btn-bold btn-upper btn-font-sm" data-toggle="modal" data-target="#createRoleModal">
 							<i class="la la-plus"></i>
 							Create New
 						</a>
 						<!-- Modal -->
-						<div class="modal fade" id="createCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal fade" id="createRoleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog" role="document">
 								<div class="modal-content">
 									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+										<h5 class="modal-title" id="exampleModalLabel">Create New Role</h5>
 										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 											<span aria-hidden="true">&times;</span>
 										</button>
 									</div>
-									<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="createCategory" onsubmit="submitCategory(event)">
+									<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="createRole" onsubmit="submitRole(event)">
 										<div class="modal-body">
 											<div class="form-group">
-												<label>Category Name:</label>
-												<input type="text" name="category_name" id="category_name" class="form-control" placeholder="Category Name">
-												<span class="form-text text-muted">Please enter the category name</span>
+												<label>Department Name:</label>
+												<input type="text" name="role_name" id="role_name" class="form-control" placeholder="Role Name">
+												<span class="form-text text-muted">Please enter the role name</span>
 											</div>
 										</div>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-outline-brand" data-dismiss="modal">Close</button>
-											<button type="submit" class="btn btn-brand" id="categorySubmitBtn">Create</button>
+											<button type="submit" class="btn btn-brand" id="roleSubmitBtn">Create</button>
 										</div>
 									</form>
 								</div>
@@ -43,12 +46,12 @@
 			<div class="kt-portlet__body">
 				<div class="kt-section">
 					<div class="kt-section__content kt-section__content--border">
-						<% categories.forEach(function(category) { %>
+						<% roles.forEach(function(role) { %>
 							<div class="list-group">
-								<a href="/category/<%= category.id %>" class="list-group-item list-group-item-action flex-column align-items-start">
+								<a href="/role/<%= role.id %>" class="list-group-item list-group-item-action flex-column align-items-start">
 									<div class="d-flex w-100 justify-content-between">
-										<h5 class="mb-1"><%= category.category_name %></h5>
-										<small><%= moment(category.createdAt).fromNow() %></small>
+										<h5 class="mb-1"><%= role.role_name %></h5>
+										<small><%= moment(role.createdAt).fromNow() %></small>
 									</div>
 								</a>
 							</div>
@@ -61,38 +64,38 @@
 
 <script>
 	const userId = `<%= user.id %>`;
-	const submitBtn = document.getElementById('categorySubmitBtn');
+	const submitBtn = document.getElementById('roleSubmitBtn');
 	
 	submitBtn.addEventListener('click', ()=>{
 	  submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
 	});
 	
-	const submitCategory = async (event) => {
+	const submitRole = async (event) => {
 		try {
 	  event.preventDefault();
-	  const form = document.getElementById('createCategory');
+	  const form = document.getElementById('createRole');
 	  const formData = {
-	          category_name: form.category_name.value,
+	          role_name: form.role_name.value,
 	          //current_business: business_name,
 	        }
 	  
 	  console.log(formData);
 	  
-	    const category = await createCategory(formData);
+	    const role = await createRole(formData);
 	    let errors = '';
-	    console.log(category);
-	    if (category.status) {
+	    console.log(role);
+	    if (role.status) {
 	      swal.fire(
 	        'Awesome!',
-	        'Category created!',
+	        'Role created!',
 	        'success'
 	      )
-	      location.href = `/categories`;
+	      location.href = `/roles`;
 	    } else {
 	      submitBtn.innerHTML = 'Create';
-	      for (let i = 0; i < category.errors.length; i++) {
-	        errors += category.errors[i].msg;
-	        if (i < category.errors.length - 1) errors += ', ';
+	      for (let i = 0; i < role.errors.length; i++) {
+	        errors += role.errors[i].msg;
+	        if (i < role.errors.length - 1) errors += ', ';
 	      }
 	      console.log(errors);
 	      document.getElementById('errDisplay').innerHTML = errors;
@@ -114,10 +117,10 @@
 	
 	};
 	
-	const createCategory = async (data) => {
+	const createRole = async (data) => {
 	    console.log(data)
 	    try {
-	      const category = await fetch(`${Route.apiRoot}/category/create`, {
+	      const role = await fetch(`${Route.apiRoot}/role/create`, {
 	        // mode: 'no-cors',
 	        method: 'POST',
 	        headers: {
@@ -125,7 +128,7 @@
 	        },
 	        body: JSON.stringify(data)
 	      });
-	      return await category.json();
+	      return await role.json();
 	    } catch (error) {
 	      console.log(error);
 	      // show network error notification
