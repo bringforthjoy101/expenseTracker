@@ -135,8 +135,14 @@ exports.category_detail = async function(req, res, next) {
                 {
                   include: [
                     {
-                      model: models.Expense,
-                      attributes: ['id', 'title', 'amount', 'status']
+                        model: models.Expense,
+                        attributes: ['id', 'title', 'amount', 'status', 'createdAt'],
+                        include: [
+                            {
+                                model: models.user,
+                                attributes: ['firstname', 'lastname'],
+                            },
+                        ]
                     },
                   ],
                 }

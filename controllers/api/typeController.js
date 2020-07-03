@@ -39,7 +39,6 @@ exports.type_create_post = [
     }
 ];
 
-
 // Handle type delete on POST.
 exports.type_delete_post = async function(req, res, next) {
     var type_id = req.params.type_id
@@ -140,13 +139,13 @@ exports.type_detail = async function(req, res, next) {
                   include: [
                     {
                       model: models.Expense,
-                      attributes: ['id', 'title', 'amount', 'status'],
+                      attributes: ['id', 'title', 'amount', 'status', 'createdAt'],
                       include: [
                         {
                             model: models.user,
                             attributes: ['firstname', 'lastname'],
                         },
-                    ]
+                      ]
                     },
                   ],
                 }
