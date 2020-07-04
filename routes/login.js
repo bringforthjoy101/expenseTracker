@@ -15,8 +15,6 @@ var fetch = require('node-fetch');
 var auth = require('./../modules/auth');
 var loginController = require('../controllers/loginController');
 
-// router.get('/', loginController.getLogin);
-// router.get('/', loginController.getSignup);
 
 router.get('/', function(req, res, next) {
     
@@ -26,15 +24,12 @@ router.get('/', function(req, res, next) {
         display: 'login',
         layout: 'layouts/auth',
         message: '',
+        errors: undefined
     }
-    console.log(req.session.flash.error);
+    console.log('this is the error ' + req.session.flash.error);
     res.render('pages/index', viewData);
 });
 
-// router.post('/', function(req, res, next) {
-//     var passport = req.app.get('passport');
-//     passport.authenticate('local', { failureRedirect: '/login?f=1', successRedirect: '/dashboard' });
-// });
 
 router.post('/signup', async function(req, res, next) {
     let { firstname, lastname, username, email, password, current_business, dept, role } = req.body;
@@ -96,12 +91,6 @@ router.post('/signup', async function(req, res, next) {
       }
 });
 
-// function checkAuthenticated(req, res, next) {
-//   if (req.isAuthenticated()) {
-//     return res.redirect("/expense");
-//   }
-//   next();
-// }
 
 
 module.exports = router;

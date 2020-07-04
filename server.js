@@ -102,11 +102,14 @@ app.use(tools.generateMainMenu);
 
 
 // authentication
-app.post('/login', passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login', failureFlash: true } ),
-    // function(req, res) {
-    //     res.redirect('/expense'); // change back to /user
-    // }
-    );
+app.post('/login', passport.authenticate('local', 
+    { 
+        successRedirect: '/dashboard', 
+        failureRedirect: '/login', 
+        failureFlash: true 
+    }),
+);
+
 app.get('/logout',
     function(req, res) {
         req.logout();
