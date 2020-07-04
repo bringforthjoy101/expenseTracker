@@ -12,6 +12,7 @@
 var bCrypt = require('bcrypt-nodejs');
 var Strategy = require('passport-local').Strategy;
 var dbLayer = require('../modules/dbLayer');
+var models = require('../models');
 var auth = {};
 
 function generateHash(password) {
@@ -32,7 +33,21 @@ auth.initializeStrategy = function(passport) {
             dbLayer.user.findOne({
                 where: {
                     email: email
-                }
+                },
+                include: [
+                    {
+                      model: models.Role,
+                      attributes: ['id', 'role_name']
+                    },
+                    {
+                      model: models.Department,
+                      attributes: ['id', 'dept_name']
+                    },
+                    {
+                      model: models.CurrentBusiness,
+                      attributes: ['id', 'current_business_name']
+                    },
+                ]
             }).then(function(user) {
                 if (!user) {
                     
@@ -43,7 +58,7 @@ auth.initializeStrategy = function(passport) {
                     return cb(null, false, { message: "Password is incorrect" });
                 }
                 var userinfo = user.get();
-                console.log('I am user ' + userinfo.firstname);
+                console.log('I am user role ' + userinfo.Role.role_name);
                 user.update({
                     last_login: Date.now()
                 })
@@ -62,7 +77,24 @@ auth.initializeStrategy = function(passport) {
 
     passport.deserializeUser(function(id, cb) {
         
-        dbLayer.user.findById(id).then(function(user) {
+        dbLayer.user.findById(id,
+        {
+            include: [
+                {
+                  model: models.Role,
+                  attributes: ['id', 'role_name']
+                },
+                {
+                  model: models.Department,
+                  attributes: ['id', 'dept_name']
+                },
+                {
+                  model: models.CurrentBusiness,
+                  attributes: ['id', 'current_business_name']
+                },
+            ]
+        }
+        ).then(function(user) {
             if (user) {
                 console.log('I am user here !!!');
                 cb(null, user);

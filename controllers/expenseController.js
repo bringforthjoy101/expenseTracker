@@ -211,7 +211,15 @@ exports.index = async function(req, res, next) {
           cookie: req.headers.cookie,
         }
     });
+    
+    const data2 = await fetch(`${apiUrl}/myExpenses`, {
+        method: 'GET',
+        headers:{
+          cookie: req.headers.cookie,
+        }
+    });
     const response = await data.json();
+    const myExpenses = await data2.json();
     console.log('this is the response ' + response.status);
     
     var viewData = {
@@ -224,6 +232,7 @@ exports.index = async function(req, res, next) {
         employeeCount: response.employeeCount, 
         expenses: response.expenses,  
         totalSum: response.totalSum,
+        myExpenses: myExpenses.data,
         moment: moment,
         startDate: tools.convertMillisecondsToStringDate(req.session.startDate),
         endDate: tools.convertMillisecondsToStringDate(req.session.lastRequestDate),

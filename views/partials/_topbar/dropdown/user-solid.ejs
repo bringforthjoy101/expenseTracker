@@ -7,7 +7,7 @@
 		</div>
 		<div class="kt-user-card__details">
 			<div class="kt-user-card__name"><%= user.firstname %> <%= user.last %></div>
-			<div class="kt-user-card__position"> Developer, Loop Inc.</div>
+			<div class="kt-user-card__position"> <%= user.Role.role_name %>, <%= user.CurrentBusiness.current_business_name %></div>
 		</div>
 	</div>
 </div>

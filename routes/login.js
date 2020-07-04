@@ -55,7 +55,7 @@ router.post('/signup', async function(req, res, next) {
         errors.push({ message: "Password must be a least 6 characters long" });
       }
       
-      if (username.length < 8) {
+      if (username.length < 6) {
         errors.push({ message: "Username must be a least 6 characters long" });
       }
     
@@ -74,7 +74,7 @@ router.post('/signup', async function(req, res, next) {
             errors, 
             firstname, lastname, username, 
             email, password, 
-            business, dept, role,
+            current_business, dept, role,
             // roles: response.data,
             // departments: response2.data,
             layout: 'layouts/auth',
