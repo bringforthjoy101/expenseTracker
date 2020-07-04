@@ -3,7 +3,7 @@ var config = require('./config.global');
 config.env = 'production';
 config.hostname = 'manifestdbinstance.cgq0reqixqsd.us-east-1.rds.amazonaws.com';
 config.db = {
-    database: 'tracker0',
+    database: 'tracker1',
     username: 'emmanueluser',
     password: '000000',
     host: "manifestdbinstance.cgq0reqixqsd.us-east-1.rds.amazonaws.com",
@@ -14,7 +14,7 @@ config.db = {
     }
 }
 config.sessionDb = {
-    database: 'tracker0',
+    database: 'tracker1',
     username: 'emmanueluser',
     password: '000000',
     host: "manifestdbinstance.cgq0reqixqsd.us-east-1.rds.amazonaws.com",
