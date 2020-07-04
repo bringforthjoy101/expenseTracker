@@ -9,7 +9,10 @@ exports.category_create_post = [
       check('category_name')
       .isLength({ min: 3, max: 50 }).withMessage('Category name must be between 3 and 50 characters long')
       .not().isEmpty().withMessage('Category name cannot be empty')
-      .matches(/^[A-Za-z\s]+$/).withMessage('Category name must contain only Letters.')
+      .matches(/^[A-Za-z\s]+$/).withMessage('Category name must contain only Letters.'),
+      check('current_business')
+        .not().isEmpty().withMessage('Current business cannot be empty')
+        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
     ],
     function(req, res, next) {
         // checks for validations
@@ -20,7 +23,8 @@ exports.category_create_post = [
         // Performs operation
         try {
             models.Category.create({
-            category_name: req.body.category_name
+            category_name: req.body.category_name,
+            CurrentBusinessId: req.body.current_business
             }).then(function(category) {
               res.json({
                 status: true,

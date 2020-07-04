@@ -10,7 +10,10 @@ exports.role_create_post = [
       check('role_name')
       .isLength({ min: 3, max: 50 }).withMessage('Role name must be between 3 and 50 characters long')
       .not().isEmpty().withMessage('Role name cannot be empty')
-      .matches(/^[A-Za-z\s]+$/).withMessage('Role name must contain only Letters.')
+      .matches(/^[A-Za-z\s]+$/).withMessage('Role name must contain only Letters.'),
+      check('current_business')
+        .not().isEmpty().withMessage('Current business cannot be empty')
+        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
     ],
     function(req, res, next) {
       // checks for validations
@@ -21,6 +24,7 @@ exports.role_create_post = [
         try {
          models.Role.create({
                 role_name: req.body.role_name,
+                CurrentBusinessId: req.body.current_business
             }).then(function(role) {
               res.status(200).json({
                 status: true,

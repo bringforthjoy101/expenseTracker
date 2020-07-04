@@ -10,7 +10,10 @@ exports.department_create_post = [
       check('dept_name')
       .isLength({ min: 3, max: 50 }).withMessage('Department name must be between 3 and 50 characters long')
       .not().isEmpty().withMessage('Department name cannot be empty')
-      .matches(/^[A-Za-z\s]+$/).withMessage('Department name must contain only Letters.')
+      .matches(/^[A-Za-z\s]+$/).withMessage('Department name must contain only Letters.'),
+      check('current_business')
+        .not().isEmpty().withMessage('Current business cannot be empty')
+        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
     ],
     
     function(req, res, next) {
@@ -27,7 +30,8 @@ exports.department_create_post = [
         
             //   performs operations
             models.Department.create({
-             dept_name: req.body.dept_name
+             dept_name: req.body.dept_name,
+             CurrentBusinessId: req.body.current_business
             }).then(function(department) {
               res.status(200).json({
                 status: true,

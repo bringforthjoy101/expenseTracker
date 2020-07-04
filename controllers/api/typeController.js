@@ -9,7 +9,10 @@ exports.type_create_post = [
       check('type_name')
       .isLength({ min: 3, max: 50 }).withMessage('Type name must be between 3 and 50 characters long')
       .not().isEmpty().withMessage('Type name cannot be empty')
-      .matches(/^[A-Za-z\s]+$/).withMessage('Type name must contain only Letters.')
+      .matches(/^[A-Za-z\s]+$/).withMessage('Type name must contain only Letters.'),
+      check('current_business')
+        .not().isEmpty().withMessage('Current business cannot be empty')
+        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
     ],
     function(req, res, next) {
         // checks for validations
@@ -19,7 +22,8 @@ exports.type_create_post = [
         }
         try {
             models.Type.create({
-                type_name: req.body.type_name
+                type_name: req.body.type_name,
+                CurrentBusinessId: req.body.current_business
             }).then(function(type) {
                   res.status(200).json({
                     status: true,

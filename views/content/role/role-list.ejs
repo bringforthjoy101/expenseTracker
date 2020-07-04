@@ -46,16 +46,27 @@
 			<div class="kt-portlet__body">
 				<div class="kt-section">
 					<div class="kt-section__content kt-section__content--border">
-						<% roles.forEach(function(role) { %>
-							<div class="list-group">
-								<a href="/role/<%= role.id %>" class="list-group-item list-group-item-action flex-column align-items-start">
-									<div class="d-flex w-100 justify-content-between">
-										<h5 class="mb-1"><%= role.role_name %></h5>
-										<small><%= moment(role.createdAt).fromNow() %></small>
-									</div>
-								</a>
-							</div>
-						<% }); %>
+						<% if (!roles.status){ %>
+							<div class="alert alert-light alert-elevate" role="alert">
+			              		<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
+			              		<div class="alert-text">
+			              			<h3 class="kt-portlet__head-title">
+			              			  No Category created
+			              			</h3>
+			              		</div>
+			              	</div>
+			            <% } else { %>
+							<% roles.forEach(function(role) { %>
+								<div class="list-group">
+									<a href="/role/<%= role.id %>" class="list-group-item list-group-item-action flex-column align-items-start">
+										<div class="d-flex w-100 justify-content-between">
+											<h5 class="mb-1"><%= role.role_name %></h5>
+											<small><%= moment(role.createdAt).fromNow() %></small>
+										</div>
+									</a>
+								</div>
+							<% }); %>
+						<% } %>
 					</div>
 				</div>
 			</div>
@@ -64,6 +75,7 @@
 
 <script>
 	const userId = `<%= user.id %>`;
+	const currentBusinessId = `<%= user.CurrentBusinessId %>`;
 	const submitBtn = document.getElementById('roleSubmitBtn');
 	
 	submitBtn.addEventListener('click', ()=>{
@@ -76,7 +88,7 @@
 	  const form = document.getElementById('createRole');
 	  const formData = {
 	          role_name: form.role_name.value,
-	          //current_business: business_name,
+	          current_business: currentBusinessId,
 	        }
 	  
 	  console.log(formData);
