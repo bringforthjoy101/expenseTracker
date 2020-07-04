@@ -253,12 +253,13 @@ var employee = {
   }
   }
 ];
+
 // Display list of all employees.
 exports.employee_list = function(req, res, next) {
 
         try {
           models.user.findAll({
-            // where:{},
+            where:{CurrentBusinessId: req.user.CurrentBusinessId},
             include: [
                 {
                   model: models.Department,
@@ -287,6 +288,66 @@ exports.employee_list = function(req, res, next) {
               }
               
               console.log("Employees list renders successfully");
+              });
+        } catch (error) {
+          res.status(400).json({
+            status: false,
+            message: `There was an error - ${error}`
+          });
+        }
+        
+      
+};
+
+// list maager in a current business and department
+exports.manager_list = async function(req, res, next) {
+
+        try {
+          // find all roles with "Manager" that belongs to a particular current business.
+          const manager = await models.Role.findAll({
+            where: {
+              CurrentBusinessId: req.user.CurrentBusinessId,
+              role_name: 'Manager'
+            },
+          });
+          
+          console.log('this is the manager role id ' + manager[0].id);
+          
+          // find all users in a particular current business belonging to the role "Manager". 
+          models.user.findAll({
+            where:{
+              CurrentBusinessId: req.user.CurrentBusinessId,
+              DepartmentId: req.user.DepartmentId,
+              RoleId: manager[0].id
+            },
+            include: [
+                {
+                  model: models.Department,
+                  attributes: ['id', 'dept_name']
+                },
+                {
+                  model: models.Role,
+                  attributes: ['id', 'role_name']
+                }
+            ]
+          }).then(function(managers) {
+            
+              console.log("rendering employee list");
+              if (managers.length === 0) {
+                res.status(400).json({
+                  status: false,
+                  data: managers,
+                  message: 'No Manager available'
+                })
+              } else {
+                res.status(400).json({
+                  status: true,
+                  data: managers,
+                  message: 'Managers Listed successfully'
+                })
+              }
+              
+              console.log("Managers list renders successfully");
               });
         } catch (error) {
           res.status(400).json({

@@ -18,7 +18,7 @@ var loginController = require('../controllers/loginController');
 // router.get('/', loginController.getLogin);
 // router.get('/', loginController.getSignup);
 
-router.get('/', async function(req, res, next) {
+router.get('/', function(req, res, next) {
     
     var viewData = {
         title: 'Login', 
@@ -37,7 +37,7 @@ router.get('/', async function(req, res, next) {
 // });
 
 router.post('/signup', async function(req, res, next) {
-    let { firstname, lastname, username, email, password, business, dept, role } = req.body;
+    let { firstname, lastname, username, email, password, current_business, dept, role } = req.body;
 
     let errors = [];
 
@@ -47,7 +47,7 @@ router.post('/signup', async function(req, res, next) {
         password,
       });
     
-      if (!firstname || !lastname || !email || !password || !business || !dept || !role ) {
+      if (!firstname || !lastname || !email || !password || !current_business || !dept || !role ) {
         errors.push({ message: "Please enter all fields" });
       }
     
@@ -63,10 +63,10 @@ router.post('/signup', async function(req, res, next) {
     //     errors.push({ message: "Passwords do not match" });
     //   }
     if (errors.length > 0) {
-        const roles = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/roles', {method: 'GET'});
-        const departments = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/departments', {method: 'GET'});
-        const response = await roles.json();
-        const response2 = await departments.json();
+        // const roles = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/roles', {method: 'GET'});
+        // const departments = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/departments', {method: 'GET'});
+        // const response = await roles.json();
+        // const response2 = await departments.json();
         var viewData = {
             title: 'Sign Up', 
             page: 'authPage',
@@ -75,8 +75,8 @@ router.post('/signup', async function(req, res, next) {
             firstname, lastname, username, 
             email, password, 
             business, dept, role,
-            roles: response.data,
-            departments: response2.data,
+            // roles: response.data,
+            // departments: response2.data,
             layout: 'layouts/auth',
         }
         res.render("pages/index", viewData);

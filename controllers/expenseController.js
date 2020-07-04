@@ -166,11 +166,19 @@ exports.expense_new = async function(req, res, next) {
               cookie: req.headers.cookie,
             }
         });
+        const data3 = await fetch(`${apiUrl}/managers`, {
+            method: 'GET',
+            headers:{
+              cookie: req.headers.cookie,
+            }
+        });
         const categories = await data.json();
         const types = await data2.json();
+        const managers = await data3.json();
         console.log('this is create expense');
         console.log('this is the category ' + categories.data);
         console.log('this is the type ' + types.data);
+        console.log('this is the managers ' + managers.data);
         var viewData = {
             title: 'Expense Create',
             page:'expensePage',
@@ -180,6 +188,7 @@ exports.expense_new = async function(req, res, next) {
             api: 'expense',
             categories: categories.data,
             types: types.data,
+            managers: managers.data,
             user: req.user,
             layout: 'layouts/main'
         }

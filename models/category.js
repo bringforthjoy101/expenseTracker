@@ -6,6 +6,13 @@ module.exports = (sequelize, DataTypes) => {
 
   Category.associate = function(models) {
     models.Category.hasMany(models.Expense);
+    
+    models.Category.belongsTo(models.CurrentBusiness, {
+      onDelete: "CASCADE",
+      foreignKey: {
+        allowNull: false
+      }
+    });
   };
   
   return Category;

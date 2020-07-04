@@ -8,6 +8,13 @@ module.exports = (sequelize, DataTypes) => {
     models.Department.hasMany(models.user);
 
     models.Department.hasMany(models.Expense);
+    
+    models.Department.belongsTo(models.CurrentBusiness, {
+      onDelete: "CASCADE",
+      foreignKey: {
+        allowNull: false
+      }
+    });
   };
 
   return Department;

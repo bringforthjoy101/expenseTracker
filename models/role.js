@@ -6,6 +6,13 @@ module.exports = (sequelize, DataTypes) => {
   
   Role.associate = function(models) {
     models.Role.hasMany(models.user);
+    
+    models.Role.belongsTo(models.CurrentBusiness, {
+      onDelete: "CASCADE",
+      foreignKey: {
+        allowNull: false
+      }
+    });
   };
   
   return Role;

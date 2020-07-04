@@ -32,30 +32,30 @@ router.get('/', function(req, res) { res.redirect('/login'); });
 router.get('/about', indexController.getAbout);
 
 router.get('/signup', async function(req, res, next) {
-    const roles = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/roles', {
-        method: 'GET',
-         headers:{
-          cookie: req.headers.cookie,
-        }
-    });
-    const departments = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/departments', {
-        method: 'GET',
-         headers:{
-          cookie: req.headers.cookie,
-        }
-    });
-    const response = await roles.json();
-    const response2 = await departments.json();
+    // const roles = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/roles', {
+    //     method: 'GET',
+    //      headers:{
+    //       cookie: req.headers.cookie,
+    //     }
+    // });
+    // const departments = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/departments', {
+    //     method: 'GET',
+    //      headers:{
+    //       cookie: req.headers.cookie,
+    //     }
+    // });
+    // const response = await roles.json();
+    // const response2 = await departments.json();
     
-    console.log(response);
-    console.log(response2);
+    // console.log(response);
+    // console.log(response2);
     
     var viewData = {
         title: 'Sign Up', 
         page: 'authPage',
         display: 'signup',
-        roles: response.data,
-        departments: response2.data,
+        // roles: response.data,
+        // departments: response2.data,
         layout: 'layouts/auth',
     }
     res.render('pages/index', viewData);

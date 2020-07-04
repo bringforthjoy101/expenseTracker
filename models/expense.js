@@ -5,7 +5,6 @@ module.exports = (sequelize, DataTypes) => {
     desc:{type: DataTypes.TEXT},
     amount:{type: DataTypes.INTEGER},
     status:{type: DataTypes.ENUM('Pending', 'Approved', 'Declined'), defaultValue: 'Pending'},
-    business_name:{type: DataTypes.STRING},
     DepartmentId: DataTypes.INTEGER,
     TypeId: DataTypes.INTEGER,
     CategoryId: DataTypes.INTEGER,
@@ -20,6 +19,14 @@ module.exports = (sequelize, DataTypes) => {
     models.Expense.belongsTo(models.user, {
       onDelete: "CASCADE",
       foreignKey: {
+      allowNull: true
+    }
+    });
+  
+    models.Expense.belongsTo(models.user, {
+      onDelete: "CASCADE",
+      foreignKey: {
+      name: 'ApproverId',
       allowNull: true
     }
     });
@@ -43,6 +50,13 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: {
       allowNull: true
     }
+    });
+    
+    models.Expense.belongsTo(models.CurrentBusiness, {
+      onDelete: "CASCADE",
+      foreignKey: {
+        allowNull: false
+      }
     });
   };
 

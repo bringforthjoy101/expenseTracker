@@ -41,15 +41,16 @@ module.exports = function(sequelize, Sequelize) {
         username: {
             type: Sequelize.TEXT,
             allowNull: false,
+            unique: false,
             validate: {
-              len: [8, 50] // must be between 8 and 50.
+              len: [6, 50] // must be between 6 and 50.
             }
         },
         
         email: {
             type: Sequelize.STRING,
             allowNull: false,
-            unique: true,
+            unique: false,
             validate: {
                 isEmail: true
             }
@@ -74,9 +75,9 @@ module.exports = function(sequelize, Sequelize) {
         module_name: {type: Sequelize.STRING},
         module_id : {type: Sequelize.INTEGER},
         account_id : {type: Sequelize.STRING},
-        permission : {type: Sequelize.STRING},
+        // permission : {type: Sequelize.STRING},
         profile : {type: Sequelize.STRING},
-        current_business : {type: Sequelize.STRING},
+        // current_business : {type: Sequelize.STRING},
         RoleId : {type: Sequelize.INTEGER, defaultValue: 2, allowNull: false},
         DepartmentId : {type: Sequelize.INTEGER, allowNull: false}
 
@@ -84,6 +85,10 @@ module.exports = function(sequelize, Sequelize) {
 
     User.associate = function(models) {
         models.user.hasMany(models.Expense);
+        
+        models.user.hasMany(models.Expense, {
+          foreignKey: 'ApproverId'
+        });
     
         models.user.belongsTo(models.Department, {
           onDelete: "CASCADE",
@@ -97,6 +102,20 @@ module.exports = function(sequelize, Sequelize) {
           foreignKey: {
           allowNull: true
         }
+        });
+        
+        models.user.belongsTo(models.CurrentBusiness, {
+            allowNull: true
+        });
+        
+        models.user.belongsTo(models.Profile, {
+            allowNull: true
+        });
+        
+        models.user.belongsToMany(models.Permission,{ 
+          as: 'permissions', 
+          through: 'UserPermissions',
+          foreignKey: 'user_id'
         });
       };
 

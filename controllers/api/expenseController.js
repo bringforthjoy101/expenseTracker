@@ -29,6 +29,9 @@ exports.expense_create_post = [
         check('employee_id')
         .not().isEmpty().withMessage('Employee ID cannot be empty')
         .isInt().withMessage('Employee ID must be numeric'),
+        check('approver')
+        .not().isEmpty().withMessage('Approver ID cannot be empty')
+        .isInt().withMessage('Approver ID must be numeric'),
         check('department')
         .not().isEmpty().withMessage('Department cannot be empty')
         .isInt().withMessage('Department must be numeric'),
@@ -73,6 +76,7 @@ exports.expense_create_post = [
                 status: status,
                 business_name: req.body.current_business,
                 userId: employee_id,
+                ApproverId: req.body.approver,
                 DepartmentId: req.body.department
             }
             
@@ -239,6 +243,11 @@ exports.expense_detail = async function(req, res, next) {
                       attributes: ['id', 'firstname', 'lastname']
                     },
                     {
+                      model: models.user,
+                      as: 'approver',
+                      attributes: ['id', 'firstname', 'lastname']
+                    },
+                    {
                         model: models.Category,
                         attributes: ['id', 'category_name']
                     },
@@ -286,10 +295,18 @@ exports.expense_list = function(req, res, next) {
     // var user_business_name = req.params.user_busines_name;
     try {
         models.Expense.findAll({
-            where: {business_name: req.user.current_business},
+            where: {
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                DepartmentId: req.user.DepartmentId
+            },
             include: [
                 {
                   model: models.user,
+                  attributes: ['id', 'firstname', 'lastname']
+                },
+                {
+                  model: models.user,
+                  as: 'approver',
                   attributes: ['id', 'firstname', 'lastname']
                 },
                 {
@@ -340,10 +357,15 @@ exports.my_expenses = function(req, res, next) {
     // var user_business_name = req.params.user_busines_name;
     try {
         models.Expense.findAll({
-            where: {business_name: req.user.current_business, userId: req.user.id},
+            where: {CurrentBusinessId: req.user.CurrentBusinessId, userId: req.user.id},
             include: [
                 {
                   model: models.user,
+                  attributes: ['id', 'firstname', 'lastname']
+                },
+                {
+                  model: models.user,
+                  as: 'approver',
                   attributes: ['id', 'firstname', 'lastname']
                 },
                 {
@@ -392,11 +414,14 @@ exports.my_expenses = function(req, res, next) {
 // This is the expense homepage.
 exports.index = async function(req, res) {
     try {
-        const employees = await models.user.findAll({where:{current_business: req.user.current_business,}});
-        const totalSum = await models.Expense.sum('amount', { where: { business_name: req.user.current_business, status: 'Approved' } } );
-            // where: { business_name: req.user.current_business, userId: req.user.id},
+        const employees = await models.user.findAll({where:{CurrentBusinessId: req.user.CurrentBusinessId,}});
+        const totalSum = await models.Expense.sum('amount', { where: { CurrentBusinessId: req.user.CurrentBusinessId, status: 'Approved' } } );
+            
         models.Expense.findAll({
-            where: { business_name: req.user.current_business},
+            where: {
+                CurrentBusinessId: req.user.CurrentBusinessId, 
+                DepartmentId: req.user.DepartmentId
+            },
             include: [
                 {
                     model: models.user,

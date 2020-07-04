@@ -57,6 +57,9 @@ router.get('/employee/:employee_id/', employee_controller.employee_detail);
 // GET request for list of all Employees.
 router.get('/employees', employee_controller.employee_list);
 
+// GET request for list of all Managers.
+router.get('/managers', employee_controller.manager_list);
+
 
 
 // /// Category ROUTES ///

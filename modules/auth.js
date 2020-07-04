@@ -95,7 +95,7 @@ auth.createUser = function(req, res, next) {
                 password: userPassword,
                 firstname: req.body.firstname,
                 lastname: req.body.lastname,
-                current_business: req.body.business,
+                CurrentBusinessId: req.body.current_business,
                 RoleId: req.body.role,
                 DepartmentId: req.body.dept
                 // more info here for user
