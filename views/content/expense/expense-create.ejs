@@ -34,12 +34,12 @@
 						<label>Type:</label>
 						<select class="form-control kt-select2" id="kt_select2_1" name="type" id="type">
 					    	<option >Select Type</option>
-					    	<% if (!types.status){ %>
+					    	<% if (types == 'None'){ %>
 					    	  <option disabled >N/A</option>
 					    	<% } else { %>
-  					    	<% types.forEach(function(type) { %>
-  					    		<option value="<%= type.id %>" ><%= type.type_name %></option>
-  					    	<% });%>
+      					    	<% types.forEach(function(type) { %>
+      					    		<option value="<%= type.id %>" ><%= type.type_name %></option>
+      					    	<% });%>
 					    	<% } %>
 					    </select>
 					</div>
@@ -47,22 +47,26 @@
 						<label>Category:</label>
 						<select class="form-control kt-select2" id="kt_select2_2" name="category" id="category">
 					    	<option >Select Category</option>
-					    	<% if (!categories.status){ %>
+					    	<% if (categories == 'None'){ %>
 					    	  <option disabled >N/A</option>
 					    	<% } else { %>
-  					    	<% categories.forEach(function(category) { %>
-  					    		<option value="<%= category.id %>" ><%= category.category_name %></option>
-  					    	<% });%>
-  					    <% } %>
+      					    	<% categories.forEach(function(category) { %>
+      					    		<option value="<%= category.id %>" ><%= category.category_name %></option>
+      					    	<% });%>
+      					    <% } %>
 					    </select>
 					</div>
 					<div class="form-group">
 						<label>Approver:</label>
 						<select class="form-control kt-select2" id="kt_select2_3" name="approver" id="approver">
 					    	<option >Select Approver</option>
-					    	<% managers.forEach(function(approver) { %>
-					    		<option value="<%= approver.id %>" ><%= approver.firstname %> <%= approver.lastname %></option>
-					    	<% });%>
+					    	<% if (managers == 'None'){ %>
+					    	  <option disabled >N/A</option>
+					    	<% } else { %>
+    					    	<% managers.forEach(function(approver) { %>
+    					    		<option value="<%= approver.id %>" ><%= approver.firstname %> <%= approver.lastname %></option>
+    					    	<% });%>
+    					    <% } %>
 					    </select>
 					</div>
 				</div>
@@ -84,7 +88,7 @@
 <script>
 const userId = `<%= user.id %>`;
 const DepartmentId = `<%= user.DepartmentId %>`;
-const business_name = `<%= user.current_business %>`;
+const currentBusinessId = `<%= user.CurrentBusinessId %>`;
 const submitBtn = document.getElementById('expenseSubmitBtn');
 
 submitBtn.addEventListener('click', ()=>{
@@ -102,7 +106,8 @@ const submitExpense = async (event) => {
           amount: form.amount.value,
           type: form.type.value,
           category: form.category.value,
-          current_business: business_name,
+          current_business: currentBusinessId,
+          approver: form.approver.value,
           department: DepartmentId,
           employee_id: userId,
         }

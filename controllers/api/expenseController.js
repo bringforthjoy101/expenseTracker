@@ -240,8 +240,14 @@ exports.expense_detail = async function(req, res, next) {
                 include: [
                     {
                       model: models.user,
+                      as: 'user',
                       attributes: ['id', 'firstname', 'lastname']
                     },
+                    // {
+                    //   model: models.user,
+                    //   as: 'approver',
+                    //   attributes: ['id', 'firstname', 'lastname']
+                    // },
                     {
                         model: models.Category,
                         attributes: ['id', 'category_name']
@@ -254,6 +260,7 @@ exports.expense_detail = async function(req, res, next) {
                         model: models.Department,
                         attributes: ['id', 'dept_name']
                     },
+                    
                 ]
             }
     ).then(function(expense) {
