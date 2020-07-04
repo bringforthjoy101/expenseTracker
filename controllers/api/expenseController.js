@@ -243,11 +243,6 @@ exports.expense_detail = async function(req, res, next) {
                       attributes: ['id', 'firstname', 'lastname']
                     },
                     {
-                      model: models.user,
-                      as: 'approver',
-                      attributes: ['id', 'firstname', 'lastname']
-                    },
-                    {
                         model: models.Category,
                         attributes: ['id', 'category_name']
                     },
@@ -305,11 +300,6 @@ exports.expense_list = function(req, res, next) {
                   attributes: ['id', 'firstname', 'lastname']
                 },
                 {
-                  model: models.user,
-                  as: 'approver',
-                  attributes: ['id', 'firstname', 'lastname']
-                },
-                {
                     model: models.Category,
                     attributes: ['id', 'category_name']
                 },
@@ -361,11 +351,6 @@ exports.my_expenses = function(req, res, next) {
             include: [
                 {
                   model: models.user,
-                  attributes: ['id', 'firstname', 'lastname']
-                },
-                {
-                  model: models.user,
-                  as: 'approver',
                   attributes: ['id', 'firstname', 'lastname']
                 },
                 {
