@@ -212,6 +212,7 @@ exports.index = async function(req, res, next) {
         }
     });
     const response = await data.json();
+    console.log('this is the response ' + response.status);
     
     var viewData = {
         title: 'Homepage', 

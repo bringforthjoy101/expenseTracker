@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     TypeId: DataTypes.INTEGER,
     CategoryId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
+    ApproverId : {type: DataTypes.INTEGER, allowNull: false}
     
   });
   
@@ -23,13 +24,13 @@ module.exports = (sequelize, DataTypes) => {
     }
     });
   
-    models.Expense.belongsTo(models.user, {
-      onDelete: "CASCADE",
-      foreignKey: {
-      name: 'ApproverId',
-      allowNull: true
-    }
-    });
+    // models.Expense.belongsTo(models.user, {
+    //   onDelete: "CASCADE",
+    //   foreignKey: {
+    //   name: 'ApproverId',
+    //   allowNull: true
+    // }
+    // });
 
     models.Expense.belongsTo(models.Category, {
       onDelete: "CASCADE",

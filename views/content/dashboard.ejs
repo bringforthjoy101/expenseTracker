@@ -37,7 +37,7 @@
 										<div class="kt-widget-3__content-desc">Amount of All Expenses</div>
 									</div>
 									<div class="kt-widget-3__content-section">
-										<span class="kt-widget-3__content-bedge">$</span>
+										<span class="kt-widget-3__content-bedge">₦</span>
 										<span class="kt-widget-3__content-number"><%= (totalSum || 0).toLocaleString(); %></span>
 									</div>
 								</div>
@@ -84,7 +84,7 @@
 		</div>
 	
 		<div class="kt-portlet__body">
-			<% if (expenses.length == 0 ) { %>
+			<% if (expenseCount === 0 ) { %>
 			    <div class="alert alert-light alert-elevate" role="alert">
               		<div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
               		<div class="alert-text">
@@ -110,28 +110,28 @@
 					</thead>
 					<tbody>
 						<% expenses.forEach(function(expense) { %>
-						<% 
-							const type = (expense.status == 'Approved') ? 'success' 
-				              : (expense.status == 'Pending') ? 'warning' 
-				              : (expense.status == 'Declined') ? 'danger'
-				              : null;
-			             %>
-						<tr>
-							<td><a href="/expense/<%= expense.id %>"><%= expense.title %></a></td>
-							<td>₦ <%= Number (expense.amount || 0).toLocaleString(); %></td>
-							<td><span class="kt-badge kt-badge--<%=type%> kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
-							<td><%= expense.user.firstname %> <%= expense.user.lastname %></td>
-							<td><%= moment(expense.createdAt).fromNow() %></td>
-							<td nowrap> 
-								<a href="/expense/<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
-									<i class="la la-eye"></i>
-								</a>
-								<a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete" onclick="deleteExpense(<%=expense.id%>)">
-									<i class="la la-trash"></i>
-								</a>
-								
-							</td>
-						</tr>
+							<% 
+								const type = (expense.status == 'Approved') ? 'success' 
+					              : (expense.status == 'Pending') ? 'warning' 
+					              : (expense.status == 'Declined') ? 'danger'
+					              : null;
+				             %>
+							<tr>
+								<td><a href="/expense/<%= expense.id %>"><%= expense.title %></a></td>
+								<td>₦ <%= Number (expense.amount || 0).toLocaleString(); %></td>
+								<td><span class="kt-badge kt-badge--<%=type%> kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
+								<td><%= expense.user.firstname %> <%= expense.user.lastname %></td>
+								<td><%= moment(expense.createdAt).fromNow() %></td>
+								<td nowrap> 
+									<a href="/expense/<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
+										<i class="la la-eye"></i>
+									</a>
+									<a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete" onclick="deleteExpense(<%=expense.id%>)">
+										<i class="la la-trash"></i>
+									</a>
+									
+								</td>
+							</tr>
 						<% }); %>
 						
 					</tbody>
