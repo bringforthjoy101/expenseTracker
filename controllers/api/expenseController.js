@@ -36,8 +36,8 @@ exports.expense_create_post = [
         .not().isEmpty().withMessage('Department cannot be empty')
         .isInt().withMessage('Department must be numeric'),
         check('current_business')
-        .not().isEmpty().withMessage('Current business cannot be empty')
-        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
+        .not().isEmpty().withMessage('CurrentBusinessId cannot be empty')
+        .isInt().withMessage('CurrentBusinessId must be numeric'),
         ],
         
       

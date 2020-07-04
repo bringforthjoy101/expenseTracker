@@ -11,8 +11,8 @@ exports.type_create_post = [
       .not().isEmpty().withMessage('Type name cannot be empty')
       .matches(/^[A-Za-z\s]+$/).withMessage('Type name must contain only Letters.'),
       check('current_business')
-        .not().isEmpty().withMessage('Current business cannot be empty')
-        .isLength({ min: 3, max: 50 }).withMessage('Current business must be between 3 and 50 characters long')
+        .not().isEmpty().withMessage('CurrentBusinessId cannot be empty')
+        .isInt().withMessage('CurrentBusinessId must be numeric'),
     ],
     function(req, res, next) {
         // checks for validations
