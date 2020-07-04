@@ -89,8 +89,9 @@ exports.type_delete_post = async function(req, res, next) {
 // Display list of all types.
 exports.type_list = function(req, res, next) {
     try {
-        models.Type.findAll(
-        ).then(function(types) {
+        models.Type.findAll({
+          where: {CurrentBusinessId: req.body.current_business}
+        }).then(function(types) {
         // renders a post list page
         console.log("rendering type list");
         if (types.length === 0) {

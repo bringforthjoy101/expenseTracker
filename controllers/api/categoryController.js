@@ -89,8 +89,9 @@ exports.category_list = function(req, res, next) {
         
         // Performs operation
         try {
-            models.Category.findAll(
-            ).then(function(categories) {
+            models.Category.findAll({
+                where: {CurrentBusinessId: req.body.current_business}
+            }).then(function(categories) {
             // renders a post list page
             if (categories.length === 0) {
               res.status(400).json({
