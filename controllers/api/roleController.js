@@ -88,8 +88,9 @@ exports.role_delete_post = async function(req, res, next) {
 // Display list of all roles.
 exports.role_list = function(req, res, next) {
     try {
-        models.Role.findAll(
-        ).then(function(roles) {
+        models.Role.findAll({
+          where: {CurrentBusinessId: req.user.CurrentBusinessId,}
+        }).then(function(roles) {
         // renders a post list page
         if (roles.length === 0) {
           res.json({

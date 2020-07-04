@@ -95,8 +95,9 @@ exports.department_delete_post = async function(req, res, next) {
 exports.department_list = function(req, res, next) {
     
     try {
-       models.Department.findAll(
-        ).then(function(departments) {
+       models.Department.findAll({
+         where: {CurrentBusinessId: req.user.CurrentBusinessId,}
+       }).then(function(departments) {
         // renders a post list page
         if (departments.length === 0) {
           res.status(400).json({
