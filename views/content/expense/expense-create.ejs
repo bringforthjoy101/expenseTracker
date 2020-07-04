@@ -60,7 +60,7 @@
 						<label>Approver:</label>
 						<select class="form-control kt-select2" id="kt_select2_3" name="approver" id="approver">
 					    	<option >Select Approver</option>
-					    	<% if (managers == 'None'){ %>
+					    	<% if (managers.length == 0) { %>
 					    	  <option disabled >N/A</option>
 					    	<% } else { %>
     					    	<% managers.forEach(function(approver) { %>
