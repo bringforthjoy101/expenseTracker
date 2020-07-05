@@ -90,7 +90,7 @@ exports.category_list = function(req, res, next) {
         // Performs operation
         try {
             models.Category.findAll({
-                where: {CurrentBusinessId: req.body.current_business}
+                where: {CurrentBusinessId: req.user.CurrentBusinessId}
             }).then(function(categories) {
             // renders a post list page
             if (categories.length === 0) {

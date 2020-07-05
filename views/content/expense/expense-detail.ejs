@@ -18,16 +18,16 @@
                 <div class="kt-portlet__body">
                     <div class="kt-section">
                         <div class="kt-section__info">
+                          <% 
+            								const type = (expense.status == 'Approved') ? 'success' 
+            					              : (expense.status == 'Pending') ? 'warning' 
+            					              : (expense.status == 'Declined') ? 'danger'
+            					              : null;
+            				      %>
                             <%= expense.desc %> <br>
                             <b>₦ <%= Number (expense.amount || 0).toLocaleString(); %></b> <br>
-                             
-                            <% if (expense.status == 'Approved') { %>
-                                <span class="badge badge-success"><%= expense.status %></span> <br>    
-                            <% } else if (expense.status == 'Pending') { %>
-                                <span class="badge badge-warning"><%= expense.status %></span> <br>
-                            <% } else { %>
-                                <span class="badge badge-danger"><%= expense.status %></span> <br>
-                            <% } %>
+                             <span class="badge badge-<%=type%>"><%= expense.status %></span> <br> 
+                            
                             <%= moment(expense.createdAt).fromNow() %>
                         </div>
                     </div>
