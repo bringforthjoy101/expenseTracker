@@ -62,3 +62,43 @@ exports.employee_detail = async function(req, res, next) {
     
 };
 
+exports.profile = async (req, res, next) => {
+  var id = req.user.id;
+  const data = await fetch(`${apiUrl}/employee/${id}`, {
+    method: 'GET',
+    headers:{
+      cookie: req.headers.cookie,
+    }
+  });
+  const data2 = await fetch(`${apiUrl}/departments`, {
+      method: 'GET',
+      headers:{
+        cookie: req.headers.cookie,
+      }
+  });
+  const data3 = await fetch(`${apiUrl}/roles`, {
+      method: 'GET',
+      headers:{
+        cookie: req.headers.cookie,
+      }
+  });
+  const response = await data.json();
+  const departments = await data2.json();
+  const roles = await data3.json();
+  
+  var viewData = {
+    parent: 'User Dashboard',
+    parentUrl: '/dashboard',
+    title: 'My Profile',
+    employee: response.data,
+    departments: departments.data,
+    roles: roles.data,
+    user: req.user,
+    amount: response.employeeTotalExpenses,
+    page:'employeePage',
+    display:'employeeProfile',
+    layout: 'layouts/main'
+  }
+  res.render('pages/index', viewData);
+};
+

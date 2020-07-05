@@ -173,7 +173,7 @@ exports.employee_update_post = [
  
 
    // validates if the ID is an integer
-  var employee_id = await checkParamsId(req, res, 'Employee', req.params.employee_id);
+  var employee_id = await checkParamsId(req, res, 'Employee', req.user.id);
 
   try {
     
@@ -187,13 +187,6 @@ exports.employee_update_post = [
           message: 'Employee ID not found'
         });
   }
-
-  // var test1;
-  
-  // var test2 = 'value';
-  
-  // console.log(test1 ? 'true':'false'); // false
-  // console.log(test2 ? 'true':'false'); // true
   
 var employee = {
     firstname: req.body.firstname ? req.body.firstname : thisEmployee.firstname,
@@ -201,37 +194,13 @@ var employee = {
     username: req.body.username ? req.body.username : thisEmployee.username, 
     email: req.body.email ? req.body.email : thisEmployee.email, 
     password: req.body.password ? req.body.password : thisEmployee.password, 
-    DepartmentId: req.body.department ? req.body.department : thisEmployee.department, 
-    RoleId: req.body.role ? req.body.role : thisEmployee.role 
+    DepartmentId: req.body.department ? req.body.department : thisEmployee.DepartmentId, 
+    RoleId: req.body.role ? req.body.role : thisEmployee.RoleId 
 }
- 
-  // var employee = {
-  //     firstname: req.body.firstname,
-  //     lastname: req.body.lastname,
-  //     username: req.body.username,
-  //     email: req.body.email,
-  //     password: req.body.password
-  //   }
           
  console.log('This is the employee ' + employee);
   
  console.log('New Employee firstname ' + employee.firstname);
-  
-  //   models.user.update({thisEmployee}).then(function(employee) {
-  //       res.status(200).json({
-  //         status: true,
-  //         data: employee,
-  //         message: 'Employee updated successfully'
-  //       });
-  //     });
-  // } catch (error) {
-  //     res.status(400).json({
-  //       status: false,
-  //       message: `There was an error - ${error}`
-  //     });
-  //   }
-  // }
-// ];
     
     console.log('This is employee id ' + employee_id);
     
@@ -383,57 +352,10 @@ exports.employee_detail = async function(req, res, next) {
   console.log("This is the employee id " + employee_id);
     // console.log("This is the employee department " + req.params.employee_department);
     // Listing all expenses created by an employee
-    const expenses = await models.Expense.findAll({
-      include: [
-        {
-          model: models.user,
-          attributes: ['id', 'firstname', 'lastname','DepartmentId']
-        },
-      ],
-        where: {
-          userId: employee_id,
-        },
-    });
-
-    // Listing all expenses created by all employees
-    // const deptExpenses = await models.Expense.findAll({
-    //   where: {
-    //     DepartmentId: req.params.employee_department,
-    //   },
-    // });
-
     
 
-    const allExpenses = await models.Expense.findAll({
-      include: [
-        {
-          model: models.user,
-          attributes: ['id', 'firstname', 'lastname']
-        },
-      ]
-    });
-
-    const employeeExpenses = await  models.Expense.findAndCountAll({
-      where: {userId: employee_id}
-    });
-
     const employeeTotalExpenses = await models.Expense.sum('amount', {where: {userId: employee_id} });
-    const categories = await models.Category.findAll();
-    const types = await models.Type.findAll();
-    const departments = await models.Department.findAll();
-    const roles =  await models.Role.findAll();
-    const employees =  await models.user.findAll({
-      include: [
-        {
-          model: models.Department,
-          attributes: ['id', 'dept_name']
-        },
-        {
-          model: models.Role,
-          attributes: ['id', 'role_name']
-        }
-      ]
-    });
+    
 
     console.log("This is the expenses for that employed id " + employee_id);
     // console.log("This is the expenses for that employee dept " + req.params.employee_department);
@@ -444,8 +366,6 @@ exports.employee_detail = async function(req, res, next) {
           include: [
             {
               model: models.Expense,
-              // attributes: [ 'title', 'desc','amount','category','status','userId','createdAt','department' ],
-                  
             },
             {
               model: models.Department,
@@ -470,16 +390,7 @@ exports.employee_detail = async function(req, res, next) {
         res.status(200).json({
             status: true,
             data: employee,
-            employees:employees, 
-            expenses: expenses,
-            departments: departments,
-            roles: roles, 
-            // deptExpenses: deptExpenses,
-            allExpenses: allExpenses,
             employeeTotalExpenses: employeeTotalExpenses,
-            employeeExpenses: employeeExpenses,
-            categories: categories,
-            types: types,
             message: 'Employee details rendered successfully'
         });
         }

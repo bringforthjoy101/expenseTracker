@@ -27,10 +27,7 @@ var requireLogin = require('../middlewares/requireLogin');
 
 // router.get('/', indexController.getIndex);
 router.get('/', function(req, res) { res.redirect('/login'); });
-// authentication
-// router.post('/login', passport.authenticate('local', { successRedirect: '/expense', failureRedirect: '/login' } ));
 router.get('/about', indexController.getAbout);
-
 router.get('/signup', async function(req, res, next) {
     // const roles = await fetch('https://manifest-expensetracker.herokuapp.com/api/expense/roles', {
     //     method: 'GET',
@@ -72,6 +69,7 @@ router.get('/myExpenses', requireLogin, expense_controller.my_expense_list);
 //  EMPLOYEE ROUTES ///
 router.get('/employee/:employee_id/', requireLogin, employee_controller.employee_detail);
 router.get('/allEmployees', requireLogin, employee_controller.employee_list);
+router.get('/profile', requireLogin, employee_controller.profile);
 
 // /// Category ROUTES ///
 router.get('/category/:category_id', requireLogin, category_controller.category_detail);

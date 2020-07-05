@@ -1,0 +1,401 @@
+<!-- begin:: Content -->
+<div class="kt-container  kt-grid__item kt-grid__item--fluid">
+  <div class="">
+    <h6 class="text-danger" id="errDisplay"></h6>
+  </div>
+
+  <!--Begin::App-->
+  <div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+
+    <!--Begin:: App Aside-->
+    <div>
+      <!--Begin:: Portlet-->
+      <div class="kt-portlet">
+        <div class="kt-portlet__body">
+          <ul class="kt-nav kt-nav--bolder kt-nav--fit-ver kt-nav--v4" role="tablist">
+            <li class="kt-nav__item  active ">
+              <a class="kt-nav__link active" href="#" role="tab">
+                <span class="kt-nav__link-icon"><i class="flaticon2-user"></i></span>
+                <span class="kt-nav__link-text">Personal Information</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="kt-portlet__separator"></div>
+        <div class="kt-portlet__body">
+          <div class="kt-widget kt-widget--general-1">
+            <div class="kt-media kt-media--brand kt-media--md kt-media--circle">
+              <!--<img src="<#%= user.avatar %>" alt="image">-->
+              <img src="/assets/media/users/300_21.jpg" alt="image">
+            </div>
+            <div class="kt-widget__wrapper">
+              <div class="kt-widget__label">
+                <strong class="kt-widget__title"><%= user.firstname + ' ' + user.lastname %> </strong>
+                <span class="kt-widget__desc">
+                  <strong class="kt-widget__title">Current Business: </strong> <%= typeof user != 'undefined' ? user.CurrentBusiness.current_business_name : '' %> <br>
+                  <strong class="kt-widget__title">Role: </strong> <%= typeof user != 'undefined' ? user.Role.role_name : '' %> <br> 
+                  <strong class="kt-widget__title">Department: </strong><%= typeof user != 'undefined' ? user.Department.dept_name : '' %>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="kt-portlet__separator"></div>
+        <div class="kt-portlet__body">
+          <ul class="kt-nav kt-nav--bolder kt-nav--fit-ver kt-nav--v4" role="tablist">
+            <li class="kt-nav__item  active ">
+              <a class="kt-nav__link active" href="#" role="tab">
+                <span class="kt-nav__link-icon"><i class="flaticon-coins"></i></span>
+                ₦ <%=(amount || 0).toLocaleString(); %>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!--End:: Portlet-->
+
+      <div class="kt-portlet">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Change Password</h3>
+          </div>
+        </div>
+        <form class="kt-form kt-form--label-right" id="passwordEditForm" onsubmit="return false">
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">Old Password</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <input class="form-control" type="password" id="oldPassword">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">New Password</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <input class="form-control" type="password" id="newPassword">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">Confirm Password</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <input class="form-control" type="password" id="confirmPassword">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                </div>
+                <div class="col-lg-9 col-xl-9">
+                  <button type="submit" class="btn btn-success" id="passwordEditBtn">Submit</button>&nbsp;
+                  <button type="reset" class="btn btn-secondary">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <!--End:: App Aside-->
+
+    <!--Begin:: App Content-->
+    <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+      <div class="kt-portlet">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <h3 class="kt-portlet__head-title">Personal Information <small>update your personal information</small></h3>
+          </div>
+        </div>
+        <form class="kt-form kt-form--label-right" id="profileEditForm" enctype="multipart/form-data" onsubmit="return false">
+          <div class="kt-portlet__body">
+            <div class="kt-section kt-section--first">
+              <div class="kt-section__body">
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">Edit Info:</h3>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="kt-avatar kt-avatar--outline kt-avatar--circle-" id="kt_profile_avatar">
+                      <div class="kt-avatar__holder" style="background-image: url('/assets/media/users/300_21.jpg');"></div>
+                      <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="" data-original-title="Change avatar">
+                        <i class="fa fa-pen"></i>
+                        <input type="file" name="avatar" accept=".png, .jpg, .jpeg" id="avatar">
+                      </label>
+                      <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="" data-original-title="Cancel avatar">
+                        <i class="fa fa-times"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">First Name</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <input class="form-control" type="text" id="firstname" name="firstname" value="<%= typeof user != 'undefined' ? user.firstname : '' %>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">Last Name</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <input class="form-control" type="text" id="lastname" name="lastname" value="<%= typeof user != 'undefined' ? user.lastname : '' %>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">Username</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <input class="form-control" type="text" id="username" name="username" value="<%= typeof user != 'undefined' ? user.username : '' %>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">Email Address</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <div class="input-group">
+                      <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
+                      <input type="text" class="form-control" name="email" id="email" value="<%= typeof user != 'undefined' ? user.email : '' %>" placeholder="Email" aria-describedby="basic-addon1">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <label class="col-xl-3"></label>
+                  <div class="col-lg-9 col-xl-6">
+                    <h3 class="kt-section__title kt-section__title-sm">Business Info:</h3>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">Department</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <select name="department" class="form-control" type="text" id="department">
+                      <% if (typeof user != 'undefined') {%> 
+                        <option value="<%= user.DepartmentId %>" selected><%= user.Department.dept_name%></option>
+                            <% departments.forEach(function(department) { %>
+					    		<option value="<%= department.id %>" ><%= department.dept_name %> </option>
+					    	<% });%>
+                      <% } else { %>
+                        <option selected >N/A</option>
+                      <% } %> 
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-xl-3 col-lg-3 col-form-label">Role</label>
+                  <div class="col-lg-9 col-xl-6">
+                    <select name="role" class="form-control" type="text" id="role">
+                      <% if (typeof user != 'undefined') {%> 
+                         <option value="<%= user.RoleId %>" selected><%= user.Role.role_name%></option>
+                            <% roles.forEach(function(role) { %>
+					    		<option value="<%= role.id %>" ><%= role.role_name %> </option>
+					    	<% });%>
+                      <% } else { %>
+                        <option selected >N/A</option>
+                      <% } %> 
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="kt-portlet__foot">
+            <div class="kt-form__actions">
+              <div class="row">
+                <div class="col-lg-3 col-xl-3">
+                </div>
+                <div class="col-lg-9 col-xl-9">
+                  <button type="submit" class="btn btn-success" id="profileEditBtn">Submit</button>&nbsp;
+                  <button type="reset" class="btn btn-secondary">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!--End:: App Content-->
+  </div>
+  <!--End::App-->
+</div>
+
+<!-- end:: Content -->
+
+<script>
+//   const Route = new Routes;
+  const userId = `<%= user.id %>`;
+  const profileEditBtn = document.getElementById('profileEditBtn');
+  const profileForm = document.querySelector('form#profileEditForm');
+  const passwordEditBtn = document.getElementById('passwordEditBtn');
+  const passwordForm = document.querySelector('form#passwordEditForm');
+
+  profileEditBtn.addEventListener('click', async ()=> {
+    profileEditBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
+
+    
+    try {
+      const formData = new FormData()
+     
+      
+        if (document.getElementById('avatar').files.length === 0) {
+          const file = 'false'
+          formData.append('file', file)
+          formData.append('firstname', profileForm.firstname.value)
+          formData.append('lastname', profileForm.lastname.value)
+          formData.append('username', profileForm.username.value)
+          formData.append('email', profileForm.email.value)
+          formData.append('department', profileForm.department.value)
+          formData.append('role', profileForm.role.value)
+        } else {
+          const file = 'true'
+          formData.append('file', file)
+          formData.append('avatar', profileForm.avatar.files[0])
+          formData.append('firstname', profileForm.firstname.value)
+          formData.append('lastname', profileForm.lastname.value)
+          formData.append('username', profileForm.username.value)
+          formData.append('email', profileForm.email.value)
+          formData.append('department', profileForm.department.value)
+          formData.append('role', profileForm.role.value)
+        }
+
+      
+      
+      let errors = '';
+      const response = await profileEdit(formData);
+      console.log('the status is ' + response)
+      if (response.status){
+        swal.fire(
+          'Awesome!',
+          'Your profile information has been changed successfully!',
+          'success'
+        )
+        location.href = `/profile`;
+      } else {
+        profileEditBtn.innerHTML = 'Submit';
+        console.log(response)
+        if (response.message) {
+          document.getElementById('errDisplay').innerHTML = response.message;
+        } else {
+          for (let i = 0; i < response.errors.length; i++) {
+            errors += response.errors[i].msg;
+            if (i < response.errors.length - 1) errors += ', ';
+          }
+          console.log(errors);
+          document.getElementById('errDisplay').innerHTML = errors;
+        }
+        swal.fire(
+          'Oops!',
+          `Profile change was unsuccessful!`,
+          'error'
+        )
+      }
+    } catch (err){
+      profileEditBtn.innerHTML = 'Submit';
+      console.log(err);
+      swal.fire(
+        'Oops!',
+        `An error occured, please retry!`,
+        'error'
+      )
+    }
+    });
+
+  const profileEdit = async (data) => {
+    console.log(data)
+    try {
+      const task = await fetch(`${Route.apiRoot}/employee/${userId}/update`, {
+        // mode: 'no-cors',
+        method: 'POST',
+        // headers: {
+        //   'Content-Type': 'application/json'
+        // },
+        body: data // JSON.stringify(data)
+      });
+      return await task.json();
+    } catch (error) {
+      console.log(error);
+      // show network error notification
+      swal.fire(
+        'Oops!',
+        'An error was encountered! Please review your network connection.',
+        'error'
+      )
+    }
+  };
+
+  passwordEditBtn.addEventListener('click', async ()=> {
+    passwordEditBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
+    try {
+      const formData = {
+        oldPassword: passwordForm.oldPassword.value,
+        newPassword: passwordForm.newPassword.value,
+        confirmPassword: passwordForm.confirmPassword.value
+      }
+      let errors = '';
+      const response = await passwordEdit(formData);
+      if (response.status){
+        swal.fire(
+          'Awesome!',
+          'Your password has been changed successfully!',
+          'success'
+        )
+        location.href = `/dashboard/profile`;
+      } else {
+        passwordEditBtn.innerHTML = 'Submit';
+        console.log(response)
+        if (response.message) {
+          document.getElementById('errDisplay').innerHTML = response.message;
+        } else {
+          for (let i = 0; i < response.errors.length; i++) {
+            errors += response.errors[i].msg;
+            if (i < response.errors.length - 1) errors += ', ';
+          }
+          console.log(errors);
+          document.getElementById('errDisplay').innerHTML = errors;
+        }
+        swal.fire(
+          'Oops!',
+          `Password change was unsuccessful!`,
+          'error'
+        )
+      }
+    } catch (err){
+      passwordEditBtn.innerHTML = 'Submit';
+      console.log(err);
+      swal.fire(
+        'Oops!',
+        `An error occured, please retry!`,
+        'error'
+      )
+    }
+    });
+
+  const passwordEdit = async (data) => {
+    console.log(data)
+    try {
+      const task = await fetch(`${Route.apiRoot}/user/${userId}/password/update`, {
+        // mode: 'no-cors',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      return await task.json();
+    } catch (error) {
+      console.log(error);
+      // show network error notification
+      swal.fire(
+        'Oops!',
+        'An error was encountered! Please review your network connection.',
+        'error'
+      )
+    }
+  };
+</script>
