@@ -104,7 +104,7 @@
 
 <script>
 const userId = `<%= user.id %>`;
-const userRoleId = `<%= user.RoleId %>`;
+const userRole = `<%= user.Role.role_name %>`;
 const typeId = `<%= id %>`;
 const submitBtn = document.getElementById('typeUpdateBtn');
 
@@ -261,7 +261,7 @@ const updateType = async (data) => {
   async function action() {
     try {
       
-      if (`${userRoleId}` == 1) { 
+      if (`${userRole}` == 'Manager') { 
         document.getElementById('action').innerHTML = `
             <div class="dropdown dropdown-block text-right">
                 <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">

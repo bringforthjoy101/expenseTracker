@@ -63,7 +63,7 @@
                 <a href="#" class="kt-link kt-link--brand">
                     Forgot Password ?
                 </a>
-                <button type="submit" class="btn btn-brand btn-elevate btn-pill" id="kt_login_submit">Sign In</button>
+                <button type="submit" class="btn btn-brand btn-elevate btn-pill" id="login">Sign In</button>
             </div>
 
             <!--end::Action-->
@@ -72,14 +72,23 @@
         <!--end::Form-->
 
         <!--begin::Separator-->
-        <div class="kt-separator kt-separator--space-lg  kt-separator--border-solid"></div>
+        <!--<div class="kt-separator kt-separator--space-lg  kt-separator--border-solid"></div>-->
 
         <!--end::Separator-->
 
         <!--begin::Options-->
-        <%- include ('../../content/auth/socials') %>
+        <!--<#%- include ('../../content/auth/socials') %>-->
         
 
         <!--end::Options-->
     </div>
 </div>
+
+<script>
+	const submitBtn = document.getElementById('login');
+	
+	submitBtn.addEventListener('click', ()=>{
+		
+	  submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
+	});
+</script>

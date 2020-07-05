@@ -70,9 +70,9 @@
 			</div>
 
 			<!--begin::Action-->
-			<div class="kt-login-v2__actions">
+			<div class="kt-login-v2__actions" id="">
 				
-				<button type="submit" class="btn btn-brand btn-elevate btn-pill" id="kt_login_submit">Register</button>
+				<button type="submit" class="btn btn-brand btn-elevate btn-pill" id="register">Register</button>
 			</div>
 
 			<!--end::Action-->
@@ -81,14 +81,23 @@
 		<!--end::Form-->
 
 		<!--begin::Separator-->
-		<div class="kt-separator kt-separator--space-lg  kt-separator--border-solid"></div>
+		<!--<div class="kt-separator kt-separator--space-lg  kt-separator--border-solid"></div>-->
 
 		<!--end::Separator-->
 
 		<!--begin::Options-->
-		<%- include ('../../content/auth/socials') %>
+		<!--<#%- include ('../../content/auth/socials') %>-->
 		
 
 		<!--end::Options-->
 	</div>
 </div>
+
+<script>
+	const submitBtn = document.getElementById('register');
+	
+	submitBtn.addEventListener('click', ()=>{
+		
+	  submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
+	});
+</script>
