@@ -240,42 +240,53 @@
 
     
     try {
-      const formData = new FormData()
+      
+      const form = document.getElementById('profileEditForm');
+      const formData = {
+              firstname: form.firstname.value,
+              lastname: form.lastname.value,
+              username: form.username.value,
+              email: form.email.value,
+              department: form.department.value,
+              role: form.role.value,
+            }
+        
+      // const formData = new FormData()
      
       
-        if (document.getElementById('avatar').files.length === 0) {
-          const file = 'false'
-          formData.append('file', file)
-          formData.append('firstname', profileForm.firstname.value)
-          formData.append('lastname', profileForm.lastname.value)
-          formData.append('username', profileForm.username.value)
-          formData.append('email', profileForm.email.value)
-          formData.append('department', profileForm.department.value)
-          formData.append('role', profileForm.role.value)
-        } else {
-          const file = 'true'
-          formData.append('file', file)
-          formData.append('avatar', profileForm.avatar.files[0])
-          formData.append('firstname', profileForm.firstname.value)
-          formData.append('lastname', profileForm.lastname.value)
-          formData.append('username', profileForm.username.value)
-          formData.append('email', profileForm.email.value)
-          formData.append('department', profileForm.department.value)
-          formData.append('role', profileForm.role.value)
-        }
+        // if (document.getElementById('avatar').files.length === 0) {
+          // const file = 'false'
+          
+          // formData.append('firstname', profileForm.firstname.value)
+          // formData.append('lastname', profileForm.lastname.value)
+          // formData.append('username', profileForm.username.value)
+          // formData.append('email', profileForm.email.value)
+          // formData.append('department', profileForm.department.value)
+          // formData.append('role', profileForm.role.value)
+        // } else {
+        //   const file = 'true'
+        //   formData.append('file', file)
+        //   formData.append('avatar', profileForm.avatar.files[0])
+        //   formData.append('firstname', profileForm.firstname.value)
+        //   formData.append('lastname', profileForm.lastname.value)
+        //   formData.append('username', profileForm.username.value)
+        //   formData.append('email', profileForm.email.value)
+        //   formData.append('department', profileForm.department.value)
+        //   formData.append('role', profileForm.role.value)
+        // }
 
       
       
       let errors = '';
       const response = await profileEdit(formData);
-      console.log('the status is ' + response)
+      console.log('the status is ' + response.data)
       if (response.status){
         swal.fire(
           'Awesome!',
           'Your profile information has been changed successfully!',
           'success'
         )
-        location.href = `/profile`;
+        // location.href = `/profile`;
       } else {
         profileEditBtn.innerHTML = 'Submit';
         console.log(response)
@@ -309,7 +320,7 @@
   const profileEdit = async (data) => {
     console.log(data)
     try {
-      const task = await fetch(`${Route.apiRoot}/employee/${userId}/update`, {
+      const employee = await fetch(`${Route.apiRoot}/employee/${userId}/update`, {
         // mode: 'no-cors',
         method: 'POST',
         // headers: {
@@ -317,7 +328,7 @@
         // },
         body: data // JSON.stringify(data)
       });
-      return await task.json();
+      return await employee.json();
     } catch (error) {
       console.log(error);
       // show network error notification
@@ -328,6 +339,8 @@
       )
     }
   };
+  
+  
 
   passwordEditBtn.addEventListener('click', async ()=> {
     passwordEditBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';

@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
         display: 'login',
         layout: 'layouts/auth',
         message: '',
-        errors: undefined
+        
     }
     console.log('this is the error ' + req.session.flash.error);
     res.render('pages/index', viewData);

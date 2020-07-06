@@ -204,7 +204,7 @@ var employee = {
     
     console.log('This is employee id ' + employee_id);
     
-    await models.user.update(
+    models.user.update(
            employee,{ where: {id: employee_id} }
       ).then(function(data) {
         res.status(200).json({
