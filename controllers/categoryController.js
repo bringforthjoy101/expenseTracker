@@ -2,26 +2,25 @@ const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
 
-// Display list of all categorys.
+// Display list of all categories.
 exports.category_list = async function(req, res, next) {
     const data = await fetch(`${apiUrl}/categories`, {
         method: 'GET',
-        headers:{
-          cookie: req.headers.cookie,
+        headers: {
+            cookie: req.headers.cookie,
         }
     });
     const categories = await data.json();
-    
+
     var viewData = {
         title: 'All Categories',
-        page:'categoryPage',
-        display:'categoryList',
+        page: 'categoryPage',
+        display: 'categoryList',
         parent: 'Dashboard',
         parentUrl: '/dashboard',
-        api: 'category',
         categories: categories.data,
         user: req.user,
-        moment:moment,
+        moment: moment,
         layout: 'layouts/main'
     }
     res.render('pages/index', viewData);
@@ -33,8 +32,8 @@ exports.category_detail = async function(req, res, next) {
     var id = req.params.category_id;
     const data = await fetch(`${apiUrl}/category/${id}`, {
         method: 'GET',
-        headers:{
-          cookie: req.headers.cookie,
+        headers: {
+            cookie: req.headers.cookie,
         }
     });
     const category = await data.json();
@@ -42,15 +41,14 @@ exports.category_detail = async function(req, res, next) {
 
     var viewData = {
         title: 'Category Details',
-        page:'categoryPage',
-        display:'categoryDetail',
+        page: 'categoryPage',
+        display: 'categoryDetail',
         parent: 'Category List',
         parentUrl: '/categories',
-        api: 'category',
         category: category.data,
         id: id,
         user: req.user,
-        moment: moment, 
+        moment: moment,
         layout: 'layouts/main'
     }
     res.render('pages/index', viewData);
