@@ -13,53 +13,53 @@ var department_controller = require('../controllers/departmentController');
 // Require the middleware
 // const authorize = require('../../middlewares/authorize');
 // const Role = require('../../helpers/role');
-const requireLogin = require('../../middlewares/requireLogin');
+// const requireLogin = require('../../middlewares/requireLogin');
 const requireAdmin = require('../../middlewares/requireAdmin');
 
 
 /// EXPENSE ROUTES ///
-router.post('/expense/create', requireLogin, expense_controller.expense_create_post);
-router.post('/expense/:expense_id/delete', requireLogin, expense_controller.expense_delete_post);
-router.post('/expense/:expense_id/update', requireLogin, expense_controller.expense_update_post);
-router.get('/expense/:expense_id', requireLogin, expense_controller.expense_detail);
-router.get('/expenses', requireLogin, requireAdmin, expense_controller.expense_list);
-router.get('/myExpenses', requireLogin, expense_controller.my_expenses);
-router.get('/expense/:expense_id/approval/:status_code', requireLogin, requireAdmin, expense_controller.expense_approval_get);
+router.post('/expense/create', expense_controller.expense_create_post);
+router.post('/expense/:expense_id/delete', expense_controller.expense_delete_post);
+router.post('/expense/:expense_id/update', expense_controller.expense_update_post);
+router.get('/expense/:expense_id', expense_controller.expense_detail);
+router.get('/expenses', requireAdmin, expense_controller.expense_list);
+router.get('/myExpenses', expense_controller.my_expenses);
+router.get('/expense/:expense_id/approval/:status_code', requireAdmin, expense_controller.expense_approval_get);
 
 //  EMPLOYEE ROUTES ///
-router.post('/employee/create', requireLogin, requireAdmin, employee_controller.employee_create_post);
-router.post('/employee/:employee_id/delete', requireLogin, requireAdmin, employee_controller.employee_delete_post);
-router.post('/employee/:employee_id/update', requireLogin, employee_controller.employee_update_post);
-router.get('/employee/:employee_id/', requireLogin, requireAdmin, employee_controller.employee_detail);
-router.get('/employees', requireLogin, requireAdmin, employee_controller.employee_list);
-router.get('/managers', requireLogin, employee_controller.manager_list);
+router.post('/employee/create', requireAdmin, employee_controller.employee_create_post);
+router.post('/employee/:employee_id/delete', requireAdmin, employee_controller.employee_delete_post);
+router.post('/employee/:employee_id/update', employee_controller.employee_update_post);
+router.get('/employee/:employee_id/', requireAdmin, employee_controller.employee_detail);
+router.get('/employees', requireAdmin, employee_controller.employee_list);
+router.get('/managers', employee_controller.manager_list);
 
 /// CATEGORY ROUTES ///
-router.post('/category/create', requireLogin, requireAdmin, category_controller.category_create_post);
-router.post('/category/:category_id/delete', requireLogin, requireAdmin, category_controller.category_delete_post);
-router.get('/category/:category_id', requireLogin, requireAdmin, category_controller.category_detail);
-router.get('/categories', requireLogin, category_controller.category_list);
+router.post('/category/create', requireAdmin, category_controller.category_create_post);
+router.post('/category/:category_id/delete', requireAdmin, category_controller.category_delete_post);
+router.get('/category/:category_id', requireAdmin, category_controller.category_detail);
+router.get('/categories', category_controller.category_list);
 
 /// TYPE ROUTES ///
-router.post('/type/create', requireLogin, requireAdmin, type_controller.type_create_post);
-router.post('/type/:type_id/delete', requireLogin, requireAdmin, type_controller.type_delete_post);
-router.get('/type/:type_id', requireLogin, requireAdmin, type_controller.type_detail);
-router.get('/types', requireLogin, type_controller.type_list);
+router.post('/type/create', requireAdmin, type_controller.type_create_post);
+router.post('/type/:type_id/delete', requireAdmin, type_controller.type_delete_post);
+router.get('/type/:type_id', requireAdmin, type_controller.type_detail);
+router.get('/types', type_controller.type_list);
 
 /// ROLE ROUTES ///
-router.post('/role/create', requireLogin, requireAdmin, role_controller.role_create_post);
-router.post('/role/:role_id/delete', requireLogin, requireAdmin, role_controller.role_delete_post);
-router.get('/role/:role_id', requireLogin, requireAdmin, role_controller.role_detail);
-router.get('/roles', requireLogin, role_controller.role_list);
+router.post('/role/create', requireAdmin, role_controller.role_create_post);
+router.post('/role/:role_id/delete', requireAdmin, role_controller.role_delete_post);
+router.get('/role/:role_id', requireAdmin, role_controller.role_detail);
+router.get('/roles', role_controller.role_list);
 
 /// DEPARTMENT ROUTES ///
-router.post('/department/create', requireLogin, requireAdmin, department_controller.department_create_post);
-router.post('/department/:department_id/delete', requireLogin, requireAdmin, department_controller.department_delete_post);
-router.get('/department/:department_id', requireLogin, requireAdmin, department_controller.department_detail);
-router.get('/departments', requireLogin, requireAdmin, department_controller.department_list);
+router.post('/department/create', requireAdmin, department_controller.department_create_post);
+router.post('/department/:department_id/delete', requireAdmin, department_controller.department_delete_post);
+router.get('/department/:department_id', requireAdmin, department_controller.department_detail);
+router.get('/departments', requireAdmin, department_controller.department_list);
 
 // DASHBOARD ROUTE.
-router.get('/', requireLogin, expense_controller.index); 
+router.get('/', expense_controller.index); 
 
 // export all the router created
 module.exports = router;

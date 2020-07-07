@@ -9,7 +9,7 @@ var role_controller = require('../controllers/roleController');
 var department_controller = require('../controllers/departmentController');
 
 // MIDDLEWARES
-// var requireLogin = require('../middlewares/requireLogin');
+var requireLogin = require('../middlewares/requireLogin');
 var requireAdmin = require('../middlewares/requireAdmin');
 
 
@@ -27,34 +27,34 @@ router.get('/signup', async function(req, res, next) {
 });
 
 /// EXPENSE ROUTES ///
-router.get('/expense/:expense_id', expense_controller.expense_detail);
-router.get('/allExpenses', requireAdmin, expense_controller.expense_list);
-router.get('/newExpense', expense_controller.expense_new); // renders the expense create page
-router.get('/myExpenses', expense_controller.my_expense_list);
+router.get('/expense/:expense_id', requireLogin, expense_controller.expense_detail);
+router.get('/allExpenses', requireLogin, requireAdmin, expense_controller.expense_list);
+router.get('/newExpense', requireLogin, expense_controller.expense_new); // renders the expense create page
+router.get('/myExpenses', requireLogin, expense_controller.my_expense_list);
 
 /// EMPLOYEE ROUTES ///
-router.get('/employee/:employee_id/', requireAdmin, employee_controller.employee_detail);
-router.get('/allEmployees', requireAdmin, employee_controller.employee_list);
-router.get('/profile', employee_controller.profile);
+router.get('/employee/:employee_id/', requireLogin, requireAdmin, employee_controller.employee_detail);
+router.get('/allEmployees', requireLogin, requireAdmin, employee_controller.employee_list);
+router.get('/profile', requireLogin, employee_controller.profile);
 
 /// Category ROUTES ///
-router.get('/category/:category_id', requireAdmin, category_controller.category_detail);
-router.get('/categories', requireAdmin, category_controller.category_list);
+router.get('/category/:category_id', requireLogin, requireAdmin, category_controller.category_detail);
+router.get('/categories', requireLogin, requireAdmin, category_controller.category_list);
 
 /// Type ROUTES ///
-router.get('/type/:type_id', requireAdmin, type_controller.type_detail);
-router.get('/types', requireAdmin, type_controller.type_list);
+router.get('/type/:type_id', requireLogin, requireAdmin, type_controller.type_detail);
+router.get('/types', requireLogin, requireAdmin, type_controller.type_list);
 
 /// ROLE ROUTES ///
-router.get('/role/:role_id', requireAdmin, role_controller.role_detail);
-router.get('/roles', requireAdmin, role_controller.role_list);
+router.get('/role/:role_id', requireLogin, requireAdmin, role_controller.role_detail);
+router.get('/roles', requireLogin, requireAdmin, role_controller.role_list);
 
 /// DEPARTMENT ROUTES ///
-router.get('/department/:department_id', requireAdmin, department_controller.department_detail);
-router.get('/departments', requireAdmin, department_controller.department_list);
+router.get('/department/:department_id', requireLogin, requireAdmin, department_controller.department_detail);
+router.get('/departments', requireLogin, requireAdmin, department_controller.department_list);
 
 // GET home page.
-router.get('/dashboard', expense_controller.index);
+router.get('/dashboard', requireLogin, expense_controller.index);
 
     
 
