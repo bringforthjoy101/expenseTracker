@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
         page: 'authPage',
         display: 'login',
         layout: 'layouts/auth',
-        // message: '',
+        message: '',
 
     }
     console.log('this is the error ' + req.session.flash.error);
