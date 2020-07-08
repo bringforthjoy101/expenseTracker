@@ -15,18 +15,17 @@ var department_controller = require('../controllers/departmentController');
 // const Role = require('../../helpers/role');
 // const requireLogin = require('../../middlewares/requireLogin');
 const requireManager = require('../../middlewares/requireManager');
-const review = require('../../middlewares/review');
 const employeeAction = require('../../middlewares/employeeAction');
 
 
 /// EXPENSE ROUTES ///
 router.post('/expense/create', expense_controller.expense_create_post);
-router.post('/expense/:expense_id/delete', review, expense_controller.expense_delete_post);
-router.post('/expense/:expense_id/update', review, expense_controller.expense_update_post);
+router.post('/expense/:expense_id/delete', expense_controller.expense_delete_post);
+router.post('/expense/:expense_id/update', expense_controller.expense_update_post);
 router.get('/expense/:expense_id', expense_controller.expense_detail);
 router.get('/expenses', requireManager, expense_controller.expense_list);
 router.get('/myExpenses', expense_controller.my_expenses);
-router.get('/expense/:expense_id/approval/:status_code', review, requireManager, expense_controller.expense_approval_get);
+router.get('/expense/:expense_id/approval/:status_code', requireManager, expense_controller.expense_approval_get);
 
 //  EMPLOYEE ROUTES ///
 router.post('/employee/create', requireManager, employee_controller.employee_create_post);

@@ -2,6 +2,7 @@ var Expense = require('../../models/expense');
 var models = require('../../models');
 const { check, validationResult } = require('express-validator');
 var checkParamsId = require('../../helpers/checkParams');
+var checkExpenseStatus = require('../../helpers/checkExpenseStatus');
 
 
 // CREATE EXPENSE.
@@ -106,6 +107,7 @@ exports.expense_create_post = [
 exports.expense_delete_post = async function(req, res, next) {
     // validates if the department ID is an integer
     var expense_id = await checkParamsId(req, res, 'Expense', req.params.expense_id);
+    
 
     // Performs operation
     try {
@@ -120,32 +122,34 @@ exports.expense_delete_post = async function(req, res, next) {
             });
         }
         
-        
-        // checks if the user is the owner of the expense or is a manger of the department
-        if (thisExpense.DepartmentId == req.user.DepartmentId) {
-            if (thisExpense.userId == req.user.id || req.user.Role.role_name == 'Manager') {
-                models.Expense.destroy({
-                    where: {
-                        id: expense_id
-                    }
-                }).then(function() {
-                    res.status(200).json({
-                        status: true,
-                        message: 'Expense Deleted Successfully'
-                    })
-                    console.log("Expense deleted successfully");
-                });
+        var reviewed = await checkExpenseStatus(req, res, thisExpense.status);
+        if (reviewed) {
+            // checks if the user is the owner of the expense or is a manger of the department
+            if (thisExpense.DepartmentId == req.user.DepartmentId) {
+                if (thisExpense.userId == req.user.id || req.user.Role.role_name == 'Manager') {
+                    models.Expense.destroy({
+                        where: {
+                            id: expense_id
+                        }
+                    }).then(function() {
+                        res.status(200).json({
+                            status: true,
+                            message: 'Expense Deleted Successfully'
+                        })
+                        console.log("Expense deleted successfully");
+                    });
+                } else {
+                    return res.status(401).json({
+                        status: false,
+                        message: 'Operation Declined! You dont have the permission to perform this operation'
+                    });
+                }
             } else {
                 return res.status(401).json({
                     status: false,
-                    message: 'Operation Declined! You dont have the permission to perform this operation'
+                    message: 'Operation Declined! You dont belong to the department under which this expense was created.'
                 });
             }
-        } else {
-            return res.status(401).json({
-                status: false,
-                message: 'Operation Declined! You dont belong to the department under which this expense was created.'
-            });
         }
         
     } catch (error) {
