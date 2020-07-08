@@ -238,27 +238,29 @@ exports.expense_update_post = [
                 CategoryId: req.body.category ? req.body.category : thisExpense.category,
                 status: status ? status : thisExpense.status,
             }
-
-            if (thisExpense.userId == req.user.id) {
-                models.Expense.update(
-                    expense, {
-                        where: {
-                            id: expense_id
+            var reviewed = await checkExpenseStatus(req, res, thisExpense.status);
+            if (reviewed) {
+                if (thisExpense.userId == req.user.id) {
+                    models.Expense.update(
+                        expense, {
+                            where: {
+                                id: expense_id
+                            }
                         }
-                    }
-                ).then(function(expense) {
-                    res.status(200).json({
-                        status: true,
-                        data: expense,
-                        message: 'Expense updated successfully'
-                    })
-                    console.log("Expense updated successfully");
-                });
-            } else {
-                return res.status(401).json({
-                    status: false,
-                    message: 'Operation Declined! You dont have the permission to perform this operation'
-                });
+                    ).then(function(expense) {
+                        res.status(200).json({
+                            status: true,
+                            data: expense,
+                            message: 'Expense updated successfully'
+                        })
+                        console.log("Expense updated successfully");
+                    });
+                } else {
+                    return res.status(401).json({
+                        status: false,
+                        message: 'Operation Declined! You dont have the permission to perform this operation'
+                    });
+                }
             }
             
         } catch (error) {
