@@ -336,7 +336,7 @@ async function expenseAction() {
       	  
         `;
                 console.log('I am loaded');
-                if (userId == expense.userId) {
+                if (userId == expense.userId && expense.status == 'Pending') {
                     document.getElementById('userAction').innerHTML = `
       			<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
               Edit
