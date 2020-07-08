@@ -553,24 +553,23 @@ exports.expense_approval_get = async function(req, res) {
 
         console.log("The status_code is not null " + status_code);
         console.log("The expense id is not null " + expense_id);
-        models.Expense.update(
-            // Values to update
-            {
-                status: status
-
-            }, { // Clause
-                where: {
-                    id: expense_id
+        
+        var reviewed = await checkExpenseStatus(req, res, thisExpense.status);
+        if (reviewed) {
+            models.Expense.update(
+                { status: status }, {
+                    where: { id: expense_id }
                 }
-            }
-
-        ).then(function() {
-            var message = "Operation Successful"
-            res.status(200).json({
-                status: true,
-                message: message
-            })
-        });
+    
+            ).then(function() {
+                var message = "Operation Successful"
+                res.status(200).json({
+                    status: true,
+                    message: message
+                })
+            });
+        }
+        
     } catch (error) {
         res.status(400).json({
             status: false,
