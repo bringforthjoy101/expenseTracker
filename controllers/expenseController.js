@@ -217,6 +217,7 @@ exports.index = async function(req, res, next) {
         employeeCount: response.employeeCount,
         expenses: response.expenses,
         totalSum: response.totalSum,
+        myTotalSum: response.myTotalSum,
         myExpenses: myExpenses.data,
         moment: moment,
         startDate: tools.convertMillisecondsToStringDate(req.session.startDate),

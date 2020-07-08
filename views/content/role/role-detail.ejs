@@ -9,7 +9,7 @@
 		<div class="kt-portlet__head kt-portlet__head--lg">
 			<div class="kt-portlet__head-label">
 				<h3 class="kt-portlet__head-title">
-					List of all expenses for <%= role.dept_name %> Role
+					List of all expenses for "<%= role.role_name %>" Role
 				</h3>
 			</div>
 		</div>
@@ -77,213 +77,108 @@
     
 </div>
 
-<!--begin::Modal-->
-<div class="modal fade" id="editRole" role="dialog" aria-labelledby="" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="">Edit Role</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true" class="la la-remove"></span>
-				</button>
-			</div>
-			<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="updateRole" onsubmit="submitRole(event)">
-  			<div class="modal-body" id="roleForm">
-  			  <div class="form-group">
-  						<label>Role Name:</label>
-  						<input type="text" name="role_name" id="role_name" value="<%= role.role_name %>" class="form-control" placeholder="Role Name">
-  						<span class="form-text text-muted">Please enter the role name</span>
-  					</div>
-  			</div>
-  			<div class="modal-footer">
-  				<button type="submit" class="btn btn-brand" id="roleUpdateBtn" >Update</button>
-  			</div>
-			</form>
-			
-		</div>
-	</div>
-</div>
-<!--end::Modal-->
-
 <script>
-const userId = `<%= user.id %>`;
-const userRole = `<%= user.Role.role_name %>`;
-const roleId = `<%= id %>`;
-const submitBtn = document.getElementById('roleUpdateBtn');
-
-submitBtn.addEventListener('click', ()=>{
-  submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
-});
-
-const submitRole = async (event) => {
-	try {
-  event.preventDefault();
-  //const form = event.target;
-  const form = document.getElementById('updateRole');
-  const formData = { role_name: form.role_name.value }
+  const userId = `<%= user.id %>`;
+  const userRole = `<%= user.Role.role_name %>`;
+  const roleId = `<%= id %>`;
   
-  console.log(formData);
-  
-    const role = await updateRole(formData);
-    let errors = '';
-    console.log(role);
-    if (role.status) {
-      swal.fire(
-        'Awesome!',
-        'Role Name Updated!',
-        'success'
-      )
-      location.href = `/role/${roleId}`;
-    } else {
-      submitBtn.innerHTML = 'Update Role';
-      for (let i = 0; i < role.errors.length; i++) {
-        errors += role.errors[i].msg;
-        if (i < role.errors.length - 1) errors += ', ';
-      }
-      console.log(errors);
-      document.getElementById('errDisplay').innerHTML = errors;
-      swal.fire(
-        'Oops!',
-        `Operation unsuccessful!`,
-        'error'
-      )
-    }
-  } catch (error) {
-    console.log(error);
-    // show network error notification
-    swal.fire(
-      'Oops!',
-      'An error was encountered! Please review your network connection.',
-      'error'
-    )
-  }
-
-};
-
-const updateRole = async (data) => {
-    console.log(data)
-    try {
-      const role = await fetch(`${Route.apiRoot}/role/${roleId}/update`, {
-        // mode: 'no-cors',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      return await role.json();
-    } catch (error) {
-      console.log(error);
-      // show network error notification
-      swal.fire(
-        'Oops!',
-        'An error was encountered! Please review your network connection.',
-        'error'
-      )
-    }
-  };
-  
- const deleteRole = async ()=>{
-     	Swal.fire({
-        title: 'Are you sure?',
-        text: "Your action cannot be reversible!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, Delete it!'
-      }).then( async (result) => {
-        if (result.value) {
-            try {
-              const role = await fetch(`${Route.apiRoot}/role/${roleId}/delete`, {
-                // mode: 'no-cors',
-                method: 'POST'
-              });
-              let response = await role.json();
-              if (response.status) {
-                swal.fire(
-                    'Sucessful!',
-                    'Department deleted successfully!',
-                    'success'
+  const deleteRole = async () => {
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "Your action cannot be reversible!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, Delete it!'
+      }).then(async (result) => {
+          if (result.value) {
+              try {
+                  const role = await fetch(`${Route.apiRoot}/role/${roleId}/delete`, {
+                      // mode: 'no-cors',
+                      method: 'POST'
+                  });
+                  let response = await role.json();
+                  if (response.status) {
+                      swal.fire(
+                          'Sucessful!',
+                          'Department deleted successfully!',
+                          'success'
+                      )
+                      location.href = `/roles`;
+                  }
+              } catch (error) {
+                  console.log(error);
+                  // show network error notification
+                  swal.fire(
+                      'Oops!',
+                      'An error was encountered! Please review your network connection.',
+                      'error'
                   )
-                  location.href = `/roles`;
               }
-            } catch (error) {
-              console.log(error);
-              // show network error notification
-              swal.fire(
-                'Oops!',
-                'An error was encountered! Please review your network connection.',
-                'error'
-              )
-            }
-        }
+          }
       });
   }
   
-
-	const deleteEmployee = async (employeeId)=>{
-		Swal.fire({
-        title: 'Are you sure?',
-        text: "This action cannot be reversible!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, Delete it!'
-      }).then( async (result) => {
-        if (result.value) {
-		    try {
-		      const employee = await fetch(`${Route.apiRoot}/employee/${employeeId}/delete`, {
-		        // mode: 'no-cors',
-		        method: 'POST'
-		      });
-		      let response = await employee.json();
-		      if (response.status) {
-		        swal.fire(
-		            'Sucessful!',
-		            'Employee deleted successfully!',
-		            'success'
-		          )
-		          location.href = `/role/${roleId}`;
-		      }
-		    } catch (error) {
-		      console.log(error);
-		      // show network error notification
-		      swal.fire(
-		        'Oops!',
-		        'An error was encountered! Please review your network connection.',
-		        'error'
-		      )
-		    }
-        }
-  });
-	}
+  const deleteEmployee = async (employeeId) => {
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "This action cannot be reversible!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, Delete it!'
+      }).then(async (result) => {
+          if (result.value) {
+              try {
+                  const employee = await fetch(`${Route.apiRoot}/employee/${employeeId}/delete`, {
+                      // mode: 'no-cors',
+                      method: 'POST'
+                  });
+                  let response = await employee.json();
+                  if (response.status) {
+                      swal.fire(
+                          'Sucessful!',
+                          'Employee deleted successfully!',
+                          'success'
+                      )
+                      location.href = `/role/${roleId}`;
+                  }
+              } catch (error) {
+                  console.log(error);
+                  // show network error notification
+                  swal.fire(
+                      'Oops!',
+                      'An error was encountered! Please review your network connection.',
+                      'error'
+                  )
+              }
+          }
+      });
+  }
   
   async function action() {
-    try {
-      
-      if (`${userRole}` == 'Manager') { 
-        document.getElementById('action').innerHTML = `
-            <div class="dropdown dropdown-block text-right">
-                <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
-                    <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="flaticon-more-1"></i>
-                    </button>
-              		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="userAction">
-                        <button type="button" class="dropdown-item" data-toggle="modal" data-target="#editRole">
-                          Edit
-                        </button>
-                        <a class="dropdown-item text-danger" onclick="deleteRole()">Delete</a>    
-              		</div>
-              	</span>
-        	</div>
-      	  
-        `;
+      try {
+  
+          if (`${userRole}` == 'Manager') {
+              document.getElementById('action').innerHTML = `
+              <div class="dropdown dropdown-block text-right">
+                  <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
+                      <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="flaticon-more-1"></i>
+                      </button>
+                		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="userAction">
+                      <a class="dropdown-item text-danger" onclick="deleteRole()">Delete</a>    
+                		</div>
+                	</span>
+          	</div>
+        	  
+          `;
+          }
+      } catch (error) {
+          console.log('this is the error ' + error);
       }
-    } catch (error) {
-      console.log('this is the error ' + error);
-    }
   }
   action();
   

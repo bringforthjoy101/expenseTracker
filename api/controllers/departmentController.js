@@ -13,7 +13,7 @@ exports.department_create_post = [
             max: 50
         }).withMessage('Department name must be between 3 and 50 characters long')
         .not().isEmpty().withMessage('Department name cannot be empty')
-        .matches(/^[A-Za-z\s]+$/).withMessage('Department name must contain only Letters.'),
+        .matches(/^[A-Za-z\s]+$/).withMessage('Department name must contain only Letters.'), 
         check('current_business')
         .not().isEmpty().withMessage('CurrentBusinessId cannot be empty')
         .isInt().withMessage('CurrentBusinessId must be numeric'),

@@ -19,34 +19,28 @@ exports.expense_create_post = [
         check('desc')
         .isLength({
             min: 3,
-            max: 50
-        }).withMessage('Expense description must be between 3 and 50 characters long')
+            max: 200
+        }).withMessage('Expense description must be between 3 and 200 characters long')
         .not().isEmpty().withMessage('Expense description cannot be empty'),
         check('amount')
         .isLength({
             min: 3,
             max: 50
-        }).withMessage('Expense title must be between 3 and 50 characters long')
-        .not().isEmpty().withMessage('Expense title cannot be empty')
+        }).withMessage('Expense amount must be greater than N100')
+        .not().isEmpty().withMessage('Expense amount cannot be empty')
         .isInt().withMessage('Expense amount must be numeric'),
         check('type')
-        .not().isEmpty().withMessage('Type cannot be empty')
-        .isInt().withMessage('Type must be numeric'),
+        .not().isEmpty().withMessage('Please select expense type'),
         check('category')
-        .not().isEmpty().withMessage('Category cannot be empty')
-        .isInt().withMessage('Category must be numeric'),
+        .not().isEmpty().withMessage('Please select expense category'),
         check('employee_id')
-        .not().isEmpty().withMessage('Employee ID cannot be empty')
-        .isInt().withMessage('Employee ID must be numeric'),
+        .not().isEmpty().withMessage('This expense must be created by an authenticated employee'),
         check('approver')
-        .not().isEmpty().withMessage('Approver ID cannot be empty')
-        .isInt().withMessage('Approver ID must be numeric'),
+        .not().isEmpty().withMessage('Please select an apporver'),
         check('department')
-        .not().isEmpty().withMessage('Department cannot be empty')
-        .isInt().withMessage('Department must be numeric'),
+        .not().isEmpty().withMessage('This expense must belong to an exsisting department'),
         check('current_business')
-        .not().isEmpty().withMessage('CurrentBusinessId cannot be empty')
-        .isInt().withMessage('CurrentBusinessId must be numeric'),
+        .not().isEmpty().withMessage('This expense must belong to an employee business'),
     ],
 
 
@@ -120,22 +114,40 @@ exports.expense_delete_post = async function(req, res, next) {
         var thisExpense = expense_id ? await models.Expense.findById(expense_id) : null
 
         if (!thisExpense) {
-            return res.status(400).json({
+            return res.status(401).json({
                 status: false,
                 message: 'Expense ID not found'
             });
         }
-        models.Expense.destroy({
-            where: {
-                id: expense_id
+        
+        
+        // checks if the user is the owner of the expense or is a manger of the department
+        if (thisExpense.DepartmentId == req.user.DepartmentId) {
+            if (thisExpense.userId == req.user.id || req.user.Role.role_name == 'Manager') {
+                models.Expense.destroy({
+                    where: {
+                        id: expense_id
+                    }
+                }).then(function() {
+                    res.status(200).json({
+                        status: true,
+                        message: 'Expense Deleted Successfully'
+                    })
+                    console.log("Expense deleted successfully");
+                });
+            } else {
+                return res.status(401).json({
+                    status: false,
+                    message: 'Operation Declined! You dont have the permission to perform this operation'
+                });
             }
-        }).then(function() {
-            res.status(200).json({
-                status: true,
-                message: 'Expense Deleted Successfully'
-            })
-            console.log("Expense deleted successfully");
-        });
+        } else {
+            return res.status(401).json({
+                status: false,
+                message: 'Operation Declined! You dont belong to the department under which this expense was created.'
+            });
+        }
+        
     } catch (error) {
         res.status(400).json({
             status: false,
@@ -153,7 +165,7 @@ exports.expense_update_post = [
             min: 3,
             max: 50
         }).withMessage('Expense title must be between 3 and 50 characters long')
-        .isEmpty().withMessage('Expense title cannot be empty')
+        .not().isEmpty().withMessage('Expense title cannot be empty')
         .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.')
         .optional({
             checkFalsy: true
@@ -161,9 +173,9 @@ exports.expense_update_post = [
         check('desc')
         .isLength({
             min: 3,
-            max: 50
-        }).withMessage('Expense description must be between 3 and 50 characters long')
-        .isEmpty().withMessage('Expense description cannot be empty')
+            max: 200
+        }).withMessage('Expense description must be between 3 and 200 characters long')
+        .not().isEmpty().withMessage('Expense description cannot be empty')
         .optional({
             checkFalsy: true
         }),
@@ -171,21 +183,19 @@ exports.expense_update_post = [
         .isLength({
             min: 3,
             max: 50
-        }).withMessage('Expense title must be between 3 and 50 characters long')
-        .isEmpty().withMessage('Expense title cannot be empty')
+        }).withMessage('Expense amount must be greater than N100')
+        .not().isEmpty().withMessage('Expense amount cannot be empty')
         .isNumeric().withMessage('Express amount must be numeric')
         .optional({
             checkFalsy: true
         }),
         check('type')
-        .isEmpty().withMessage('Type cannot be empty')
-        .isNumeric().withMessage('Type must be numeric')
+        .not().isEmpty().withMessage('Please select expense category')
         .optional({
             checkFalsy: true
         }),
         check('category')
-        .isEmpty().withMessage('Category cannot be empty')
-        .isNumeric().withMessage('Category must be numeric')
+        .not().isEmpty().withMessage('Please select expense category')
         .optional({
             checkFalsy: true
         }),
@@ -225,20 +235,28 @@ exports.expense_update_post = [
                 status: status ? status : thisExpense.status,
             }
 
-            models.Expense.update(
-                expense, {
-                    where: {
-                        id: expense_id
+            if (thisExpense.userId == req.user.id) {
+                models.Expense.update(
+                    expense, {
+                        where: {
+                            id: expense_id
+                        }
                     }
-                }
-            ).then(function(expense) {
-                res.status(200).json({
-                    status: true,
-                    data: expense,
-                    message: 'Expense updated successfully'
-                })
-                console.log("Expense updated successfully");
-            });
+                ).then(function(expense) {
+                    res.status(200).json({
+                        status: true,
+                        data: expense,
+                        message: 'Expense updated successfully'
+                    })
+                    console.log("Expense updated successfully");
+                });
+            } else {
+                return res.status(401).json({
+                    status: false,
+                    message: 'Operation Declined! You dont have the permission to perform this operation'
+                });
+            }
+            
         } catch (error) {
             res.status(400).json({
                 status: false,
@@ -434,6 +452,13 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
+        const myTotalSum = await models.Expense.sum('amount', {
+            where: {
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
 
         models.Expense.findAll({
             where: {
@@ -466,6 +491,7 @@ exports.index = async function(req, res) {
                 expenseCount: expenses.length,
                 employeeCount: employees.length,
                 totalSum: totalSum,
+                myTotalSum: myTotalSum,
                 expenses: expenses,
             })
 
@@ -498,12 +524,21 @@ exports.expense_approval_get = async function(req, res) {
             });
         }
 
-
-        var status = (status_code == 1) ? 'Approved' : (status_code == 2) ? 'Declined' : null;
+        
+        // checks if the manager belongs to this expense's department and is also assigned to review this expense.
+        if (thisExpense.DepartmentId == req.user.DepartmentId && thisExpense.ApproverId == req.user.id && req.user.Role.role_name == 'Manager') {
+            var status = (status_code == 1) ? 'Approved' : (status_code == 2) ? 'Declined' : null;
+        } else {
+            return res.status(401).send({
+                status: false,
+                message: 'Operation denied, you are not assigned to review this expense!'
+            });
+        }
+        
 
 
         if (!status) {
-            return res.status(400).json({
+            return res.status(401).json({
                 status: false,
                 message: 'Unidentified status code'
             });

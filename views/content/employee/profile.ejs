@@ -175,31 +175,14 @@
                 <div class="form-group row">
                   <label class="col-xl-3 col-lg-3 col-form-label">Department</label>
                   <div class="col-lg-9 col-xl-6">
-                    <select name="department" class="form-control" type="text" id="department">
-                      <% if (typeof user != 'undefined') {%> 
-                        <option value="<%= user.DepartmentId %>" selected><%= user.Department.dept_name%></option>
-                            <% departments.forEach(function(department) { %>
-					    		<option value="<%= department.id %>" ><%= department.dept_name %> </option>
-					    	<% });%>
-                      <% } else { %>
-                        <option selected >N/A</option>
-                      <% } %> 
+                    <input readonly type="text" class="form-control" name="department" id="department" value="<%= typeof user != 'undefined' ? user.Department.dept_name : '' %>" placeholder="Department" aria-describedby="basic-addon1">
                     </select>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label class="col-xl-3 col-lg-3 col-form-label">Role</label>
                   <div class="col-lg-9 col-xl-6">
-                    <select name="role" class="form-control" type="text" id="role">
-                      <% if (typeof user != 'undefined') {%> 
-                         <option value="<%= user.RoleId %>" selected><%= user.Role.role_name%></option>
-                            <% roles.forEach(function(role) { %>
-					    		<option value="<%= role.id %>" ><%= role.role_name %> </option>
-					    	<% });%>
-                      <% } else { %>
-                        <option selected >N/A</option>
-                      <% } %> 
-                    </select>
+                    <input readonly type="text" class="form-control" name="role" id="role" value="<%= typeof user != 'undefined' ? user.Role.role_name : '' %>" placeholder="Role" aria-describedby="basic-addon1">
                   </div>
                 </div>
               </div>

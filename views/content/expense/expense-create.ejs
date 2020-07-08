@@ -8,8 +8,11 @@
 			</div>
 		</div>
 		
-		<div class="">
-	        <h6 class="text-danger" id="errDisplay"></h6>
+		<div class="" id="error">
+		  
+	        <!--<h6 class="text-danger" id="errDisplay">-->
+	          
+	        <!--</h6>-->
 	  </div>
 
 		<!--begin::Form-->
@@ -32,21 +35,21 @@
 					</div>
 					<div class="form-group">
 						<label>Type:</label>
-						<select class="form-control kt-select2" id="kt_select2_1" name="type" id="type">
-					    	<option >Select Type</option>
-					    	<% if (types == 'None'){ %>
-					    	  <option disabled >N/A</option>
-					    	<% } else { %>
+  						<select class="form-control kt-select2" id="kt_select2_1" name="type" id="type">
+  				    	<option value="">Select Type</option>
+  				    	<% if (types == 'None'){ %>
+  				    	  <option disabled >N/A</option>
+  				    	<% } else { %>
       					    	<% types.forEach(function(type) { %>
       					    		<option value="<%= type.id %>" ><%= type.type_name %></option>
       					    	<% });%>
-					    	<% } %>
-					    </select>
+  				    	<% } %>
+  				    </select>
 					</div>
 					<div class="form-group">
 						<label>Category:</label>
-						<select class="form-control kt-select2" id="kt_select2_2" name="category" id="category">
-					    	<option >Select Category</option>
+						<select class="form-control kt-select2" id="kt_select2_2" name="category" id="category"> 
+					    	<option value="">Select Category</option>
 					    	<% if (categories == 'None'){ %>
 					    	  <option disabled >N/A</option>
 					    	<% } else { %>
@@ -59,7 +62,7 @@
 					<div class="form-group">
 						<label>Approver:</label>
 						<select class="form-control kt-select2" id="kt_select2_3" name="approver" id="approver">
-					    	<option >Select Approver</option>
+					    	<option value="">Select Approver</option>
 					    	<% if (managers.length == 0) { %>
 					    	  <option disabled >N/A</option>
 					    	<% } else { %>
@@ -127,17 +130,29 @@ const submitExpense = async (event) => {
       location.href = `/expense/${expense.data.id}`;
     } else {
       submitBtn.innerHTML = 'Submit Expense';
-      for (let i = 0; i < expense.errors.length; i++) {
-        errors += expense.errors[i].msg;
-        if (i < expense.errors.length - 1) errors += ', ';
-      }
-      console.log(errors);
-      document.getElementById('errDisplay').innerHTML = errors;
-      swal.fire(
-        'Oops!',
-        `Operation was not successful!`,
-        'error'
-      )
+      console.log(expense.errors);
+      
+      toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    };
+    expense.errors.forEach(error => {
+      toastr.error(error.msg);  
+    });
+    
     }
   } catch (error) {
     console.log(error);

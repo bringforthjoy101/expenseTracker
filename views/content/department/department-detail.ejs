@@ -9,7 +9,7 @@
 		<div class="kt-portlet__head kt-portlet__head--lg">
 			<div class="kt-portlet__head-label">
 				<h3 class="kt-portlet__head-title">
-					List of all expenses for <%= department.dept_name %> Department
+					List of all employees for "<%= department.dept_name %>" Department
 				</h3>
 			</div>
 		</div>
@@ -77,115 +77,15 @@
     
 </div>
 
-<!--begin::Modal-->
-<div class="modal fade" id="editDepartment" role="dialog" aria-labelledby="" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="">Edit Department</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true" class="la la-remove"></span>
-				</button>
-			</div>
-			<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="updateDepartment" onsubmit="submitDepartment(event)">
-  			<div class="modal-body" id="departmentForm">
-  			  <div class="form-group">
-  						<label>Department Name:</label>
-  						<input type="text" name="dept_name" id="dept_name" value="<%= department.dept_name %>" class="form-control" placeholder="Department Name">
-  						<span class="form-text text-muted">Please enter the department name</span>
-  					</div>
-  			</div>
-  			<div class="modal-footer">
-  				<button type="submit" class="btn btn-brand" id="departmentUpdateBtn" >Update</button>
-  			</div>
-			</form>
-			
-		</div>
-	</div>
-</div>
-<!--end::Modal-->
+
 
 <script>
 const userId = `<%= user.id %>`;
 const userRole = `<%= user.Role.role_name %>`;
 const departmentId = `<%= id %>`;
-const submitBtn = document.getElementById('departmentUpdateBtn');
 
-submitBtn.addEventListener('click', ()=>{
-  submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
-});
-
-const submitDepartment = async (event) => {
-	try {
-  event.preventDefault();
-  //const form = event.target;
-  const form = document.getElementById('updateDepartment');
-  const formData = { dept_name: form.dept_name.value }
-  
-  console.log(formData);
-  
-  
-    const department = await updateDepartment(formData);
-    let errors = '';
-    console.log(department);
-    if (department.status) {
-      swal.fire(
-        'Awesome!',
-        'Department Name Updated!',
-        'success'
-      )
-      location.href = `/department/${departmentId}`;
-    } else {
-      submitBtn.innerHTML = 'Update Department';
-      for (let i = 0; i < department.errors.length; i++) {
-        errors += department.errors[i].msg;
-        if (i < department.errors.length - 1) errors += ', ';
-      }
-      console.log(errors);
-      document.getElementById('errDisplay').innerHTML = errors;
-      swal.fire(
-        'Oops!',
-        `Operation unsuccessful!`,
-        'error'
-      )
-    }
-  } catch (error) {
-    console.log(error);
-    // show network error notification
-    swal.fire(
-      'Oops!',
-      'An error was encountered! Please review your network connection.',
-      'error'
-    )
-  }
-
-};
-
-const updateDepartment = async (data) => {
-    console.log(data)
-    try {
-      const department = await fetch(`${Route.apiRoot}/department/${departmentId}/update`, {
-        // mode: 'no-cors',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      return await department.json();
-    } catch (error) {
-      console.log(error);
-      // show network error notification
-      swal.fire(
-        'Oops!',
-        'An error was encountered! Please review your network connection.',
-        'error'
-      )
-    }
-  };
-  
- const deleteDepartment = async ()=>{
-     	Swal.fire({
+const deleteDepartment = async () => {
+    Swal.fire({
         title: 'Are you sure?',
         text: "Your action cannot be reversible!",
         type: 'warning',
@@ -193,38 +93,37 @@ const updateDepartment = async (data) => {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, Delete it!'
-      }).then( async (result) => {
+    }).then(async (result) => {
         if (result.value) {
             try {
-              const department = await fetch(`${Route.apiRoot}/department/${departmentId}/delete`, {
-                // mode: 'no-cors',
-                method: 'POST'
-              });
-              let response = await department.json();
-              if (response.status) {
-                swal.fire(
-                    'Sucessful!',
-                    'Department deleted successfully!',
-                    'success'
-                  )
-                  location.href = `/departments`;
-              }
+                const department = await fetch(`${Route.apiRoot}/department/${departmentId}/delete`, {
+                    // mode: 'no-cors',
+                    method: 'POST'
+                });
+                let response = await department.json();
+                if (response.status) {
+                    swal.fire(
+                        'Sucessful!',
+                        'Department deleted successfully!',
+                        'success'
+                    )
+                    location.href = `/departments`;
+                }
             } catch (error) {
-              console.log(error);
-              // show network error notification
-              swal.fire(
-                'Oops!',
-                'An error was encountered! Please review your network connection.',
-                'error'
-              )
+                console.log(error);
+                // show network error notification
+                swal.fire(
+                    'Oops!',
+                    'An error was encountered! Please review your network connection.',
+                    'error'
+                )
             }
         }
-      });
-  }
-  
+    });
+}
 
-	const deleteEmployee = async (employeeId)=>{
-		Swal.fire({
+const deleteEmployee = async (employeeId) => {
+    Swal.fire({
         title: 'Are you sure?',
         text: "This action cannot be reversible!",
         type: 'warning',
@@ -232,60 +131,58 @@ const updateDepartment = async (data) => {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, Delete it!'
-      }).then( async (result) => {
+    }).then(async (result) => {
         if (result.value) {
-		    try {
-		      const employee = await fetch(`${Route.apiRoot}/employee/${employeeId}/delete`, {
-		        // mode: 'no-cors',
-		        method: 'POST'
-		      });
-		      let response = await employee.json();
-		      if (response.status) {
-		        swal.fire(
-		            'Sucessful!',
-		            'Employee deleted successfully!',
-		            'success'
-		          )
-		          location.href = `/department/${departmentId}`;
-		      }
-		    } catch (error) {
-		      console.log(error);
-		      // show network error notification
-		      swal.fire(
-		        'Oops!',
-		        'An error was encountered! Please review your network connection.',
-		        'error'
-		      )
-		    }
+            try {
+                const employee = await fetch(`${Route.apiRoot}/employee/${employeeId}/delete`, {
+                    // mode: 'no-cors',
+                    method: 'POST'
+                });
+                let response = await employee.json();
+                if (response.status) {
+                    swal.fire(
+                        'Sucessful!',
+                        'Employee deleted successfully!',
+                        'success'
+                    )
+                    location.href = `/department/${departmentId}`;
+                }
+            } catch (error) {
+                console.log(error);
+                // show network error notification
+                swal.fire(
+                    'Oops!',
+                    'An error was encountered! Please review your network connection.',
+                    'error'
+                )
+            }
         }
-  });
-	}
-  
-  async function action() {
+    });
+}
+
+async function action() {
     try {
-      
-      if (`${userRole}` == 'Manager') { 
-        document.getElementById('action').innerHTML = `
+
+        if (`${userRole}` == 'Manager') {
+            document.getElementById('action').innerHTML = `
             <div class="dropdown dropdown-block text-right">
                 <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
                     <button type="button" class="btn btn-hover-brand btn-elevate-hover btn-icon btn-sm btn-icon-md btn-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="flaticon-more-1"></i>
                     </button>
               		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="userAction">
-                        <button type="button" class="dropdown-item" data-toggle="modal" data-target="#editDepartment">
-                          Edit
-                        </button>
+                        
                         <a class="dropdown-item text-danger" onclick="deleteDepartment()">Delete</a>    
               		</div>
               	</span>
         	</div>
       	  
         `;
-      }
+        }
     } catch (error) {
-      console.log('this is the error ' + error);
+        console.log('this is the error ' + error);
     }
-  }
-  action();
+}
+action();
   
 </script>
