@@ -239,6 +239,7 @@ exports.expense_update_post = [
                 status: status ? status : thisExpense.status,
             }
             var reviewed = await checkExpenseStatus(req, res, thisExpense.status);
+            console.log('this is the status'+ reviewed);
             if (reviewed) {
                 if (thisExpense.userId == req.user.id) {
                     models.Expense.update(
