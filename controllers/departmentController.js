@@ -1,16 +1,10 @@
-const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
+const apiFetch = require('../helpers/apiFetch');
 
 // LIST ALL DEPARTMENTS.
 exports.department_list = async function(req, res, next) {
-    const data = await fetch(`${apiUrl}/departments`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const departments = await data.json();
+    const departments = await apiFetch(req, res, `${apiUrl}/departments`);
 
     var viewData = {
         title: 'All Departments',
@@ -30,14 +24,7 @@ exports.department_list = async function(req, res, next) {
 // READ ONE DEPARTMENT.
 exports.department_detail = async function(req, res, next) {
     var id = req.params.department_id;
-    const data = await fetch(`${apiUrl}/department/${id}`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const department = await data.json();
-    console.log('this is department ' + department);
+    const department = await apiFetch(req, res, `${apiUrl}/department/${id}`);
 
     var viewData = {
         title: 'Department Details',

@@ -1,16 +1,10 @@
-const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
+const apiFetch = require('../helpers/apiFetch');
 
 // LIST ALL TYPES.
 exports.type_list = async function(req, res, next) {
-    const data = await fetch(`${apiUrl}/types`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const types = await data.json();
+    const types = await apiFetch(req, res, `${apiUrl}/types`);
 
     var viewData = {
         title: 'All types',
@@ -30,14 +24,7 @@ exports.type_list = async function(req, res, next) {
 // READ ONE TYPE.
 exports.type_detail = async function(req, res, next) {
     var id = req.params.type_id;
-    const data = await fetch(`${apiUrl}/type/${id}`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const type = await data.json();
-    console.log('this is type ' + type);
+    const type = await apiFetch(req, res, `${apiUrl}/type/${id}`);
 
     var viewData = {
         title: 'Type Details',

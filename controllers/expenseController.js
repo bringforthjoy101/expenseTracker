@@ -1,42 +1,16 @@
 var tools = require('./../modules/tools');
-const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
+const apiFetch = require('../helpers/apiFetch');
 
 // READ ONE EXPENSE.
 exports.expense_detail = async function(req, res, next) {
     var id = req.params.expense_id;
-
-    console.log('Logged in User Email ' + req.user.email);
-    console.log('Logged in User Password ' + req.user.password);
-    const data = await fetch(`${apiUrl}/expenses`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data2 = await fetch(`${apiUrl}/categories`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data3 = await fetch(`${apiUrl}/types`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data4 = await fetch(`${apiUrl}/expense/${id}`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const expenses = await data.json();
-    const categories = await data2.json();
-    const types = await data3.json();
-    const expense = await data4.json();
+    
+    const expenses = await apiFetch(req, res, `${apiUrl}/expenses`);
+    const categories = await apiFetch(req, res, `${apiUrl}/categories`);
+    const types = await apiFetch(req, res, `${apiUrl}/types`);
+    const expense = await apiFetch(req, res, `${apiUrl}/expense/${id}`);
 
     var viewData = {
         title: 'Expense Details',
@@ -62,28 +36,9 @@ exports.expense_detail = async function(req, res, next) {
 
 // LIST ALL EXPENSES.
 exports.expense_list = async function(req, res, next) {
-    const data = await fetch(`${apiUrl}/expenses`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data2 = await fetch(`${apiUrl}/categories`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data3 = await fetch(`${apiUrl}/types`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const expenses = await data.json();
-    const categories = await data2.json();
-    const types = await data3.json();
-    console.log('This is the response: ' + expenses);
+    const expenses = await apiFetch(req, res, `${apiUrl}/expenses`);
+    const categories = await apiFetch(req, res, `${apiUrl}/categories`);
+    const types = await apiFetch(req, res, `${apiUrl}/types`);
 
     var viewData = {
         title: 'All Expenses',
@@ -104,28 +59,9 @@ exports.expense_list = async function(req, res, next) {
 
 // READ MY EXPENSES.
 exports.my_expense_list = async function(req, res, next) {
-    const data = await fetch(`${apiUrl}/myExpenses`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data2 = await fetch(`${apiUrl}/categories`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data3 = await fetch(`${apiUrl}/types`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const expenses = await data.json();
-    const categories = await data2.json();
-    const types = await data3.json();
-    console.log('This is the response: ' + expenses);
+    const expenses = await apiFetch(req, res, `${apiUrl}/myExpenses`);
+    const categories = await apiFetch(req, res, `${apiUrl}/categories`);
+    const types = await apiFetch(req, res, `${apiUrl}/types`);
 
     var viewData = {
         title: 'My Expenses',
@@ -147,27 +83,9 @@ exports.my_expense_list = async function(req, res, next) {
 // CREATE NEW EXPENSE.
 exports.expense_new = async function(req, res, next) {
     try {
-        const data = await fetch(`${apiUrl}/categories`, {
-            method: 'GET',
-            headers: {
-                cookie: req.headers.cookie,
-            }
-        });
-        const data2 = await fetch(`${apiUrl}/types`, {
-            method: 'GET',
-            headers: {
-                cookie: req.headers.cookie,
-            }
-        });
-        const data3 = await fetch(`${apiUrl}/managers`, {
-            method: 'GET',
-            headers: {
-                cookie: req.headers.cookie,
-            }
-        });
-        const categories = await data.json();
-        const types = await data2.json();
-        const managers = await data3.json();
+        const managers = await apiFetch(req, res, `${apiUrl}/managers`);
+        const categories = await apiFetch(req, res, `${apiUrl}/categories`);
+        const types = await apiFetch(req, res, `${apiUrl}/types`);
         
         var viewData = {
             title: 'Expense Create',
@@ -193,31 +111,25 @@ exports.expense_new = async function(req, res, next) {
 
 // EXPENSE HOMEPAGE.
 exports.index = async function(req, res, next) {
-    const data = await fetch(`${apiUrl}`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data2 = await fetch(`${apiUrl}/myExpenses`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const response = await data.json();
-    const myExpenses = await data2.json();
+    const dashboard = await apiFetch(req, res, `${apiUrl}`);
+    const myExpenses = await apiFetch(req, res, `${apiUrl}/myExpenses`);
 
     var viewData = {
         title: 'Homepage',
         page: 'homePage',
         parent: 'Dashboard',
         parentUrl: '/dashboard',
-        expenseCount: response.expenseCount,
-        employeeCount: response.employeeCount,
-        expenses: response.expenses,
-        totalSum: response.totalSum,
-        myTotalSum: response.myTotalSum,
+        expenseCount: dashboard.expenseCount,
+        employeeCount: dashboard.employeeCount,
+        expenses: dashboard.expenses,
+        totalSum: dashboard.totalSum,
+        myTotalSum: dashboard.myTotalSum,
+        expensesToday: dashboard.expensesToday,
+        expensesTodayCount: dashboard.expensesTodayCount,
+        totalSumToday: dashboard.totalSumToday,
+        totalSumYesterday: dashboard.totalSumYesterday,
+        totalSumThisWeek: dashboard.totalSumThisWeek,
+        totalSumThisMonth: dashboard.totalSumThisMonth,
         myExpenses: myExpenses.data,
         moment: moment,
         startDate: tools.convertMillisecondsToStringDate(req.session.startDate),

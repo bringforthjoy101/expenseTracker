@@ -1,16 +1,10 @@
-const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
+const apiFetch = require('../helpers/apiFetch');
 
 // LIST ALL ROLES.
 exports.role_list = async function(req, res, next) {
-    const data = await fetch(`${apiUrl}/roles`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const roles = await data.json();
+    const roles = await apiFetch(req, res, `${apiUrl}/roles`);
 
     var viewData = {
         title: 'All Roles',
@@ -30,14 +24,7 @@ exports.role_list = async function(req, res, next) {
 // READ ONE ROLE.
 exports.role_detail = async function(req, res, next) {
     var id = req.params.role_id;
-    const data = await fetch(`${apiUrl}/role/${id}`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const role = await data.json();
-    console.log('this is role ' + role);
+    const role = await apiFetch(req, res, `${apiUrl}/role/${id}`);
 
     var viewData = {
         title: 'Role Details',

@@ -68,17 +68,20 @@ exports.category_delete_post = async function(req, res, next) {
     }
     // Performs operation.
     try {
-        models.Category.destroy({
-            where: {
-                id: category_id
-            }
-        }).then(function() {
-            res.status(200).json({
-                status: true,
-                message: 'Category deleted successfully'
-            })
-            console.log("Category deleted successfully");
-        });
+        // checks if the user is a manager and belongs to the company where this category was created.
+        if (thisCategory.CurrentBusinessId == req.user.CurrentBusinessId && req.user.Role.role_name == 'Manager') {
+            models.Category.destroy({
+                where: {
+                    id: category_id
+                }
+            }).then(function() {
+                res.status(200).json({
+                    status: true,
+                    message: 'Category deleted successfully'
+                })
+                console.log("Category deleted successfully");
+            });
+        }
     } catch (error) {
         res.status(400).json({
             status: false,

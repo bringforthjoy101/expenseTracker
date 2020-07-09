@@ -19,16 +19,19 @@
                     <div class="kt-section">
                         <div class="kt-section__info">
                           <% 
-            								const type = (expense.status == 'Approved') ? 'success' 
-            					              : (expense.status == 'Pending') ? 'warning' 
-            					              : (expense.status == 'Declined') ? 'danger'
-            					              : null;
-            				      %>
-                            <%= expense.desc %> <br>
-                            <b>₦ <%= Number (expense.amount || 0).toLocaleString(); %></b> <br>
-                             <span class="badge badge-<%=type%>"><%= expense.status %></span> <br> 
+							const type = (expense.status == 'Approved') ? 'success' 
+				              : (expense.status == 'Pending') ? 'warning' 
+				              : (expense.status == 'Declined') ? 'danger'
+				              : null;
+            			   %>
+                            <b>Description: </b><%= expense.desc %> <br>
+                            <b>Amount: </b>₦ <%= Number (expense.amount || 0).toLocaleString(); %></b> <br>
+                            <b>Status: </b><span class="badge badge-<%=type%>"><%= expense.status %></span> <br>
+                            <% if (expense.status != 'Pending') { %>
+                            <b>Reviewer: </b><%= expense.reviewer %> <br>
+                            <% } %>
                             
-                            <%= moment(expense.createdAt).fromNow() %>
+                            <b>Time: </b><%= moment(expense.createdAt).fromNow() %>
                         </div>
                     </div>
                 </div>

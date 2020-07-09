@@ -1,18 +1,10 @@
-const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
+const apiFetch = require('../helpers/apiFetch');
 
 // LIST ALL EMPLOYEES.
 exports.employee_list = async function(req, res, next) {
-    console.log('this is the api url ' + apiUrl);
-    const data = await fetch(`${apiUrl}/employees`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const response = await data.json();
-    console.log(response);
+    const employees = await apiFetch(req, res, `${apiUrl}/employees`);
     
     var viewData = {
         title: 'All Employees',
@@ -21,7 +13,7 @@ exports.employee_list = async function(req, res, next) {
         display: 'employeeList',
         parent: 'Dashboard',
         parentUrl: '/dashboard',
-        employees: response.data,
+        employees: employees.data,
         user: req.user,
     }
     res.render('pages/index', viewData);
@@ -29,15 +21,8 @@ exports.employee_list = async function(req, res, next) {
 
 // READ ONE EMPLOYEE.
 exports.employee_detail = async function(req, res, next) {
-    var id = req.params.employee_id
-    const data = await fetch(`${apiUrl}/employee/${id}`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const response = await data.json();
-    console.log(response);
+    var id = req.params.employee_id;
+    const employee = await apiFetch(req, res, `${apiUrl}/employee/${id}`);
 
     var viewData = {
         title: 'Employee Profile',
@@ -46,8 +31,8 @@ exports.employee_detail = async function(req, res, next) {
         parent: 'Employees List',
         parentUrl: '/allEmployees',
         id: id,
-        employee: response.data,
-        expenses: response.expenses,
+        employee: employee.data,
+        expenses: employee.expenses,
         moment: moment,
         user: req.user,
         layout: 'layouts/main'
@@ -60,37 +45,15 @@ exports.employee_detail = async function(req, res, next) {
 // EMPLOYEE'S PROFILE
 exports.profile = async (req, res, next) => {
     var id = req.user.id;
-    const data = await fetch(`${apiUrl}/employee/${id}`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data2 = await fetch(`${apiUrl}/departments`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const data3 = await fetch(`${apiUrl}/roles`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const response = await data.json();
-    const departments = await data2.json();
-    const roles = await data3.json();
+    const employee = await apiFetch(req, res, `${apiUrl}/employee/${id}`);
 
     var viewData = {
         parent: 'User Dashboard',
         parentUrl: '/dashboard',
         title: 'My Profile',
-        employee: response.data,
-        departments: departments.data,
-        roles: roles.data,
+        employee: employee.data,
         user: req.user,
-        amount: response.employeeTotalExpenses,
+        amount: employee.employeeTotalExpenses,
         page: 'employeePage',
         display: 'employeeProfile',
         layout: 'layouts/main'

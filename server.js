@@ -109,10 +109,10 @@ app.use('/dashboard',
 });
 
 
-app.use('/api/expense', authenticationMiddleware);
+app.use('/api', authenticationMiddleware);
 
 //// API ENDPOINTS ///
-app.use('/api/expense', expenseAPI);
+app.use('/api', expenseAPI);
 
 
 // error handling

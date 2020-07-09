@@ -42,10 +42,18 @@ module.exports = (sequelize, DataTypes) => {
         userId: {
             type: DataTypes.INTEGER
         },
-        ApproverId: {
+        ReviewerId: {
             type: DataTypes.INTEGER,
             allowNull: false
-        }
+        },
+        reviewer: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            is: /^[A-Za-z\s]+$/,
+            validate: {
+                len: [3, 200] // must be between 3 and 200.
+            }
+        },
     });
 
 

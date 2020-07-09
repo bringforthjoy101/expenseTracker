@@ -104,18 +104,21 @@ exports.employee_delete_post = async function(req, res, next) {
                 message: 'Employee ID not found'
             });
         }
-
-        models.user.destroy({
-            thisEmployee,
-            where: {
-                id: employee_id
-            }
-        }).then(function() {
-            res.status(200).json({
-                status: true,
-                message: 'Employee deleted successfully'
-            })
-        });
+        
+        // checks if the user is a manager and belongs to this employee's department
+        if (thisEmployee.DepartmentId == req.user.DepartmentId && req.user.Role.role_name == 'Manager') {
+            models.user.destroy({
+                thisEmployee,
+                where: {
+                    id: employee_id
+                }
+            }).then(function() {
+                res.status(200).json({
+                    status: true,
+                    message: 'Employee deleted successfully'
+                })
+            });
+        }
     } catch (error) {
         res.status(400).json({
             status: false,

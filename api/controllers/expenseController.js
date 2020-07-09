@@ -1,5 +1,6 @@
 var Expense = require('../../models/expense');
 var models = require('../../models');
+const moment = require('moment');
 const { check, validationResult } = require('express-validator');
 var checkParamsId = require('../../helpers/checkParams');
 var checkExpenseStatus = require('../../helpers/checkExpenseStatus');
@@ -36,8 +37,8 @@ exports.expense_create_post = [
         .not().isEmpty().withMessage('Please select expense category'),
         check('employee_id')
         .not().isEmpty().withMessage('This expense must be created by an authenticated employee'),
-        check('approver')
-        .not().isEmpty().withMessage('Please select an apporver'),
+        check('reviewer')
+        .not().isEmpty().withMessage('Please select a reviewer'),
         check('department')
         .not().isEmpty().withMessage('This expense must belong to an exsisting department'),
         check('current_business')
@@ -81,7 +82,7 @@ exports.expense_create_post = [
                 status: status,
                 CurrentBusinessId: req.body.current_business,
                 userId: employee_id,
-                ApproverId: req.body.approver,
+                ReviewerId: req.body.reviewer,
                 DepartmentId: req.body.department
             }
 
@@ -466,6 +467,11 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
+       const expensesToday = await models.Expense.findAll({where: {createdAt: {$gte: moment().startOf('day')}}});
+       const totalSumToday = await models.Expense.sum('amount', {where: {createdAt: {$gte: moment().startOf('day')}}});
+       const totalSumYesterday = await models.Expense.sum('amount', {where: {createdAt: { $gte: moment().startOf('day').add(-1, 'day'), $lte: moment().startOf('day')}}});
+       const totalSumThisWeek = await await models.Expense.sum('amount', {where: {createdAt: { $gte: moment().startOf('week').add(-1, 'day'), $lte: moment().startOf('day')}}});
+       const totalSumThisMonth = await await models.Expense.sum('amount', {where: {createdAt: { $gte: moment().startOf('month').add(-1, 'day'), $lte: moment().startOf('day')}}});
 
         models.Expense.findAll({
             where: {
@@ -500,6 +506,12 @@ exports.index = async function(req, res) {
                 totalSum: totalSum,
                 myTotalSum: myTotalSum,
                 expenses: expenses,
+                expensesToday: expensesToday,
+                expensesTodayCount: expensesToday.length,
+                totalSumToday: totalSumToday,
+                totalSumYesterday: totalSumYesterday,
+                totalSumThisWeek: totalSumThisWeek,
+                totalSumThisMonth: totalSumThisMonth
             })
 
         });
@@ -533,7 +545,7 @@ exports.expense_approval_get = async function(req, res) {
 
         
         // checks if the manager belongs to this expense's department and is also assigned to review this expense.
-        if (thisExpense.DepartmentId == req.user.DepartmentId && thisExpense.ApproverId == req.user.id && req.user.Role.role_name == 'Manager') {
+        if (thisExpense.DepartmentId == req.user.DepartmentId && thisExpense.ReviewerId == req.user.id && req.user.Role.role_name == 'Manager') {
             var status = (status_code == 1) ? 'Approved' : (status_code == 2) ? 'Declined' : null;
         } else {
             return res.status(401).send({
@@ -557,7 +569,7 @@ exports.expense_approval_get = async function(req, res) {
         var reviewed = await checkExpenseStatus(req, res, thisExpense.status);
         if (reviewed) {
             models.Expense.update(
-                { status: status }, {
+                { status: status, reviewer: req.user.firstname + ' ' + req.user.lastname }, {
                     where: { id: expense_id }
                 }
     

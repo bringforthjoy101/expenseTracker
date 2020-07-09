@@ -64,10 +64,11 @@
                                                 <a href="/expense/<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                     <i class="la la-eye"></i>
                                                 </a>
-                                                </a>
+                                                <% if (expense.status == 'Pending') { %>
                                                 <a class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete" onclick="deleteExpense(<%=expense.id%>)">
                                                     <i class="la la-trash"></i>
                                                 </a>
+                                                <% } %>
                                                 
                                             </td>
                                         </tr>

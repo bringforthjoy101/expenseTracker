@@ -1,16 +1,10 @@
-const fetch = require('node-fetch');
 const moment = require('moment');
 const apiUrl = require('../helpers/apiUrl');
+const apiFetch = require('../helpers/apiFetch');
 
 // Display list of all categories.
 exports.category_list = async function(req, res, next) {
-    const data = await fetch(`${apiUrl}/categories`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const categories = await data.json();
+    const categories = await apiFetch(req, res, `${apiUrl}/categories`);
 
     var viewData = {
         title: 'All Categories',
@@ -30,14 +24,7 @@ exports.category_list = async function(req, res, next) {
 // Display detail page for a specific category.
 exports.category_detail = async function(req, res, next) {
     var id = req.params.category_id;
-    const data = await fetch(`${apiUrl}/category/${id}`, {
-        method: 'GET',
-        headers: {
-            cookie: req.headers.cookie,
-        }
-    });
-    const category = await data.json();
-    console.log('this is category ' + category);
+    const category = await apiFetch(req, res, `${apiUrl}/category/${id}`);
 
     var viewData = {
         title: 'Category Details',

@@ -6,17 +6,21 @@
         
             
         <% if (typeof errors != 'undefined') { %>
-        <div class="alert alert-bold alert-solid-danger alert-dismissible" role="alert">
-            <ul>
-                <% errors.forEach(error => { %>
-                    <li>
-            			<div class="alert-text"><%= error.message %></div>
-            			<div class="alert-close">
-                            <i class="flaticon2-cross kt-icon-sm" data-dismiss="alert"></i>
-                        </div>
-                    </li>
-                <% }) %> 
-            </ul>
+        <div class="kt-portlet__body">
+			<div class="kt-section kt-section--first">
+                <div class="alert alert-bold alert-solid-danger alert-dismissible" role="alert">
+                    <ul>
+                        <% errors.forEach(error => { %>
+                            <li>
+                    			<div class="alert-text"><%= error.message %></div>
+                    			<div class="alert-close">
+                                    <i class="flaticon2-cross kt-icon-sm" data-dismiss="alert"></i>
+                                </div>
+                            </li>
+                        <% }) %> 
+                    </ul>
+                </div>
+            </div>
         </div>
         <% } %>
         
@@ -30,10 +34,14 @@
         <% } %>
         
         <% if(messages.error) { %>
-        <div class="alert alert-bold alert-solid-danger alert-dismissible" role="alert">
-            <div class="alert-text"><%= messages.error %></div>
-			<div class="alert-close">
-                <i class="flaticon2-cross kt-icon-sm" data-dismiss="alert"></i>
+        <div class="kt-portlet__body">
+			<div class="kt-section kt-section--first">
+                <div class="alert alert-bold alert-solid-danger alert-dismissible" role="alert">
+                    <div class="alert-text"><%= messages.error %></div>
+        			<div class="alert-close">
+                        <i class="flaticon2-cross kt-icon-sm" data-dismiss="alert"></i>
+                    </div>
+                </div>
             </div>
         </div>
         <% } %>
