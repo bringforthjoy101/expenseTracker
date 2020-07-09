@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         reviewer: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             is: /^[A-Za-z\s]+$/,
             validate: {
                 len: [3, 200] // must be between 3 and 200.
