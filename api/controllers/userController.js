@@ -378,7 +378,8 @@ exports.employee_detail = async function(req, res, next) {
 
         const employeeTotalExpenses = await models.Expense.sum('amount', {
             where: {
-                userId: employee_id
+                userId: employee_id,
+                status: 'Approved'
             }
         });
 
