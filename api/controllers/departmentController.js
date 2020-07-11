@@ -151,7 +151,7 @@ exports.department_detail = async function(req, res, next) {
             department_id, {
                 include: [{
                     model: models.user,
-                    attributes: ['id', 'firstname', 'lastname', 'email', 'RoleId', 'DepartmentId'],
+                    attributes: ['id', 'firstname', 'lastname', 'name', 'email', 'RoleId', 'DepartmentId'],
                     include: [{
                             model: models.Department,
                         },

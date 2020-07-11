@@ -69,6 +69,47 @@ app.use(tools.onRequestEnd);
 app.use(tools.generateMainMenu);
 // app.use('/dashboard', tools.generateUserMenu);
 
+const isWhiteListed = ( path, whiteList = [ 'login', 'autoLogin', 'signup' ] ) => {
+    let whiteListed = false;
+    for(let i=0; i < whiteList.length; i++) {
+        // this won't check authentication for login and autoLogin
+        // add logic here if you want to check POST or GET method in login
+        if( path.indexOf( whiteList[ i ] ) !== -1 ) {
+            whiteListed = true;
+        }
+    }
+    return whiteListed;
+};
+
+const authenticationMiddleware = (req, res, next) => {
+    if( isWhiteListed(req.originalUrl) || req.isAuthenticated() ) {
+        return next();
+    }
+
+    res.redirect('https://manifestusermodule.herokuapp.com/login');
+    // return res.status(401).send({error: 'You must be logged in'});
+    // return res.redirect('/login/?m=not-logged-in');
+};
+
+const apiAuthenticationMiddleware = (req, res, next) => {
+    if( req.isAuthenticated() ) {
+        return next();
+    }
+    return res.status(401).send({error: 'You must be logged in'});
+    // res.redirect('/login/?m=not-logged-in');
+};
+
+app.use(authenticationMiddleware);
+
+var authentication = require('./modules/authentication');
+
+// Auto login
+app.post('/autoLogin',
+   authentication(),
+    function(req, res) {
+        res.redirect('/dashboard');
+    });
+
 
 // authentication
 app.post('/login', passport.authenticate('local', 
@@ -85,14 +126,6 @@ app.get('/logout',
         res.redirect('/login');
     });
     
-const authenticationMiddleware = (req, res, next) => {
-    if( req.isAuthenticated() ) {
-        return next();
-    }
-    return res.status(401).send({error: 'You must be logged in'});
-    // res.redirect('/login/?m=not-logged-in');
-};
-// app.use(authenticationMiddleware);
     
 
 
@@ -109,7 +142,7 @@ app.use('/dashboard',
 });
 
 
-app.use('/api', authenticationMiddleware);
+app.use('/api', apiAuthenticationMiddleware);
 
 //// API ENDPOINTS ///
 app.use('/api', expenseAPI);

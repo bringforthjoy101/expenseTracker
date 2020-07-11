@@ -303,7 +303,7 @@ exports.expense_detail = async function(req, res, next) {
                 include: [{
                         model: models.user,
                         as: 'user',
-                        attributes: ['id', 'firstname', 'lastname']
+                        attributes: ['id', 'firstname', 'lastname', 'name']
                     },
                     {
                         model: models.Category,
@@ -356,7 +356,7 @@ exports.expense_list = function(req, res, next) {
             },
             include: [{
                     model: models.user,
-                    attributes: ['id', 'firstname', 'lastname']
+                    attributes: ['id', 'firstname', 'lastname', 'name']
                 },
                 {
                     model: models.Category,
@@ -411,7 +411,7 @@ exports.my_expenses = function(req, res, next) {
             },
             include: [{
                     model: models.user,
-                    attributes: ['id', 'firstname', 'lastname']
+                    attributes: ['id', 'firstname', 'lastname', 'name']
                 },
                 {
                     model: models.Category,
@@ -523,7 +523,7 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
-        const totalSumThisWeek = await await models.Expense.sum('amount', {
+        const totalSumThisWeek = await models.Expense.sum('amount', {
             where: {
                 createdAt: {
                     [Op.gte]: moment().startOf('week'),
@@ -533,7 +533,7 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
-        const myTotalSumThisWeek = await await models.Expense.sum('amount', {
+        const myTotalSumThisWeek = await models.Expense.sum('amount', {
             where: {
                 createdAt: {
                     [Op.gte]: moment().startOf('week'),
@@ -544,7 +544,7 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
-        const totalSumThisMonth = await await models.Expense.sum('amount', {
+        const totalSumThisMonth = await models.Expense.sum('amount', {
             where: {
                 createdAt: {
                     [Op.gte]: moment().startOf('month'),
@@ -554,7 +554,7 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
-        const myTotalSumThisMonth = await await models.Expense.sum('amount', {
+        const myTotalSumThisMonth = await models.Expense.sum('amount', {
             where: {
                 createdAt: {
                     [Op.gte]: moment().startOf('month'),
@@ -565,7 +565,7 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
-        const totalSumThisYear = await await models.Expense.sum('amount', {
+        const totalSumThisYear = await models.Expense.sum('amount', {
             where: {
                 createdAt: {
                     [Op.gte]: moment().startOf('year'),
@@ -575,7 +575,7 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
-        const myTotalSumThisYear = await await models.Expense.sum('amount', {
+        const myTotalSumThisYear = await models.Expense.sum('amount', {
             where: {
                 createdAt: {
                     [Op.gte]: moment().startOf('year'),
@@ -586,11 +586,28 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
+        const allDepartment = await models.Department.findAll({
+            where: {
+                CurrentBusinessId: req.user.CurrentBusinessId,
+            },
+        });
+        
+        // const departmentalExpenses = await allDepartment.forEach(function(department) {
+        //     models.Expense.findAll({
+        //         where: {DepartmentId: department.id},
+        //         include: [
+        //             {
+        //                 model: models.Department,
+        //                 attributes: ['id', 'dept_name']
+        //             },
+        //         ]
+        //     })
+        // })
+        
+        
        
-       console.log('this is the total sum for today ' + expensesToday.length);
-       console.log('this is the total sum for today ' + totalSumToday);
-       console.log('this is the total sum for today ' + totalSumYesterday);
-       console.log('this is the total sum for today ' + totalSumThisWeek);
+       console.log('this is the dept ' + allDepartment.length);
+    //   console.log('this is the departmentalExpenses ' + departmentalExpenses);
         models.Expense.findAll({
             where: {
                 CurrentBusinessId: req.user.CurrentBusinessId,
@@ -598,7 +615,7 @@ exports.index = async function(req, res) {
             },
             include: [{
                     model: models.user,
-                    attributes: ['id', 'firstname', 'lastname']
+                    attributes: ['id', 'firstname', 'lastname', 'name']
                 },
                 {
                     model: models.Category,
@@ -693,7 +710,7 @@ exports.expense_approval_get = async function(req, res) {
         var reviewed = await checkExpenseStatus(req, res, thisExpense.status);
         if (reviewed) {
             models.Expense.update(
-                { status: status, reviewer: req.user.firstname + ' ' + req.user.lastname }, {
+                { status: status, reviewer: req.user.name }, {
                     where: { id: expense_id }
                 }
     

@@ -149,7 +149,7 @@ exports.category_detail = async function(req, res, next) {
                     attributes: ['id', 'title', 'amount', 'status', 'createdAt'],
                     include: [{
                         model: models.user,
-                        attributes: ['firstname', 'lastname'],
+                        attributes: ['firstname', 'lastname', 'name'],
                     }, ]
                 }, ],
             }

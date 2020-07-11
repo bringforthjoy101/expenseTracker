@@ -143,7 +143,7 @@ exports.role_detail = async function(req, res, next) {
             role_id, {
                 include: [{
                     model: models.user,
-                    attributes: ['id', 'firstname', 'lastname', 'email', 'RoleId', 'DepartmentId'],
+                    attributes: ['id', 'firstname', 'lastname', 'email', 'name', 'RoleId', 'DepartmentId'],
                     include: [{
                             model: models.Department,
                         },
