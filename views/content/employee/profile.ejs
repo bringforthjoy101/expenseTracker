@@ -30,7 +30,7 @@
             </div>
             <div class="kt-widget__wrapper">
               <div class="kt-widget__label">
-                <strong class="kt-widget__title"><%= user.firstname + ' ' + user.lastname %> </strong>
+                <strong class="kt-widget__title"><%= user.firstname ? user.firstname + ' ' + user.lastname : user.name %> </strong>
                 <span class="kt-widget__desc">
                   <strong class="kt-widget__title">Current Business: </strong> <%= typeof user != 'undefined' ? user.CurrentBusiness.current_business_name : '' %> <br>
                   <strong class="kt-widget__title">Role: </strong> <%= typeof user != 'undefined' ? user.Role.role_name : '' %> <br> 

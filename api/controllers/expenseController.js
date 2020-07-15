@@ -179,31 +179,22 @@ exports.expense_update_post = [
             max: 50
         }).withMessage('Expense title must be between 3 and 50 characters long')
         .not().isEmpty().withMessage('Expense title cannot be empty')
-        .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.')
-        .optional({
-            checkFalsy: true
-        }),
+        .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.'),
         check('desc')
         .isLength({
             min: 3,
             max: 200
         }).withMessage('Expense description must be between 3 and 200 characters long')
-        .not().isEmpty().withMessage('Expense description cannot be empty')
-        .optional({
-            checkFalsy: true
-        }),
+        .not().isEmpty().withMessage('Expense description cannot be empty'),
         check('amount')
         .isLength({
             min: 3,
             max: 50
         }).withMessage('Expense amount must be greater than N100')
         .not().isEmpty().withMessage('Expense amount cannot be empty')
-        .isNumeric().withMessage('Express amount must be numeric')
-        .optional({
-            checkFalsy: true
-        }),
+        .isNumeric().withMessage('Express amount must be numeric'),
         check('type')
-        .not().isEmpty().withMessage('Please select expense category')
+        .not().isEmpty().withMessage('Please select expense type')
         .optional({
             checkFalsy: true
         }),
@@ -258,12 +249,20 @@ exports.expense_update_post = [
                             }
                         }
                     ).then(function(expense) {
-                        res.status(200).json({
-                            status: true,
-                            data: expense,
-                            message: 'Expense updated successfully'
-                        })
-                        console.log("Expense updated successfully");
+                        if(!expense) {
+                            res.status(404).json({
+                                status: false,
+                                data: 'None',
+                                message: 'Expense not updated'
+                            })
+                        } else {
+                            res.status(200).json({
+                                status: true,
+                                data: expense,
+                                message: 'Expense updated successfully'
+                            })
+                            console.log("Expense updated successfully");
+                        }
                     });
                 } else {
                     return res.status(401).json({

@@ -4,7 +4,7 @@ submitBtn.addEventListener('click', () => {
     submitBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
 });
 
-const submitExpense = async (event) => {
+const submitExpense = async (event, expenseId) => {
     try {
         event.preventDefault();
         //const form = event.target;
@@ -19,21 +19,21 @@ const submitExpense = async (event) => {
 
         console.log(formData);
 
-
-        const expense = await updateExpense(formData);
         let errors = '';
-        console.log(expense);
+        const expense = await updateExpense(formData, expenseId);
+        // console.log(expense);
         if (expense.status) {
             swal.fire(
                 'Awesome!',
                 'Expense updated!',
                 'success'
             )
-            location.href = `/expense/${expenseId}`;
+            // location.href = `/expense/${expenseId}`;
+            // location.reload()
         } else {
             submitBtn.innerHTML = 'Update Expense';
             
-            console.log(expense.errors);
+            console.log('expense error ' + expense.errors);
             toastr.options = {
               "closeButton": true,
               "debug": false,
@@ -66,8 +66,8 @@ const submitExpense = async (event) => {
     }
 
 };
-const updateExpense = async (data) => {
-    console.log(data)
+const updateExpense = async (data, expenseId) => {
+    console.log('this is the data ' + expenseId)
     try {
         const expense = await fetch(`${Route.apiRoot}/expense/${expenseId}/update`, {
             // mode: 'no-cors',
@@ -88,7 +88,7 @@ const updateExpense = async (data) => {
         )
     }
 };
-const deleteExpense = async () => {
+const deleteExpense = async (expenseId) => {
     try {
         const expense = await fetch(`${Route.apiRoot}/expense/${expenseId}/delete`, {
             // mode: 'no-cors',
@@ -121,7 +121,8 @@ const onActionCompleted = (approval) => {
             'Operation Successful',
             'success'
         )
-        location.href = `/expense/${expenseId}`;
+        // location.href = `/expense/${expenseId}`;
+        location.reload()
     } else {
         swal.fire(
             'Oops!',
@@ -141,7 +142,7 @@ const onErrorCatch = (error) => {
 }
 
 // Review Expense
-const approveExpense = async () => {
+const approveExpense = async (expenseId) => {
     Swal.fire({
         title: 'Are you sure?',
         text: "Your action wil approve this expense!",
@@ -164,7 +165,7 @@ const approveExpense = async () => {
         }
     })
 };
-const declineExpense = async () => {
+const declineExpense = async (expenseId) => {
     Swal.fire({
         title: 'Are you sure?',
         text: "Your action wil decline this expense!",
@@ -196,7 +197,6 @@ const expenseAction = async (userId, userRole, expenseId) => {
         let expenseData = await response.json();
         const expense = expenseData.data;
         console.log(expense);
-        console.log('I am loaded1');
         console.log('this is expense user ID ' + expense.userId)
         if (expense.status == 'Pending') {
             if (expense.userId == `${userId}` || `${userRole}` == 'Manager') {
@@ -220,23 +220,23 @@ const expenseAction = async (userId, userRole, expenseId) => {
       			<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
               Edit
             </button>
-            <a class="dropdown-item text-danger" onclick="deleteExpense()">Delete</a>
+            <a class="dropdown-item text-danger" onclick="deleteExpense(${expenseId})">Delete</a>
           `;
                 }
 
                 if (userRole == 'Manager') {
                     if (expense.status == 'Pending') {
                         document.getElementById('userAction').innerHTML += `
-                <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
-                <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
+                <a class="dropdown-item text-success" onclick="approveExpense(${expenseId})">Approve</a>
+                <a class="dropdown-item text-danger" onclick="declineExpense(${expenseId})">Decline</a>
                 `;
                     } else if (expense.status == 'Approved') {
                         document.getElementById('userAction').innerHTML += `
-                <a class="dropdown-item text-danger" onclick="declineExpense()">Decline</a>
+                <a class="dropdown-item text-danger" onclick="declineExpense(${expenseId})">Decline</a>
                 `;
                     } else {
                         document.getElementById('userAction').innerHTML += `
-                <a class="dropdown-item text-success" onclick="approveExpense()">Approve</a>
+                <a class="dropdown-item text-success" onclick="approveExpense(${expenseId})">Approve</a>
                 `;
                     }
                 }

@@ -83,7 +83,7 @@ const profileEditBtn = document.getElementById('profileEditBtn');
       )
     }
 }
-  const profileEdit = async (data) => {
+  const profileEdit = async (data,userId) => {
     console.log(data)
     try {
       const employee = await fetch(`${Route.apiRoot}/employee/${userId}/update`, {

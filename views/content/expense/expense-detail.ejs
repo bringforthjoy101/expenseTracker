@@ -73,7 +73,7 @@
 					<span aria-hidden="true" class="la la-remove"></span>
 				</button>
 			</div>
-			<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="updateExpense" onsubmit="submitExpense(event)">
+			<form class="kt-form kt-form--fit kt-form--label-right" action="#" id="updateExpense" onsubmit="submitExpense(event, <%= expense.id %>)">
   			<div class="modal-body" id="expenseForm">
   			  <div class="form-group">
   						<label>Expense Title:</label>

@@ -35,7 +35,7 @@ const submitCreateExpense = async (event, userId, DepartmentId, CurrentBusinessI
       )
       location.href = `/expense/${expense.data.id}`;
     } else {
-      submitBtn.innerHTML = 'Submit Expense';
+      expenseSubmitBtn.innerHTML = 'Submit Expense';
       console.log(expense.errors);
       
       toastr.options = {
