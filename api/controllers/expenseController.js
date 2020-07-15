@@ -179,20 +179,29 @@ exports.expense_update_post = [
             max: 50
         }).withMessage('Expense title must be between 3 and 50 characters long')
         .not().isEmpty().withMessage('Expense title cannot be empty')
-        .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.'),
+        .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.')
+        .optional({
+            checkFalsy: true
+        }),
         check('desc')
         .isLength({
             min: 3,
             max: 200
         }).withMessage('Expense description must be between 3 and 200 characters long')
-        .not().isEmpty().withMessage('Expense description cannot be empty'),
+        .not().isEmpty().withMessage('Expense description cannot be empty')
+        .optional({
+            checkFalsy: true
+        }),
         check('amount')
         .isLength({
             min: 3,
             max: 50
         }).withMessage('Expense amount must be greater than N100')
         .not().isEmpty().withMessage('Expense amount cannot be empty')
-        .isNumeric().withMessage('Express amount must be numeric'),
+        .isNumeric().withMessage('Express amount must be numeric')
+        .optional({
+            checkFalsy: true
+        }),
         check('type')
         .not().isEmpty().withMessage('Please select expense type')
         .optional({

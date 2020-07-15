@@ -22,7 +22,7 @@ const submitExpense = async (event, expenseId) => {
         let errors = '';
         const expense = await updateExpense(formData, expenseId);
         // console.log(expense);
-        if (expense.status) {
+        if (expense.status == true) {
             swal.fire(
                 'Awesome!',
                 'Expense updated!',
@@ -78,6 +78,7 @@ const updateExpense = async (data, expenseId) => {
             body: JSON.stringify(data)
         });
         return await expense.json();
+        console.log('this is the expense json '+expense.json)
     } catch (error) {
         console.log(error);
         // show network error notification
