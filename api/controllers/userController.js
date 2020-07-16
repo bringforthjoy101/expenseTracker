@@ -152,9 +152,9 @@ exports.employee_update_post = [
         }),
         check('username')
         .isLength({
-            min: 3,
+            min: 6,
             max: 50
-        }).withMessage('Username must be between 3 and 50 characters long')
+        }).withMessage('Username must be between 6 and 50 characters long')
         .isAlphanumeric().withMessage('Username can only be alphanumeric.')
         .optional({
             checkFalsy: true

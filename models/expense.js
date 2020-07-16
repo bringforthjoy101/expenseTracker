@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
         title: {
             type: DataTypes.STRING,
             allowNull: false,
+            is: /^[A-Za-z\s]+$/,
             validate: {
                 len: [3, 50] // must be between 3 and 50.
             }

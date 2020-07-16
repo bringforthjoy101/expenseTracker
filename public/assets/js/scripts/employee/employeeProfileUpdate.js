@@ -60,18 +60,41 @@ const profileEditBtn = document.getElementById('profileEditBtn');
         if (response.message) {
           document.getElementById('errDisplay').innerHTML = response.message;
         } else {
-          for (let i = 0; i < response.errors.length; i++) {
-            errors += response.errors[i].msg;
-            if (i < response.errors.length - 1) errors += ', ';
-          }
-          console.log(errors);
-          document.getElementById('errDisplay').innerHTML = errors;
+          // for (let i = 0; i < response.errors.length; i++) {
+          //   errors += response.errors[i].msg;
+          //   if (i < response.errors.length - 1) errors += ', ';
+          // }
+          // console.log(errors);
+          // document.getElementById('errDisplay').innerHTML = errors;
+          console.log('expense error ' + response.errors);
+          toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+          };
+          response.errors.forEach(error => {
+            toastr.error(error.msg);  
+          });
         }
-        swal.fire(
-          'Oops!',
-          `Profile change was unsuccessful!`,
-          'error'
-        )
+        // swal.fire(
+        //   'Oops!',
+        //   `Profile change was unsuccessful!`,
+        //   'error'
+        // )
+        
+        
       }
     } catch (err){
       profileEditBtn.innerHTML = 'Submit';

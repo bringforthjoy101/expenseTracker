@@ -1,14 +1,3 @@
-/**
- * Auth Module.
- * Author: Babatope Olajide.
- * Version: 1.0.0
- * Release Date: 08-April-2020
- * Last Updated: 09-April-2020
- */
-
-/**
- * Module dependencies.
- */
 var bCrypt = require('bcrypt-nodejs');
 var Strategy = require('passport-local').Strategy;
 var dbLayer = require('../modules/dbLayer');
@@ -29,49 +18,49 @@ auth.initializeStrategy = function(passport) {
             passwordField: 'password',
             passReqToCallback: true
         },
-        function(req, email, password, cb) {
-            dbLayer.user.findOne({
-                where: {
-                    email: email
-                },
-                include: [
-                    {
-                      model: models.Role,
-                      attributes: ['id', 'role_name']
-                    },
-                    {
-                      model: models.Department,
-                      attributes: ['id', 'dept_name']
-                    },
-                    {
-                      model: models.CurrentBusiness,
-                      attributes: ['id', 'current_business_name']
-                    },
-                ]
-            }).then(function(user) {
-                if (!user) {
-                    
-                    return cb(null, false, { message: "No user with that email address" });
-                }
-                if (!isValidPassword(user.password, password)) {
-                    console.log('I am here invalid password');
-                    return cb(null, false, { message: "Password is incorrect" });
-                }
-                var userinfo = user.get();
-                console.log('I am user role ' + userinfo.Role.role_name);
-                user.update({
-                    last_login: Date.now()
-                })
-                return cb(null, userinfo);
-
-            }).catch(function(err) {
-                console.log("Error:", err);
-                return cb(null, false);
-            });
-        }));
         // function(req, email, password, cb) {
-        //     auth.checkCredentials( email, password, cb ); //change auth to this
+        //     dbLayer.user.findOne({
+        //         where: {
+        //             email: email
+        //         },
+        //         include: [
+        //             {
+        //               model: models.Role,
+        //               attributes: ['id', 'role_name']
+        //             },
+        //             {
+        //               model: models.Department,
+        //               attributes: ['id', 'dept_name']
+        //             },
+        //             {
+        //               model: models.CurrentBusiness,
+        //               attributes: ['id', 'current_business_name']
+        //             },
+        //         ]
+        //     }).then(function(user) {
+        //         if (!user) {
+                    
+        //             return cb(null, false, { message: "No user with that email address" });
+        //         }
+        //         if (!isValidPassword(user.password, password)) {
+        //             console.log('I am here invalid password');
+        //             return cb(null, false, { message: "Password is incorrect" });
+        //         }
+        //         var userinfo = user.get();
+        //         console.log('I am user role ' + userinfo.Role.role_name);
+        //         user.update({
+        //             last_login: Date.now()
+        //         })
+        //         return cb(null, userinfo);
+
+        //     }).catch(function(err) {
+        //         console.log("Error:", err);
+        //         return cb(null, false);
+        //     });
         // }));
+        function(req, email, password, cb) {
+            auth.checkCredentials( email, password, cb ); //change auth to this
+        }));
 
     passport.serializeUser(function(user, cb) {
         

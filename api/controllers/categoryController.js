@@ -19,7 +19,7 @@ exports.category_create_post = [
     ],
     function(req, res, next) {
         // checks for validations
-        const errors = validationResult(req.body);
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({
                 status: false,
