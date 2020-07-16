@@ -46,7 +46,6 @@ const profileEditBtn = document.getElementById('profileEditBtn');
       
       let errors = '';
       const response = await profileEdit(formData, userId);
-      console.log('the status is ' + response.data)
       if (response.status){
         swal.fire(
           'Awesome!',
@@ -56,10 +55,7 @@ const profileEditBtn = document.getElementById('profileEditBtn');
         location.href = `/profile`;
       } else {
         profileEditBtn.innerHTML = 'Submit';
-        console.log(response)
-        if (response.message) {
-          document.getElementById('errDisplay').innerHTML = response.message;
-        } 
+        
           console.log('expense error ' + response.errors);
           toastr.options = {
             "closeButton": true,
