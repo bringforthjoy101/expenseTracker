@@ -6,13 +6,13 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title"><%= employee.name %>'s profile detail</h3>
+                        <h3 class="kt-portlet__head-title"><%= employee.firstname ? employee.firstname + ' ' + employee.lastname : employee.name %>'s profile detail</h3>
                     </div>
                 </div>
                 <div class="kt-portlet__body">
                     <div class="kt-section">
                         <div class="kt-section__info">
-                            <b> Full Name: </b><%= employee.name %><br>
+                            <b> Full Name: </b><%= employee.firstname ? employee.firstname + ' ' + employee.lastname : employee.name %><br>
                             <b> Role: </b><%= employee.Role.role_name %><br>
                             <b> Department: </b><%= employee.Department.dept_name %><br>
                             <b> Joined since: </b><%= moment(employee.createdAt).fromNow() %>
@@ -26,7 +26,7 @@
             <div class="kt-portlet">
                 <div class="kt-portlet__head">
                     <div class="kt-portlet__head-label">
-                        <h3 class="kt-portlet__head-title"><%= employee.name %>'s Expenses</h3>
+                        <h3 class="kt-portlet__head-title"><%= employee.firstname ? employee.firstname + ' ' + employee.lastname : employee.name %>'s Expenses</h3>
                     </div>
                 </div>
                 <div class="kt-portlet__body">
@@ -58,7 +58,7 @@
                                             <% } else { %>
                                                 <td><span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
                                             <% } %>
-                                            <td><%= employee.name %></td>
+                                            <td><%= employee.firstname ? employee.firstname + ' ' + employee.lastname : employee.name %></td>
                                             <td><%= moment(expense.createdAt).fromNow() %></td>
                                             <td nowrap> 
                                                 <a href="/expense/<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">

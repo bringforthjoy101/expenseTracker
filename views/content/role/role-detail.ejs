@@ -47,7 +47,7 @@
 									<img src="/assets/media/users/100_3.jpg" alt="photo">
 								</div>
 								<div class="kt-user-card-v2__details">
-									<a href="/employee/<%= employee.id %>" class="kt-user-card-v2__name"><%= employee.name %></a>
+									<a href="/employee/<%= employee.id %>" class="kt-user-card-v2__name"><%= employee.firstname ? employee.firstname + ' ' + employee.lastname : employee.name %></a>
 									<span class="kt-user-card-v2__desc"><%= employee.Role.role_name %></span>
 								</div>
 							</div>

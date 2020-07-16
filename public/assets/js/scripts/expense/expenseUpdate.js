@@ -224,22 +224,15 @@ const expenseAction = async (userId, userRole, expenseId) => {
             <a class="dropdown-item text-danger" onclick="deleteExpense(${expenseId})">Delete</a>
           `;
                 }
-
-                if (userRole == 'Manager') {
-                    if (expense.status == 'Pending') {
-                        document.getElementById('userAction').innerHTML += `
+                
+                // checks if the auth user is a manager and if he has been assigend to review this expense
+                if (userRole == 'Manager' && expense.ReviewerId == userId && expense.status == 'Pending') {
+                    
+                document.getElementById('userAction').innerHTML += `
                 <a class="dropdown-item text-success" onclick="approveExpense(${expenseId})">Approve</a>
                 <a class="dropdown-item text-danger" onclick="declineExpense(${expenseId})">Decline</a>
                 `;
-                    } else if (expense.status == 'Approved') {
-                        document.getElementById('userAction').innerHTML += `
-                <a class="dropdown-item text-danger" onclick="declineExpense(${expenseId})">Decline</a>
-                `;
-                    } else {
-                        document.getElementById('userAction').innerHTML += `
-                <a class="dropdown-item text-success" onclick="approveExpense(${expenseId})">Approve</a>
-                `;
-                    }
+                    
                 }
 
             }

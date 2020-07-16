@@ -67,7 +67,7 @@
 					    	  <option disabled >N/A</option>
 					    	<% } else { %>
     					    	<% managers.forEach(function(reviewer) { %>
-    					    		<option value="<%= reviewer.id %>" ><%= reviewer.name %></option>
+    					    		<option value="<%= reviewer.id %>" ><%= reviewer.user.firstname ? reviewer.user.firstname + ' ' + reviewer.user.lastname : reviewer.user.name %></option>
     					    	<% });%>
     					    <% } %>
 					    </select>

@@ -6,7 +6,7 @@
 			<img alt="Pic" src="/assets/media/users/300_21.jpg" class="kt-rounded-" />
 		</div>
 		<div class="kt-user-card__details">
-			<div class="kt-user-card__name"><%= user.name %></div>
+			<div class="kt-user-card__name"><%= user.firstname ? user.firstname + ' ' + user.lastname : user.name %></div>
 			<div class="kt-user-card__position"> <%= user.Role.role_name %>, <%= user.CurrentBusiness.current_business_name %></div>
 		</div>
 	</div>
