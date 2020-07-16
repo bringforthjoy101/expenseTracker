@@ -1,5 +1,5 @@
 function checkExpenseStatus (req, res, expenseStatus) {
-
+console.log('this is the inputed status ' + `${expenseStatus}`);
   if (expenseStatus != 'Pending') {
         console.log('Operation denied, expense reviewed already!');
         return res.status(401).send({
