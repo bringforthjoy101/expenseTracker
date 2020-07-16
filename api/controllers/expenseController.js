@@ -155,7 +155,7 @@ exports.expense_update_post = [
     ],
     async function(req, res, next) {
         // checks for validations
-        const errors = validationResult(req.body);
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).json({
                 status: false,
