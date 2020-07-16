@@ -112,63 +112,6 @@ exports.expense_create_post = [
     }
 ];
 
-// DELETE EXPENSE.
-exports.expense_delete_post = async function(req, res, next) {
-    // validates if the department ID is an integer
-    var expense_id = await checkParamsId(req, res, 'Expense', req.params.expense_id);
-    
-
-    // Performs operation
-    try {
-
-        // checks if the ID exists
-        var thisExpense = expense_id ? await models.Expense.findById(expense_id) : null
-
-        if (!thisExpense) {
-            return res.status(401).json({
-                status: false,
-                message: 'Expense ID not found'
-            });
-        }
-        
-        var reviewed = await checkExpenseStatus(req, res, thisExpense.status);
-        if (reviewed) {
-            // checks if the user is the owner of the expense or is a manger of the department
-            if (thisExpense.DepartmentId == req.user.DepartmentId) {
-                if (thisExpense.userId == req.user.id || req.user.Role.role_name == 'Manager') {
-                    models.Expense.destroy({
-                        where: {
-                            id: expense_id
-                        }
-                    }).then(function() {
-                        res.status(200).json({
-                            status: true,
-                            message: 'Expense Deleted Successfully'
-                        })
-                        console.log("Expense deleted successfully");
-                    });
-                } else {
-                    return res.status(401).json({
-                        status: false,
-                        message: 'Operation Declined! You dont have the permission to perform this operation'
-                    });
-                }
-            } else {
-                return res.status(401).json({
-                    status: false,
-                    message: 'Operation Declined! You dont belong to the department under which this expense was created.'
-                });
-            }
-        }
-        
-    } catch (error) {
-        res.status(400).json({
-            status: false,
-            message: `There was an error - ${error}`
-        });
-    }
-};
-
 // UPDATE EXPENSE.
 exports.expense_update_post = [
     [
@@ -179,10 +122,7 @@ exports.expense_update_post = [
             max: 50
         }).withMessage('Expense title must be between 3 and 50 characters long')
         .not().isEmpty().withMessage('Expense title cannot be empty')
-        .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.')
-        .optional({
-            checkFalsy: true
-        }),
+        .matches(/^[A-Za-z\s]+$/).withMessage('Expense title must contain only Letters.'),
         check('desc')
         .isLength({
             min: 3,
@@ -290,6 +230,63 @@ exports.expense_update_post = [
 
     }
 ];
+
+// DELETE EXPENSE.
+exports.expense_delete_post = async function(req, res, next) {
+    // validates if the department ID is an integer
+    var expense_id = await checkParamsId(req, res, 'Expense', req.params.expense_id);
+    
+
+    // Performs operation
+    try {
+
+        // checks if the ID exists
+        var thisExpense = expense_id ? await models.Expense.findById(expense_id) : null
+
+        if (!thisExpense) {
+            return res.status(401).json({
+                status: false,
+                message: 'Expense ID not found'
+            });
+        }
+        
+        var reviewed = await checkExpenseStatus(req, res, thisExpense.status);
+        if (reviewed) {
+            // checks if the user is the owner of the expense or is a manger of the department
+            if (thisExpense.DepartmentId == req.user.DepartmentId) {
+                if (thisExpense.userId == req.user.id || req.user.Role.role_name == 'Manager') {
+                    models.Expense.destroy({
+                        where: {
+                            id: expense_id
+                        }
+                    }).then(function() {
+                        res.status(200).json({
+                            status: true,
+                            message: 'Expense Deleted Successfully'
+                        })
+                        console.log("Expense deleted successfully");
+                    });
+                } else {
+                    return res.status(401).json({
+                        status: false,
+                        message: 'Operation Declined! You dont have the permission to perform this operation'
+                    });
+                }
+            } else {
+                return res.status(401).json({
+                    status: false,
+                    message: 'Operation Declined! You dont belong to the department under which this expense was created.'
+                });
+            }
+        }
+        
+    } catch (error) {
+        res.status(400).json({
+            status: false,
+            message: `There was an error - ${error}`
+        });
+    }
+};
 
 // READ ONE EXPENSE.
 exports.expense_detail = async function(req, res, next) {
