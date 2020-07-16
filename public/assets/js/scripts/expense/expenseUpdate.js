@@ -200,7 +200,8 @@ const expenseAction = async (userId, userRole, expenseId) => {
         console.log(expense);
         console.log('this is expense user ID ' + expense.userId)
         if (expense.status == 'Pending') {
-            if (expense.userId == `${userId}` || `${userRole}` == 'Manager') {
+            // checks if the auth user is either the owner of this expense or the manager assigned to review this expense.
+            if (expense.userId == `${userId}` || `${userId}` == expense.userId) {
                 document.getElementById('expenseAction').innerHTML = `
             <div class="dropdown dropdown-block text-right">
                 <span class="d-inline-block" tabindex="0" data-toggle="kt-tooltip" data-skin="brand" title="More options">
@@ -218,11 +219,11 @@ const expenseAction = async (userId, userRole, expenseId) => {
                 console.log('I am loaded');
                 if (userId == expense.userId && expense.status == 'Pending') {
                     document.getElementById('userAction').innerHTML = `
-      			<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
-              Edit
-            </button>
-            <a class="dropdown-item text-danger" onclick="deleteExpense(${expenseId})">Delete</a>
-          `;
+              		<button type="button" class="dropdown-item" data-toggle="modal" data-target="#editExpense">
+                      Edit
+                    </button>
+                    <a class="dropdown-item text-danger" onclick="deleteExpense(${expenseId})">Delete</a>
+                  `;
                 }
                 
                 // checks if the auth user is a manager and if he has been assigend to review this expense

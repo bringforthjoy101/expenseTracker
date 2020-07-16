@@ -699,7 +699,7 @@ exports.expense_approval_get = async function(req, res) {
         } else {
             return res.status(401).send({
                 status: false,
-                message: 'Operation denied, you are not assigned to review this expense!'
+                message: 'Operation denied, you are either not a manager or not assigned to review this expense!'
             });
         }
         
