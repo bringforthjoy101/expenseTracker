@@ -7,9 +7,9 @@ const profileEditBtn = document.getElementById('profileEditBtn');
     profileEditBtn.innerHTML = '<i class="kt-spinner kt-spinner--md kt-spinner--center px-4 kt-spinner--light"></i>';
 
     });
-    const updateProfile = async (userId) => {    
+    const updateProfile = async (event, userId) => {    
     try {
-      
+      event.preventDefault();
       const form = document.getElementById('profileEditForm');
       const formData = {
               firstname: form.firstname.value,
