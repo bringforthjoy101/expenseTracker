@@ -59,13 +59,7 @@ const profileEditBtn = document.getElementById('profileEditBtn');
         console.log(response)
         if (response.message) {
           document.getElementById('errDisplay').innerHTML = response.message;
-        } else {
-          // for (let i = 0; i < response.errors.length; i++) {
-          //   errors += response.errors[i].msg;
-          //   if (i < response.errors.length - 1) errors += ', ';
-          // }
-          // console.log(errors);
-          // document.getElementById('errDisplay').innerHTML = errors;
+        } 
           console.log('expense error ' + response.errors);
           toastr.options = {
             "closeButton": true,
@@ -87,7 +81,7 @@ const profileEditBtn = document.getElementById('profileEditBtn');
           response.errors.forEach(error => {
             toastr.error(error.msg);  
           });
-        }
+        
         // swal.fire(
         //   'Oops!',
         //   `Profile change was unsuccessful!`,

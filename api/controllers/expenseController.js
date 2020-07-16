@@ -180,7 +180,7 @@ exports.expense_update_post = [
             status = (req.body.amount <= 1000) ? 'Approved' : 'Pending';
 
             var expense = {
-                title: req.body.title,
+                title: req.body.title ? req.body.title : thisExpense.title,
                 desc: req.body.desc ? req.body.desc : thisExpense.desc,
                 amount: req.body.amount ? req.body.amount : thisExpense.amount,
                 TypeId: req.body.type ? req.body.type : thisExpense.type,
