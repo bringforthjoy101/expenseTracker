@@ -187,6 +187,9 @@ exports.expense_update_post = [
                 CategoryId: req.body.category ? req.body.category : thisExpense.category,
                 status: status ? status : thisExpense.status,
             }
+            console.log('this is the expense status '  + thisExpense.status);
+            console.log('this is the expense amount '  + thisExpense.amount);
+            
             var reviewed = await checkExpenseStatus(req, res, thisExpense.status);
             console.log('this is the status'+ reviewed);
             if (reviewed) {
