@@ -22,14 +22,14 @@ const submitExpense = async (event, expenseId) => {
         let errors = '';
         const expense = await updateExpense(formData, expenseId);
         // console.log(expense);
-        if (expense.status == true) {
+        if (expense.status) {
             swal.fire(
                 'Awesome!',
                 'Expense updated!',
                 'success'
             )
             // location.href = `/expense/${expenseId}`;
-            // location.reload()
+            location.reload()
         } else {
             submitBtn.innerHTML = 'Update Expense';
             
