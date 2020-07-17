@@ -257,6 +257,9 @@ exports.employee_list = function(req, res, next) {
             where: {
                 CurrentBusinessId: req.user.CurrentBusinessId
             },
+            order: [
+                ['id', 'DESC'],
+            ],
             include: [{
                     model: models.Department,
                     attributes: ['id', 'dept_name']
@@ -315,6 +318,9 @@ exports.manager_list = async function(req, res, next) {
                 DepartmentId: req.user.DepartmentId,
                 RoleId: manager[0].id
             },
+            order: [
+                ['id', 'DESC'],
+            ],
             include: [{
                     model: models.Department,
                     attributes: ['id', 'dept_name']

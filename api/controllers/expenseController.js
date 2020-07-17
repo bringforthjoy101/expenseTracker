@@ -178,9 +178,9 @@ exports.expense_update_post = [
                 });
             }
 
-            var status;
+            // var status;
 
-            status = (req.body.amount <= 1000) ? 'Approved' : 'Pending';
+            // status = (req.body.amount <= 1000) ? 'Approved' : 'Pending';
 
             var expense = {
                 title: req.body.title ? req.body.title : thisExpense.title,
@@ -188,7 +188,6 @@ exports.expense_update_post = [
                 amount: req.body.amount ? req.body.amount : thisExpense.amount,
                 TypeId: req.body.type ? req.body.type : thisExpense.type,
                 CategoryId: req.body.category ? req.body.category : thisExpense.category,
-                status: status ? status : thisExpense.status,
             }
             console.log('this is the expense status '  + thisExpense.status);
             console.log('this is the expense amount '  + thisExpense.amount);
@@ -365,6 +364,9 @@ exports.expense_list = function(req, res, next) {
                 CurrentBusinessId: req.user.CurrentBusinessId,
                 DepartmentId: req.user.DepartmentId
             },
+            order: [
+                ['id', 'DESC'],
+            ],
             include: [{
                     model: models.user,
                     attributes: ['id', 'firstname', 'lastname', 'name']
@@ -420,6 +422,9 @@ exports.my_expenses = function(req, res, next) {
                 CurrentBusinessId: req.user.CurrentBusinessId,
                 userId: req.user.id
             },
+            order: [
+                ['id', 'DESC'],
+            ],
             include: [{
                     model: models.user,
                     attributes: ['id', 'firstname', 'lastname', 'name']
@@ -617,6 +622,9 @@ exports.index = async function(req, res) {
                 CurrentBusinessId: req.user.CurrentBusinessId,
                 DepartmentId: req.user.DepartmentId
             },
+            order: [
+                ['id', 'DESC'],
+            ],
             include: [
                 {
                     model: models.user,
@@ -1011,9 +1019,9 @@ exports.expense_approval_get = async function(req, res) {
 
 function getSum(status, currentBusinessId) {
     models.Expense.sum('amount', {
-            where: {
-                CurrentBusinessId: currentBusinessId,
-                status: status,
-            }
-        });
+        where: {
+            CurrentBusinessId: currentBusinessId,
+            status: status,
+        }
+    });
 }

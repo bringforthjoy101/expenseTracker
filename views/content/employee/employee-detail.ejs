@@ -15,7 +15,7 @@
                             <b> Full Name: </b><%= employee.firstname ? employee.firstname + ' ' + employee.lastname : employee.name %><br>
                             <b> Role: </b><%= employee.Role.role_name %><br>
                             <b> Department: </b><%= employee.Department.dept_name %><br>
-                            <b> Joined since: </b><%= moment(employee.createdAt).fromNow() %>
+                            <b> Joined since: </b><%= moment(employee.createdAt).format('LL') %>
                         </div>
                     </div>
                 </div>
@@ -41,8 +41,8 @@
                                         <th>Title</th>
                                         <th>Amount</th>
                                         <th>Status</th>
-                                        <th>Employee</th>
-                                        <th>Time</th>
+                                        <th>Created By</th>
+                                        <th>Time Updated</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -59,7 +59,7 @@
                                                 <td><span class="kt-badge kt-badge--danger kt-badge--inline kt-badge--pill"><%= expense.status %></span></td>
                                             <% } %>
                                             <td><%= employee.firstname ? employee.firstname + ' ' + employee.lastname : employee.name %></td>
-                                            <td><%= moment(expense.createdAt).fromNow() %></td>
+                                            <td><%= moment(expense.updatedAt).fromNow() %></td>
                                             <td nowrap> 
                                                 <a href="/expense/<%= expense.id %>" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">
                                                     <i class="la la-eye"></i>

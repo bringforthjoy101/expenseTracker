@@ -51,7 +51,7 @@
                         <div class="kt-section__info">
                             <b>Type:</b> <%= expense.Type.type_name %> <br>
                             <b>Category:</b> <%= expense.Category.category_name %> <br>
-                            <b>Employee:</b> <%= expense.user.firstname ? expense.user.firstname + ' ' + expense.user.lastname : expense.user.name %> <br> 
+                            <b>Created By:</b> <%= expense.user.firstname ? expense.user.firstname + ' ' + expense.user.lastname : expense.user.name %> <br> 
                             <b>Department:</b> <%= expense.Department.dept_name %> <br>
                         </div>
                     </div>
