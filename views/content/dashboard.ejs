@@ -1,23 +1,24 @@
 <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
 	<!--begin::Row-->
+	
+
+		
+	
 		<div class="row">
-			<div class="col-lg-4 col-xl-4 order-lg-1 order-xl-1">
-
+			<div class="col-lg-6 col-xl-4 order-lg-1 order-xl-1">
 				<!--begin::Portlet-->
-				<div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
+				<div class="kt-portlet kt-portlet--height-fluid">
+					<div class="kt-portlet__head  kt-portlet__head--noborder">
+						<div class="kt-portlet__head-label">
+							<h3 class="kt-portlet__head-title">Total Expenses</h3>
+						</div>
+					</div>
 					<div class="kt-portlet__body kt-portlet__body--fluid">
-						<div class="kt-widget-3 kt-widget-3--brand">
-							<div class="kt-widget-3__content">
-								<div class="kt-widget-3__content-info">
-									<div class="kt-widget-3__content-section">
-										<div class="kt-widget-3__content-title">Expenses</div>
-										<div class="kt-widget-3__content-desc">Total Number Of Expenses</div>
-									</div>
-									<div class="kt-widget-3__content-section">
-										<% const count = (user.Role.role_name == 'Manager') ? expenseCount : myExpenses.length; %>
-										<span class="kt-widget-3__content-number"><%= Number (count || 0).toLocaleString(); %></span>
-									</div>
-								</div>
+						<div class="kt-widget-21">
+							<div class="kt-widget-21__title">
+								<% const sum = (user.Role.role_name == 'Manager') ? dashboard.totalSum : dashboard.myTotalSum; %>
+								<div class="kt-widget-21__label">₦ <%= (sum || 0).toLocaleString(); %></div>
+								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
 						</div>
 					</div>
@@ -25,24 +26,20 @@
 
 				<!--end::Portlet-->
 			</div>
-			<div class="col-lg-4 col-xl-4 order-lg-1 order-xl-1">
-
+			<div class="col-lg-6 col-xl-4 order-lg-1 order-xl-1">
 				<!--begin::Portlet-->
-				<div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
+				<div class="kt-portlet kt-portlet--height-fluid">
+					<div class="kt-portlet__head  kt-portlet__head--noborder">
+						<div class="kt-portlet__head-label">
+							<h3 class="kt-portlet__head-title">Total Number of Expenses</h3>
+						</div>
+					</div>
 					<div class="kt-portlet__body kt-portlet__body--fluid">
-						<div class="kt-widget-3 kt-widget-3--danger">
-							<div class="kt-widget-3__content">
-								<div class="kt-widget-3__content-info">
-									<div class="kt-widget-3__content-section">
-										<div class="kt-widget-3__content-title">Total Expenses</div>
-										<div class="kt-widget-3__content-desc">Amount of All Expenses</div>
-									</div>
-									<div class="kt-widget-3__content-section">
-										<span class="kt-widget-3__content-bedge">₦</span>
-										<% const sum = (user.Role.role_name == 'Manager') ? totalSum : myTotalSum; %>
-										<span class="kt-widget-3__content-number"><%= (sum || 0).toLocaleString(); %></span>
-									</div>
-								</div>
+						<div class="kt-widget-21">
+							<div class="kt-widget-21__title">
+								<% const count = (user.Role.role_name == 'Manager') ? expenseCount : myExpenses.length; %>
+								<div class="kt-widget-21__label"><%= (count || 0).toLocaleString(); %></div>
+								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
 						</div>
 					</div>
@@ -50,22 +47,20 @@
 
 				<!--end::Portlet-->
 			</div>
-			<div class="col-lg-4 col-xl-4 order-lg-1 order-xl-1">
-
+			<div class="col-lg-6 col-xl-4 order-lg-1 order-xl-1">
 				<!--begin::Portlet-->
-				<div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
+				<div class="kt-portlet kt-portlet--height-fluid">
+					<div class="kt-portlet__head  kt-portlet__head--noborder">
+						<div class="kt-portlet__head-label">
+							<h3 class="kt-portlet__head-title">Today's Total Expenses</h3>
+						</div>
+					</div>
 					<div class="kt-portlet__body kt-portlet__body--fluid">
-						<div class="kt-widget-3 kt-widget-3--info">
-							<div class="kt-widget-3__content">
-								<div class="kt-widget-3__content-info">
-									<div class="kt-widget-3__content-section">
-										<div class="kt-widget-3__content-title">Employees</div>
-										<div class="kt-widget-3__content-desc">Total Number of Employees</div>
-									</div>
-									<div class="kt-widget-3__content-section">
-										<span class="kt-widget-3__content-number"><%= Number (employeeCount || 0).toLocaleString(); %></span>
-									</div>
-								</div>
+						<div class="kt-widget-21">
+							<div class="kt-widget-21__title">
+								<% const sumToday = (user.Role.role_name == 'Manager') ? dashboard.totalSumToday : dashboard.myTotalSumToday; %>
+								<div class="kt-widget-21__label">₦ <%= (sumToday || 0).toLocaleString(); %></div>
+								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
 						</div>
 					</div>
@@ -73,22 +68,20 @@
 
 				<!--end::Portlet-->
 			</div>
-			<div class="col-lg-4 col-xl-4 order-lg-1 order-xl-1">
-
+			<div class="col-lg-6 col-xl-4 order-lg-1 order-xl-1">
 				<!--begin::Portlet-->
-				<div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
+				<div class="kt-portlet kt-portlet--height-fluid">
+					<div class="kt-portlet__head  kt-portlet__head--noborder">
+						<div class="kt-portlet__head-label">
+							<h3 class="kt-portlet__head-title">Today's Total Number of Expenses</h3>
+						</div>
+					</div>
 					<div class="kt-portlet__body kt-portlet__body--fluid">
-						<div class="kt-widget-3 kt-widget-3--success">
-							<div class="kt-widget-3__content">
-								<div class="kt-widget-3__content-info">
-									<div class="kt-widget-3__content-section">
-										<div class="kt-widget-3__content-title">Expenses Today</div>
-										<div class="kt-widget-3__content-desc">Total Number of Today's Expenses</div>
-									</div>
-									<div class="kt-widget-3__content-section">
-										<span class="kt-widget-3__content-number"><%= Number (expensesTodayCount || 0).toLocaleString(); %></span>
-									</div>
-								</div>
+						<div class="kt-widget-21">
+							<div class="kt-widget-21__title">
+								<% const countToday = (user.Role.role_name == 'Manager') ? expensesTodayCount : myExpenses.length; %>
+								<div class="kt-widget-21__label"><%= (countToday || 0).toLocaleString(); %></div>
+								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
 						</div>
 					</div>
@@ -96,24 +89,20 @@
 
 				<!--end::Portlet-->
 			</div>
-			<div class="col-lg-4 col-xl-4 order-lg-1 order-xl-1">
-
+			<div class="col-lg-6 col-xl-4 order-lg-1 order-xl-1">
 				<!--begin::Portlet-->
-				<div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
+				<div class="kt-portlet kt-portlet--height-fluid">
+					<div class="kt-portlet__head  kt-portlet__head--noborder">
+						<div class="kt-portlet__head-label">
+							<h3 class="kt-portlet__head-title">Total Expenses Yesterday</h3>
+						</div>
+					</div>
 					<div class="kt-portlet__body kt-portlet__body--fluid">
-						<div class="kt-widget-3 kt-widget-3--success">
-							<div class="kt-widget-3__content">
-								<div class="kt-widget-3__content-info">
-									<div class="kt-widget-3__content-section">
-										<div class="kt-widget-3__content-title">Expenses Today</div>
-										<div class="kt-widget-3__content-desc">Total of Today's Expenses</div>
-									</div>
-									<div class="kt-widget-3__content-section">
-										<span class="kt-widget-3__content-bedge">₦</span>
-										<% const todaySum = (user.Role.role_name == 'Manager') ? totalSumToday : myTotalSumToday; %>
-										<span class="kt-widget-3__content-number"><%= (todaySum || 0).toLocaleString(); %></span>
-									</div>
-								</div>
+						<div class="kt-widget-21">
+							<div class="kt-widget-21__title">
+								<% const sumYesterday = (user.Role.role_name == 'Manager') ? dashboard.totalSumYesterday : dashboard.myTotalSumYesterday; %>
+								<div class="kt-widget-21__label">₦ <%= (sumYesterday || 0).toLocaleString(); %></div>
+								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
 						</div>
 					</div>
@@ -121,24 +110,20 @@
 
 				<!--end::Portlet-->
 			</div>
-			<div class="col-lg-4 col-xl-4 order-lg-1 order-xl-1">
-
+			<div class="col-lg-6 col-xl-4 order-lg-1 order-xl-1">
 				<!--begin::Portlet-->
-				<div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
+				<div class="kt-portlet kt-portlet--height-fluid">
+					<div class="kt-portlet__head  kt-portlet__head--noborder">
+						<div class="kt-portlet__head-label">
+							<h3 class="kt-portlet__head-title">Total Expenses This Week</h3>
+						</div>
+					</div>
 					<div class="kt-portlet__body kt-portlet__body--fluid">
-						<div class="kt-widget-3 kt-widget-3--success">
-							<div class="kt-widget-3__content">
-								<div class="kt-widget-3__content-info">
-									<div class="kt-widget-3__content-section">
-										<div class="kt-widget-3__content-title">Expenses Yesterday</div>
-										<div class="kt-widget-3__content-desc">Total of Yesterday's Expenses</div>
-									</div>
-									<div class="kt-widget-3__content-section">
-										<span class="kt-widget-3__content-bedge">₦</span>
-										<% const yesterdaySum = (user.Role.role_name == 'Manager') ? totalSumYesterday : myTotalSumYesterday; %>
-										<span class="kt-widget-3__content-number"><%= (yesterdaySum || 0).toLocaleString(); %></span>
-									</div>
-								</div>
+						<div class="kt-widget-21">
+							<div class="kt-widget-21__title">
+								<% const sumThisWeek = (user.Role.role_name == 'Manager') ? dashboard.totalSumThisWeek : dashboard.myTotalSumThisWeek; %>
+								<div class="kt-widget-21__label">₦ <%= (sumThisWeek || 0).toLocaleString(); %></div>
+								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
 						</div>
 					</div>
@@ -146,24 +131,20 @@
 
 				<!--end::Portlet-->
 			</div>
-			<div class="col-lg-4 col-xl-4 order-lg-1 order-xl-1">
-
+			<div class="col-lg-6 col-xl-4 order-lg-1 order-xl-1">
 				<!--begin::Portlet-->
-				<div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
+				<div class="kt-portlet kt-portlet--height-fluid">
+					<div class="kt-portlet__head  kt-portlet__head--noborder">
+						<div class="kt-portlet__head-label">
+							<h3 class="kt-portlet__head-title">Total Expenses This Month</h3>
+						</div>
+					</div>
 					<div class="kt-portlet__body kt-portlet__body--fluid">
-						<div class="kt-widget-3 kt-widget-3--success">
-							<div class="kt-widget-3__content">
-								<div class="kt-widget-3__content-info">
-									<div class="kt-widget-3__content-section">
-										<div class="kt-widget-3__content-title">Expenses This Week</div>
-										<div class="kt-widget-3__content-desc">Total of this week's Expenses</div>
-									</div>
-									<div class="kt-widget-3__content-section">
-										<span class="kt-widget-3__content-bedge">₦</span>
-										<% const weeklySum = (user.Role.role_name == 'Manager') ? totalSumThisWeek : myTotalSumThisWeek; %>
-										<span class="kt-widget-3__content-number"><%= (weeklySum || 0).toLocaleString(); %></span>
-									</div>
-								</div>
+						<div class="kt-widget-21">
+							<div class="kt-widget-21__title">
+								<% const sumThisMonth = (user.Role.role_name == 'Manager') ? dashboard.totalSumThisMonth : dashboard.myTotalSumThisMonth; %>
+								<div class="kt-widget-21__label">₦ <%= (sumThisMonth || 0).toLocaleString(); %></div>
+								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
 						</div>
 					</div>
@@ -171,49 +152,20 @@
 
 				<!--end::Portlet-->
 			</div>
-			<div class="col-lg-4 col-xl-4 order-lg-1 order-xl-1">
-
+			<div class="col-lg-6 col-xl-4 order-lg-1 order-xl-1">
 				<!--begin::Portlet-->
-				<div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
-					<div class="kt-portlet__body kt-portlet__body--fluid">
-						<div class="kt-widget-3 kt-widget-3--success">
-							<div class="kt-widget-3__content">
-								<div class="kt-widget-3__content-info">
-									<div class="kt-widget-3__content-section">
-										<div class="kt-widget-3__content-title">Expenses This Month</div>
-										<div class="kt-widget-3__content-desc">Total of this month's Expenses</div>
-									</div>
-									<div class="kt-widget-3__content-section">
-										<span class="kt-widget-3__content-bedge">₦</span>
-										<% const monthlySum = (user.Role.role_name == 'Manager') ? totalSumThisMonth : myTotalSumThisMonth; %>
-										<span class="kt-widget-3__content-number"><%= (monthlySum || 0).toLocaleString(); %></span>
-									</div>
-								</div>
-							</div>
+				<div class="kt-portlet kt-portlet--height-fluid">
+					<div class="kt-portlet__head  kt-portlet__head--noborder">
+						<div class="kt-portlet__head-label">
+							<h3 class="kt-portlet__head-title">Total Expenses This Year</h3>
 						</div>
 					</div>
-				</div>
-
-				<!--end::Portlet-->
-			</div>
-			<div class="col-lg-4 col-xl-4 order-lg-1 order-xl-1">
-
-				<!--begin::Portlet-->
-				<div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
 					<div class="kt-portlet__body kt-portlet__body--fluid">
-						<div class="kt-widget-3 kt-widget-3--success">
-							<div class="kt-widget-3__content">
-								<div class="kt-widget-3__content-info">
-									<div class="kt-widget-3__content-section">
-										<div class="kt-widget-3__content-title">Expenses This Year</div>
-										<div class="kt-widget-3__content-desc">Total of this year's Expenses</div>
-									</div>
-									<div class="kt-widget-3__content-section">
-										<span class="kt-widget-3__content-bedge">₦</span>
-										<% const yearlySum = (user.Role.role_name == 'Manager') ? totalSumThisYear : myTotalSumThisYear; %>
-										<span class="kt-widget-3__content-number"><%= (yearlySum || 0).toLocaleString(); %></span>
-									</div>
-								</div>
+						<div class="kt-widget-21">
+							<div class="kt-widget-21__title">
+								<% const sumThisYear = (user.Role.role_name == 'Manager') ? dashboard.totalSumThisYear : dashboard.myTotalSumThisYear; %>
+								<div class="kt-widget-21__label">₦ <%= (sumThisYear || 0).toLocaleString(); %></div>
+								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
 						</div>
 					</div>

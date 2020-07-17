@@ -119,6 +119,7 @@ exports.index = async function(req, res, next) {
         page: 'homePage',
         parent: 'Dashboard',
         parentUrl: '/dashboard',
+        dashboard: dashboard,
         expenseCount: dashboard.expenseCount,
         employeeCount: dashboard.employeeCount,
         expenses: dashboard.expenses,

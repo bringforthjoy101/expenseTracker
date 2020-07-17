@@ -10,3 +10,10 @@ config.API_URL = 'https://d5sqweaij8.execute-api.us-east-1.amazonaws.com/UserMod
 config.module_name= 'Module2';
 config.SALT = '7sd!O(!@$*!#*#!a989!!@*#!@#&!^#*!&3hASD987*(#*%$&';
 config.authentication_method = 'POST';
+
+// en = 'English'
+// if(language = 'en') {
+// ERROR_MESAGE_CREATE_CAMPAIGN = 'Cannot create campaign'}
+// else (language ='fr'{
+    
+// }

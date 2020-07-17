@@ -58,6 +58,7 @@ exports.expense_create_post = [
         }
 
         try {
+            
             // put default pending in model
             var status;
             status = (req.body.amount <= 1000) ? 'Approved' : 'Pending';
@@ -67,6 +68,8 @@ exports.expense_create_post = [
             } else {
                 var reviewer = null
             }
+            
+            // var reviewer = status == 'Approved' ? 'Auto' : null
 
             let employee_id = req.body.employee_id;
 
@@ -462,13 +465,24 @@ exports.my_expenses = function(req, res, next) {
     }
 };
 
-// DASHBOARD DATA.
+// DASHBOARD.
 exports.index = async function(req, res) {
     try {
         const employees = await models.user.findAll({
             where: {
                 CurrentBusinessId: req.user.CurrentBusinessId,
-            }
+            },
+            include: [
+                {
+                    model: models.Role,
+                },
+                {
+                    model: models.CurrentBusiness,
+                },
+                {
+                    model: models.Department,
+                },
+            ]
         });
         const totalSum = await models.Expense.sum('amount', {
             where: {
@@ -476,6 +490,9 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
+        
+        // const totalSum = getSum('Approved', req.user.CurrentBusinessId);
+        
         const myTotalSum = await models.Expense.sum('amount', {
             where: {
                 userId: req.user.id,
@@ -594,34 +611,14 @@ exports.index = async function(req, res) {
                 status: 'Approved'
             }
         });
-        const allDepartment = await models.Department.findAll({
-            where: {
-                CurrentBusinessId: req.user.CurrentBusinessId,
-            },
-        });
         
-        // const departmentalExpenses = await allDepartment.forEach(function(department) {
-        //     models.Expense.findAll({
-        //         where: {DepartmentId: department.id},
-        //         include: [
-        //             {
-        //                 model: models.Department,
-        //                 attributes: ['id', 'dept_name']
-        //             },
-        //         ]
-        //     })
-        // })
-        
-        
-       
-       console.log('this is the dept ' + allDepartment.length);
-    //   console.log('this is the departmentalExpenses ' + departmentalExpenses);
         models.Expense.findAll({
             where: {
                 CurrentBusinessId: req.user.CurrentBusinessId,
                 DepartmentId: req.user.DepartmentId
             },
-            include: [{
+            include: [
+                {
                     model: models.user,
                     attributes: ['id', 'firstname', 'lastname', 'name']
                 },
@@ -645,6 +642,7 @@ exports.index = async function(req, res) {
             res.status(200).json({
                 status: true,
                 expenseCount: expenses.length,
+                employees: employees,
                 employeeCount: employees.length,
                 totalSum: totalSum,
                 myTotalSum: myTotalSum,
@@ -671,6 +669,269 @@ exports.index = async function(req, res) {
         });
     }
 };
+
+// DASHBOARD DATA.
+exports.dashboadStats = async function(req, res) {
+    try {
+        // general sum of everything
+        const totalSum = await models.Expense.sum('amount', {
+            where: {
+                CurrentBusinessId: req.user.CurrentBusinessId,
+            }
+        });
+        const totalSumApproved = await models.Expense.sum('amount', {
+            where: {
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        const totalSumPending = await models.Expense.sum('amount', {
+            where: {
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Pending'
+            }
+        });
+        const totalSumDeclined = await models.Expense.sum('amount', {
+            where: {
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Declined'
+            }
+        });
+        
+        // const totalSum = getSum('Approved', req.user.CurrentBusinessId);
+        
+        // general sum for the auth user
+        const myTotalSum = await models.Expense.sum('amount', {
+            where: {
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+            }
+        });
+        
+        const myTotalSumApproved = await models.Expense.sum('amount', {
+            where: {
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        
+        const myTotalSumPending = await models.Expense.sum('amount', {
+            where: {
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Pending'
+            }
+        });
+        
+        const myTotalSumDeclined = await models.Expense.sum('amount', {
+            where: {
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Declined'
+            }
+        });
+        
+        // expenses for today
+        const expensesToday = await models.Expense.findAll({
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('date')
+                },
+                CurrentBusinessId: req.user.CurrentBusinessId,
+            }
+        });
+        const expensesTodayApproved = await models.Expense.findAll({
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('date')
+                },
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        const expensesTodayPending = await models.Expense.findAll({
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('date')
+                },
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Pending'
+            }
+        });
+        const expensesTodayDeclined = await models.Expense.findAll({
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('date')
+                },
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Declined'
+            }
+        });
+        
+        // sum of expenses today
+        const totalSumToday = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('date')
+                },
+                CurrentBusinessId: req.user.CurrentBusinessId,
+            }
+        });
+        const myTotalSumToday = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('date')
+                },
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+            }
+        });
+        
+        // sum of expenses yesterday
+        const totalSumYesterday = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('day').add(-1, 'day'),
+                    [Op.lte]: moment().startOf('day')
+                },
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        const myTotalSumYesterday = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('day').add(-1, 'day'),
+                    [Op.lte]: moment().startOf('day')
+                },
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        const totalSumThisWeek = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('week'),
+                    [Op.lte]: moment().startOf('day')
+                },
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        const myTotalSumThisWeek = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('week'),
+                    [Op.lte]: moment().startOf('day')
+                },
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        const totalSumThisMonth = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('month'),
+                    [Op.lte]: moment().startOf('day')
+                },
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        const myTotalSumThisMonth = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('month'),
+                    [Op.lte]: moment().startOf('day')
+                },
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        const totalSumThisYear = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('year'),
+                    [Op.lte]: moment().startOf('day')
+                },
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        const myTotalSumThisYear = await models.Expense.sum('amount', {
+            where: {
+                createdAt: {
+                    [Op.gte]: moment().startOf('year'),
+                    [Op.lte]: moment().startOf('day')
+                },
+                userId: req.user.id,
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                status: 'Approved'
+            }
+        });
+        
+        models.Expense.findAll({
+            where: {
+                CurrentBusinessId: req.user.CurrentBusinessId,
+                DepartmentId: req.user.DepartmentId
+            },
+            include: [
+                {
+                    model: models.user,
+                    attributes: ['id', 'firstname', 'lastname', 'name']
+                },
+                {
+                    model: models.Category,
+                    attributes: ['id', 'category_name']
+                },
+                {
+                    model: models.Type,
+                    attributes: ['id', 'type_name']
+                },
+                {
+                    model: models.Department,
+                    attributes: ['id', 'dept_name']
+                },
+            ]
+        }).then(function(expenses) {
+
+            console.log("this is the total sum of expenses = " + totalSum);
+
+            res.status(200).json({
+                status: true,
+                expenseCount: expenses.length,
+                employees: employees,
+                employeeCount: employees.length,
+                totalSum: totalSum,
+                myTotalSum: myTotalSum,
+                expenses: expenses,
+                expensesToday: expensesToday,
+                expensesTodayCount: expensesToday.length,
+                totalSumToday: totalSumToday,
+                myTotalSumToday: myTotalSumToday,
+                totalSumYesterday: totalSumYesterday,
+                myTotalSumYesterday: myTotalSumYesterday,
+                totalSumThisWeek: totalSumThisWeek,
+                myTotalSumThisWeek: myTotalSumThisWeek,
+                totalSumThisMonth: totalSumThisMonth,
+                myTotalSumThisMonth: myTotalSumThisMonth,
+                totalSumThisYear: totalSumThisYear,
+                myTotalSumThisYear: myTotalSumThisYear
+            })
+
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: false,
+            message: `There was an error - ${error}`
+        });
+    }
+};
+
 
 // EXPENSE APPROVAL
 exports.expense_approval_get = async function(req, res) {
@@ -747,3 +1008,12 @@ exports.expense_approval_get = async function(req, res) {
 // async function getStatus(amount) {
 //     var status;
 // }
+
+function getSum(status, currentBusinessId) {
+    models.Expense.sum('amount', {
+            where: {
+                CurrentBusinessId: currentBusinessId,
+                status: status,
+            }
+        });
+}
