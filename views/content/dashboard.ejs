@@ -37,7 +37,7 @@
 					<div class="kt-portlet__body kt-portlet__body--fluid">
 						<div class="kt-widget-21">
 							<div class="kt-widget-21__title">
-								<% const count = (user.Role.role_name == 'Manager') ? expenseCount : myExpenses.length; %>
+								<% const count = (user.Role.role_name == 'Manager') ? dashboard.expenseCount : dashboard.myExpenses.length; %>
 								<div class="kt-widget-21__label"><%= (count || 0).toLocaleString(); %></div>
 								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
@@ -79,7 +79,7 @@
 					<div class="kt-portlet__body kt-portlet__body--fluid">
 						<div class="kt-widget-21">
 							<div class="kt-widget-21__title">
-								<% const countToday = (user.Role.role_name == 'Manager') ? expensesTodayCount : myExpenses.length; %>
+								<% const countToday = (user.Role.role_name == 'Manager') ? dashboard.expensesTodayCount : dashboard.myExpenses.length; %>
 								<div class="kt-widget-21__label"><%= (countToday || 0).toLocaleString(); %></div>
 								<img src="assets/media/misc/iconbox_bg.png" class="kt-widget-21__bg" alt="bg" />
 							</div>
@@ -185,7 +185,7 @@
 			</div>
 		</div>
 		<%
-			const displayExpense = (user.Role.role_name == 'Manager') ? expenses : myExpenses;
+			const displayExpense = (user.Role.role_name == 'Manager') ? dashboard.expenses : myExpenses;
 		%>
 	
 		<div class="kt-portlet__body">
