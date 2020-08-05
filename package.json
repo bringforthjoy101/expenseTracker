@@ -28,7 +28,7 @@
     "ejs": "^3.0.1",
     "express": "^4.16.2",
     "express-ejs-layouts": "^2.5.0",
-    "express-fileupload": "^1.1.7-alpha.3",
+    "express-fileupload": "^1.1.9",
     "express-flash": "0.0.2",
     "express-session": "^1.15.6",
     "express-validator": "^6.5.0",
