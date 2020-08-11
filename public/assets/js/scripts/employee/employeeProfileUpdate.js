@@ -56,7 +56,7 @@ const profileEditBtn = document.getElementById('profileEditBtn');
       } else {
         profileEditBtn.innerHTML = 'Submit';
         
-          console.log('expense error ' + response.errors);
+          console.log('profile error ' + response.errors);
           toastr.options = {
             "closeButton": true,
             "debug": false,
