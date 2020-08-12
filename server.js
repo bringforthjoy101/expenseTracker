@@ -86,9 +86,9 @@ const authenticationMiddleware = (req, res, next) => {
         return next();
     }
 
-    res.redirect('https://manifestusermodule.herokuapp.com/login');
+    // res.redirect('https://manifestusermodule.herokuapp.com/login');
     // return res.status(401).send({error: 'You must be logged in'});
-    // return res.redirect('/login/?m=not-logged-in');
+    return res.redirect('/login/?m=not-logged-in');
 };
 
 const apiAuthenticationMiddleware = (req, res, next) => {
