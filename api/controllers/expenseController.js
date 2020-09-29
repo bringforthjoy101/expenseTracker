@@ -474,9 +474,9 @@ exports.my_expenses = function(req, res, next) {
 exports.index = async function(req, res) {
     try {
         const employees = await models.user.findAll({
-            where: {
-                CurrentBusinessId: req.user.CurrentBusinessId,
-            },
+            // where: {
+            //     CurrentBusinessId: req.user.CurrentBusinessId,
+            // },
             include: [
                 {
                     model: models.Role,
@@ -491,7 +491,7 @@ exports.index = async function(req, res) {
         });
         const totalSum = await models.Expense.sum('amount', {
             where: {
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -500,8 +500,8 @@ exports.index = async function(req, res) {
         
         const myTotalSum = await models.Expense.sum('amount', {
             where: {
-                userId: req.user.id,
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // userId: req.user.id,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -510,7 +510,7 @@ exports.index = async function(req, res) {
                 createdAt: {
                     [Op.gte]: moment().startOf('date')
                 },
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
             }
         });
         const totalSumToday = await models.Expense.sum('amount', {
@@ -518,7 +518,7 @@ exports.index = async function(req, res) {
                 createdAt: {
                     [Op.gte]: moment().startOf('date')
                 },
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -527,8 +527,8 @@ exports.index = async function(req, res) {
                 createdAt: {
                     [Op.gte]: moment().startOf('date')
                 },
-                userId: req.user.id,
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // userId: req.user.id,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -538,7 +538,7 @@ exports.index = async function(req, res) {
                     [Op.gte]: moment().startOf('day').add(-1, 'day'),
                     [Op.lte]: moment().startOf('day')
                 },
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -548,8 +548,8 @@ exports.index = async function(req, res) {
                     [Op.gte]: moment().startOf('day').add(-1, 'day'),
                     [Op.lte]: moment().startOf('day')
                 },
-                userId: req.user.id,
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // userId: req.user.id,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -559,7 +559,7 @@ exports.index = async function(req, res) {
                     [Op.gte]: moment().startOf('week'),
                     [Op.lte]: moment().startOf('day')
                 },
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -569,8 +569,8 @@ exports.index = async function(req, res) {
                     [Op.gte]: moment().startOf('week'),
                     [Op.lte]: moment().startOf('day')
                 },
-                userId: req.user.id,
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // userId: req.user.id,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -580,7 +580,7 @@ exports.index = async function(req, res) {
                     [Op.gte]: moment().startOf('month'),
                     [Op.lte]: moment().startOf('day')
                 },
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -590,8 +590,8 @@ exports.index = async function(req, res) {
                     [Op.gte]: moment().startOf('month'),
                     [Op.lte]: moment().startOf('day')
                 },
-                userId: req.user.id,
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // userId: req.user.id,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -601,7 +601,7 @@ exports.index = async function(req, res) {
                     [Op.gte]: moment().startOf('year'),
                     [Op.lte]: moment().startOf('day')
                 },
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
@@ -611,20 +611,21 @@ exports.index = async function(req, res) {
                     [Op.gte]: moment().startOf('year'),
                     [Op.lte]: moment().startOf('day')
                 },
-                userId: req.user.id,
-                CurrentBusinessId: req.user.CurrentBusinessId,
+                // userId: req.user.id,
+                // CurrentBusinessId: req.user.CurrentBusinessId,
                 status: 'Approved'
             }
         });
         
         models.Expense.findAll({
             where: {
-                CurrentBusinessId: req.user.CurrentBusinessId,
-                DepartmentId: req.user.DepartmentId
+                // CurrentBusinessId: req.user.CurrentBusinessId,
+                // DepartmentId: req.user.DepartmentId
             },
             order: [
                 ['id', 'DESC'],
             ],
+            attributes: ['id', 'createdAt', 'amount'],
             include: [
                 {
                     model: models.user,
@@ -644,6 +645,7 @@ exports.index = async function(req, res) {
                 },
             ]
         }).then(function(expenses) {
+            
 
             console.log("this is the total sum of expenses = " + totalSum);
 

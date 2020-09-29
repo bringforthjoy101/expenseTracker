@@ -99,7 +99,7 @@ const apiAuthenticationMiddleware = (req, res, next) => {
     // res.redirect('/login/?m=not-logged-in');
 };
 
-app.use(authenticationMiddleware);
+// app.use(authenticationMiddleware);
 
 var authentication = require('./modules/authentication');
 
@@ -142,7 +142,7 @@ app.use('/dashboard',
 });
 
 
-app.use('/api', apiAuthenticationMiddleware);
+// app.use('/api', apiAuthenticationMiddleware);
 
 //// API ENDPOINTS ///
 app.use('/api', expenseAPI);
